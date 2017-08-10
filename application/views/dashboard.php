@@ -19,7 +19,7 @@
 		<div class='box-header with-border'>
 		  <div class='user-block'>
 			<img class='img-circle' src='<?=base_url().$announcement['user_img']?>' alt='user image'>
-			<!--span class='username'><a href="#">Jonathan Burke Jr.</a></span-->
+			<span class='username'><a href="#"><?=$announcement['name']?></a></span>
 			<span class='description'><?=$announcement['announce_date']?></span>
 		  </div><!-- /.user-block -->
 		  <!--div class='box-tools'>

@@ -287,7 +287,7 @@ class user extends CI_Controller {
 							//$new_name = rand() . '.'. $file_name[1];  
 							$new_name = $file_name[0] . '_'.date('Ymdhis').'.'. $file_name[1];  
 							$sourcePath = $_FILES["cv_files"]["tmp_name"][$name];  
-							$targetPath = "uploads/user/cv".$new_name;  
+							$targetPath = "uploads/user/cv/".$new_name;  
 							move_uploaded_file($sourcePath, $targetPath); 
 
 					   }
