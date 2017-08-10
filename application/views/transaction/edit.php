@@ -130,6 +130,31 @@
 
 	  }
 	
+	
+	
+	function showMyImage(fileInput) {
+        var files = fileInput.files;
+        for (var i = 0; i < files.length; i++) {           
+            var file = files[i];
+            var imageType = /image.*/;     
+            if (!file.type.match(imageType)) {
+                continue;
+            }           
+            var img=document.getElementById("main-img-preview");            
+            img.file = file;
+			//alert($('#main-file-name').val(files));
+            var reader = new FileReader();
+            reader.onload = (function(aImg) { 
+                return function(e) { 
+                    aImg.src = e.target.result; 
+                }; 
+            })(img);
+            reader.readAsDataURL(file);
+        }    
+    }
+
+	
+	
 
 </script>
 
@@ -245,6 +270,25 @@
                 </div>
               </div>
               <div class="clearfix sp-margin-sm"></div> 
+			  <div class="sp-margin-sm"></div> 			
+			  <div class="form-group">
+				<form id ="image-form">
+				  <label for="name" class="col-md-3 control-label">Image</label>
+				  <div class="col-sm-7">
+					<input type="file" name="main_image[]" id ="main_img_select" onchange="showMyImage(this);ValidateMainImage(this)">
+					<input type="hidden" class="form-control input-sm" id="main-file-name" name="main_file_name" placeholder="Upload an Image" value="">
+					<h5><em>Click on the image to remove</em></h5>
+					<!--button type="submit" class="btn btn-primary" id="btn-clear">Clear</button-->
+
+					<img id ="main-img-preview" src ="<?= ($action == 'edit') ? base_url().$transaction['transact_img'] : "" ?>" height=100 width = 100></img>
+					
+				  </div>
+				</form>
+				<form id ='image-form2' style ="display:none;">
+				<?= ($action=='edit')? '<input type ="hidden" name ="main_new_file_name" id="main-new-file-name" value ="'.$announcement['announce_img'].'" >' : "" ?>
+				
+				</form>
+			   </div> 
             </div>
 			
 			

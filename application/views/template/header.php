@@ -88,7 +88,7 @@
                 <ul class="dropdown-menu">
                   <!-- User image -->
                   <li class="user-header">
-                    <img src="<?= base_url()?>dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
+                    <img src="<?= base_url().$this->session->userdata('user_img'); ?>" class="img-circle" alt="User Image">
                     <p>
                       <?= $this->session->userdata('name'); ?>
                     </p>
@@ -106,9 +106,9 @@
                 </ul>
               </li>
               <!-- Control Sidebar Toggle Button -->
-              <li>
+              <!--li>
                 <a href="#" data-toggle="control-sidebar"><i class="fa fa-gears"></i></a>
-              </li>
+              </li-->
             </ul>
           </div>
         </nav>

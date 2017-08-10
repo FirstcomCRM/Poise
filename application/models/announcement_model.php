@@ -25,7 +25,8 @@ class announcement_model extends CI_Model {
 	public function get_top_announcements($id = FALSE) {
 		if ($id === FALSE)
 		{
-			$this->db->where('status !=', 1);
+			$this->db->join('users u', 'u.user_id = announcement.user_id', 'left');
+			$this->db->where('announcement.status !=', 1);
 			$this->db->order_by('announce_date', 'DESC');
 			$this->db->limit(5);
 			$query = $this->db->get('announcement');
@@ -136,6 +137,7 @@ class announcement_model extends CI_Model {
 			'announce_body'			=> $this->input->post('announcement_body'),
 			'announce_date'			=> date('Y-m-d',strtotime($this->input->post('announcement_date'))),
 			'announce_img'			=> $this->input->post('main_new_file_name'),
+			'user_id'				=> $this->session->userdata('user_id'),
 			//'announcement_date'					=> $this->input->post('terms'),
 		);
 		$this->db->insert('announcement', $data);
@@ -231,9 +233,9 @@ class announcement_model extends CI_Model {
 			$this->datatables->where('q.sale_person_id', $this->session->userdata('user_id'));
 		} */
 		
-        $this->datatables->select("a.announce_id,a.announce_title,a.announce_body,a.announce_date,a.announce_img", false);
+        $this->datatables->select("a.announce_id,a.announce_title,u.username, a.announce_body,a.announce_date,a.announce_img", false);
         $this->datatables->from('announcement a');
-       
+		$this->datatables->join('users u', 'u.user_id = a.user_id', 'left');
 		$this->datatables->where('a.status !=', 1);
 		$this->datatables->add_column('no', '');
 		//$this->datatables->add_column('action', '<a class="view-link btn btn-mtac admin-control btn-view" data-toggle="tooltip" data-placement="top" title="View" href="announcement/view/$1"><i class="fa fa-eye ico"></i></a> / <a class="print-link" data-toggle="tooltip" data-placement="top" title="Print" href="announcement/printannouncement/$1"><i class="fa fa-print ico"></i></a> / <a class="edit-link" data-toggle="tooltip" data-placement="top" title="Edit" href="announcement/edit/$1"><i class="fa fa-edit ico"></i></a> / <a class="delete-link" data-toggle="tooltip" data-placement="top" title="Delete" href="announcement/delete/$1"><i class="fa fa-trash-o ico"></i></a>', 'announce_id');

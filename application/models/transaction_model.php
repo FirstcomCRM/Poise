@@ -120,6 +120,7 @@ class transaction_model extends CI_Model {
 					'commission'         			=> $this->input->post('commission'),
 					'co_broke_commission'			=> $this->input->post('co_broke_commission'),
 					'internal_commission'			=> $this->input->post('internal_commission'),
+					'transact_img'					=> $this->input->post('main_new_file_name'),
 					'user_id' 						=> $this->input->post('user_id'),
 			);
 			$this->db->insert('case_submission', $data);
@@ -218,6 +219,7 @@ class transaction_model extends CI_Model {
 				'commission'         			=> $this->input->post('commission'),
 				'co_broke_commission'			=> $this->input->post('co_broke_commission'),
 				'internal_commission'			=> $this->input->post('internal_commission'),
+				'transact_img'					=> $this->input->post('main_new_file_name'),
 				'user_id' 						=> $this->input->post('user_id'),
 		);
 		$this->db->where('case_id', $id);

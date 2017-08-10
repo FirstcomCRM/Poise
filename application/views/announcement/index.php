@@ -34,6 +34,7 @@
         "columns": [
             { "data": "no", "orderable": false, "bSearchable": false },
             { "data": "announce_title"},
+            { "data": "username"},
             { "data": "announce_body"},
             { "data": "announce_date"},
             { "data": "action", "orderable": false, "bSearchable": false, "className": 'col_act_md'}
@@ -204,6 +205,7 @@
 							<tr>
 								<th>No</th>
 								<th>Title</th>
+								<th>Posted by</th>
 								<th>Announcement</th>
 								<th>Date</th>
 								<th>Action</th>
@@ -215,6 +217,7 @@
 							<tr>
 								<th>No</th>
 								<th>Title</th>
+								<th>Posted by</th>
 								<th>Announcement</th>
 								<th>Date</th>
 								<th>Action</th>

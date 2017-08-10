@@ -43,7 +43,7 @@ var burl = "<?= base_url() ?>";
             { "data": "contact"},
 			{ "data": "cv",
 					"render": function(data, type, row) {
-						if(data==0 || data ==""){
+						if(data==0 || data =="" || data =="NULL" || !data){
 							return "N/A";
 						}
 						else{

@@ -255,7 +255,35 @@ class transaction extends CI_Controller {
 	}
 	
 	
-	
+	function upload_main_img()
+		{
+			//$output = '';
+			if(is_array($_FILES))  
+			 {  
+				  foreach($_FILES['main_image']['name'] as $name => $value)  
+				  {  
+					   $file_name = explode(".", $_FILES['main_image']['name'][$name]);  
+					   $allowed_extension = array("jpg", "jpeg", "png", "gif","JPG");
+						//$allowed_extension = array("jpg", "jpeg", "png", "gif","pdf","doc","docx","xls","xlsx","csv"); 
+						if(in_array($file_name[1], $allowed_extension))  
+						{  
+							//$new_name = rand() . '.'. $file_name[1];  
+							$new_name = $file_name[0] . '_'.date('Ymdhis').'.'. $file_name[1];  
+							$sourcePath = $_FILES["main_image"]["tmp_name"][$name];  
+							$targetPath = "uploads/transaction/img/".$new_name;  
+							move_uploaded_file($sourcePath, $targetPath); 
+					
+							
+							$output = '<input type ="hidden" name ="main_new_file_name" id="main-new-file-name" value ="' . $targetPath .'" >';
+							//$output .= '<script type ="text/javascript">console.log($("main-new-file-name").val())</script>';
+							echo $output;
+						}
+
+						
+				  }  
+			
+			 }  
+		}
 	
 	public function aj_addTransactfile() {
 		$detail_id = $this->transaction_model->addFile();
