@@ -1,0 +1,54 @@
+
+	#unit-price	(on every product)
+	#quantity	(on every product)
+
+
+ $("#product-add").click(function(e)
+	#product-add	(on every product)
+	#product-id	(on every product)
+	#unit-price	(on every product)	
+	#quantity	(on every product)
+	#total		(on every product)
+	#detail-form 	(on every product)
+	#p-remark	(on every product)
+
+	.product-grid	(on every product) ???
+	.row		(on every product) ???
+
+	formdata	(on every product, var)
+	detailkey	(on every product, var)
+	detailarr	(on every product, var) //could  be unique
+	row		(on every product, var)
+	classname 	(on every product, var)
+
+	.product-add-area	(on every product)
+
+	.edit-id	(on every product)
+	.delete-id	(on every product)
+
+
+$("#detail-form").each(function(){this.reset();});
+	#detail-form	(on every product)
+
+//Click Detail Edit link
+	.product-grid	(on every product)
+	obj		(on every product, var)
+	#hid-edit-id	(on every product)
+	#product-update	(on every product)
+
+//Click Detail Update Button
+	#total		(on every product)
+
+//insert
+	formdata	(on every product, var)
+	editkey 	(on every product, var)
+	
+	
+	
+success: function(data)
+	result		
+	
+	
+	
+	
+	col_total very important. adding for total amt

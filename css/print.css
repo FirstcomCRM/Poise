@@ -1,0 +1,30 @@
+body {
+	font-size : 12px;
+}
+
+.sp-margin-sm {
+	margin-bottom : 3px;
+}
+
+.sp-margin-md {
+	margin-bottom : 5px;
+}
+
+.sp-margin-lg {
+	margin-bottom : 10px;
+}
+
+.print-logo-text {
+	font-size : 10px;
+}
+
+.content-header {
+	font-weight:bolder;
+	font-size:19px;
+}
+
+.table-head {
+	border : 1px solid #ddd !important;
+}
+
+
