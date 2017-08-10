@@ -7,7 +7,7 @@ class form_agreement extends CI_Controller {
 	
 	
 	
-	public function __construct() {
+	public function __construct() { //test
 		parent::__construct();
 		$this->load->library('session');
 		$this->load->library("pagination");
