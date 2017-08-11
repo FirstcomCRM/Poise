@@ -1,7 +1,33 @@
+	var _validFileExtensions = [".jpg", ".jpeg", ".bmp", ".gif", ".png",".pdf", ".doc", ".docx",".xls",".xlsx",".csv"];
+	var _validFileExtensionsImg = [".jpg", ".jpeg", ".bmp", ".gif", ".png"];    
+	function ValidateSingleInput(oInput) {
+		if (oInput.type == "file") {
+			var sFileName = oInput.value;
+			 if (sFileName.length > 0) {
+				var blnValid = false;
+				for (var j = 0; j < _validFileExtensions.length; j++) {
+					var sCurExtension = _validFileExtensions[j];
+					if (sFileName.substr(sFileName.length - sCurExtension.length, sCurExtension.length).toLowerCase() == sCurExtension.toLowerCase()) {
+						blnValid = true;
+						break;
+					}
+				}
+				 
+				if (!blnValid) {
+					alert("Sorry, " + sFileName + " is invalid, allowed extensions are: " + _validFileExtensions.join(", "));
+					oInput.value = "";
+					return false;
+				}
+			}
+		}
+		return true;
+	}
+
+
 $( document ).ready(function() {
 
 	updateTable(detail_arr);
-	//updatePDTable(payment_detail_arr);
+	updatePDTable(payment_detail_arr);
 	
 	
 	
@@ -42,6 +68,12 @@ $( document ).ready(function() {
     });
     
 	
+	$('#btn-clear').click(function(e) { 
+    //e.preventDefault();
+		$('#chk-new-file-name').val('');
+		$('#cheque_select').val('');
+	});
+	
 	
 	$('#ico-add-pd').click(function(e) { 
     e.preventDefault();
@@ -54,11 +86,14 @@ $( document ).ready(function() {
           type: "POST",
           url: burl + "invoice/aj_addInvoicePaymentdetail", 
           data: { 
-            hid_invoice_id    : $('#hid-invoice-id').val(),
-            payment_date      : $('#payment-date').val(),
-            payment_amount    : $('#payment-amount').val(),
-            payment_type      : $('#payment-type').val(),
-            remarks           : $('#remarks').val(),
+		  
+            hid_invoice_id    	: $('#hid-invoice-id').val(),
+            payment_date      	: $('#payment-date').val(),
+            bank_name      		: $('#bank-name').val(),
+            payment_amount      : $('#payment-amount').val(),
+            payment_type      	: $('#payment-date').val(),
+			cheque_file			: $('#chk-new-file-name').val(),
+            remarks           	: $('#remarks').val(),
           },
           success: function(data){ 
             var result = $.parseJSON(data)
@@ -141,8 +176,11 @@ $( document ).ready(function() {
 				
 
               $('#payment-date').val(result['date']);
+              $('#bank-name').val(result['bank_name']);
 			  $('#payment-amount').val(result['amount']);
               $('#payment-type').val(result['payment_type']);
+              $('#cheque_select').val('');
+              $('#chk-new-file-name').val(result['cheque']);
               $('#remarks').val(result['remarks']);
 				   
               $('#detail-add-pd').hide();
@@ -223,6 +261,64 @@ $( document ).ready(function() {
     });
 	
 	
+	$('#cheque_select').change(function(e){3
+		$('#detail-form-pd').submit();
+	
+		//readURL(this);
+		//$('#main-img-preview').show();
+	
+	
+		//e.preventDefault();
+		var img = $('#cheque_select').val();
+		var news = document.getElementById("cheque_select").files[0].name;
+		//$('#path').val(img);
+		//$('#path').val(burl + news);
+		//$('#main-file-name').val(burl + news);
+	
+	
+	});
+	
+	
+	$('#detail-form-pd').on('submit', function(e){
+		e.preventDefault();
+
+	    $.ajax({
+			url : burl + "invoice/upload_cheque",
+			method : "POST",
+			data: new FormData(this),
+			contentType:false,
+			processData:false,
+			success: function(data){
+		
+               $('#cheque-form2').html(data); 
+
+			}
+		})
+	});
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
     /** Add Item **/
     $('#ico-update').click(function(e) { 
@@ -276,11 +372,13 @@ $( document ).ready(function() {
                 type: "POST",
                 url: burl + "invoice/aj_updateInvoicePaymentdetail/" + editkey, 
                 data: { 
-                  hid_invoice_id    : $('#hid-invoice-id').val(),
-                  payment_date      : $('#payment-date').val(),
-                  payment_amount    : $('#payment-amount').val(),
-                  payment_type      : $('#payment-type').val(),
-                  remarks           : $('#remarks').val(),
+					hid_invoice_id    	: $('#hid-invoice-id').val(),
+					payment_date      	: $('#payment-date').val(),
+					bank_name      		: $('#bank-name').val(),
+					payment_amount      : $('#payment-amount').val(),
+					payment_type      	: $('#payment-type').val(),
+					cheque_file			: $('#chk-new-file-name').val(),
+					remarks           	: $('#remarks').val(),
                   
                 },
                 success: function(data){ 
@@ -403,13 +501,15 @@ $( document ).ready(function() {
     $.each(arr, function( i, value ) {   
         var classname = 'id-' + value.invoice_payment_detail_id ; 
         $('#payment-detail-table > tbody:last').append("<tr class='"+classname+"'>"+
-                                               "<td>"+ value.date +"</td>"+
+											   "<td>"+ value.date +"</td>"+
+                                               "<td>"+ value.bank_name +"</td>"+
                                                "<td>"+ value.amount +"</td>"+
-                                               "<td>"+ value.payment_type+"</td>"+
+                                               "<td>"+ value.payment_type +"</td>"+
+                                               "<td>"+ value.cheque +"</td>"+
                                                "<td>"+ value.remarks +"</td>"+
                                                "<td><a href='#' class='edit-di-pd'><i class='fa fa-edit ico'></i> / <a href='#' class='delete-di-pd'><i class='fa fa-trash ico'></i></a></td></tr>");
        /* sub_total += (value.amount != '') ? parseFloat(value.amount) : 0;*/
-	  // console.log(arr);
+	  // console.log(arr);"<td><input type ='file' name='cheque[]' id ='cheque_select' value= '"+ value.cheque +"'/></td>"+
     });
    
     } 

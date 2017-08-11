@@ -55,7 +55,7 @@ class invoice_model extends CI_Model {
 		$invoice_id = $this->db->insert_id();
 		if($invoice_id) {
 			$this->addDetails($invoice_id);	
-			//$this->addPaymentDetails($invoice_id);	
+			$this->addPaymentDetails($invoice_id);	
 		}
 		return $invoice_id;
 	}
@@ -67,7 +67,7 @@ class invoice_model extends CI_Model {
 				//$no = ($detail['no']) ? $detail['no'] : NULL;
 				$data = array(
 					'invoice_id'	 	=> $invoice_id,
-					'service_id'		=> $detail['service_id'],
+					'service'		=> $detail['service_id'],
 					'description'		=> $detail['description'],
 					'qty'				=> $detail['qty'],
 					'amount'			=> $detail['amount'],
@@ -84,10 +84,12 @@ class invoice_model extends CI_Model {
 			foreach($payment_details as $payment_detail) {
 				//$no = ($detail['no']) ? $detail['no'] : NULL;
 				$data = array(
-					'invoice_id'	 	=> $invoice_id,
-					'date'			=> $payment_detail['date'],
-					'amount'		=> $payment_detail['amount'],
+					'invoice_id'	=> $invoice_id,
+					'date'			=> $payment_detail['payment_date'],
+					'bank_name'		=> $payment_detail['bank_name'],
+					'amount'		=> $payment_detail['payment_amount'],
 					'payment_type'	=> $payment_detail['payment_type'],
+					'cheque'		=> $payment_detail['cheque_file'],
 					'remarks'		=> $payment_detail['remarks'],
 					
 		
@@ -249,7 +251,7 @@ class invoice_model extends CI_Model {
 		$no = $this->input->post('no');
 		$data = array(
 			'invoice_id'	 	=>  $this->input->post('hid_invoice_id'),
-			'service'		=>  $this->input->post('service_id'),
+			'service'			=>  $this->input->post('service_id'),
 			'description'		=>  $this->input->post('description'),
 			'qty'				=>  $this->input->post('qty'),
 			'amount'			=>  $this->input->post('amount'),
@@ -266,11 +268,15 @@ class invoice_model extends CI_Model {
 		//$payment_date = ($this->input->post('payment_date')) ? get_timestamp($this->input->post('payment_date'), '-') : 0;
 		//'date'		=> $this->input->post('payment_date'),
 		$data = array(
-			'invoice_id'	 	=> $this->input->post('hid_invoice_id'),
-			'date'		=> $this->input->post('payment_date'),
-			'amount'	=> $this->input->post('payment_amount'),
-			'payment_type'		=> $this->input->post('payment_type'),
-			'remarks'			=> $this->input->post('remarks'),
+			'invoice_id'	 	=>  $this->input->post('hid_invoice_id'),
+			'date'				=>  $this->input->post('payment_date'),
+			'bank_name'			=>  $this->input->post('bank_name'),
+			'amount'			=>  $this->input->post('payment_amount'),
+			'payment_type'		=>  $this->input->post('payment_type'),
+			'cheque'			=>  $this->input->post('cheque_file'),
+		    'remarks'		
+		
+		
 		);
 		$this->db->insert('invoice_payment_detail', $data);
 		$payment_detail_id = $this->db->insert_id();
@@ -306,7 +312,7 @@ class invoice_model extends CI_Model {
 		$no = $this->input->post('no');
 		$data = array(
 			'invoice_id'	 	=> $this->input->post('hid_invoice_id'),
-			'service'	 	=> $this->input->post('service_id'),
+			'service'	 		=> $this->input->post('service_id'),
 			'description'		=> $this->input->post('description'),
 			'qty'				=> $this->input->post('qty'),
 			'amount'			=> $this->input->post('amount'),
@@ -318,13 +324,14 @@ class invoice_model extends CI_Model {
 	public function updatePaymentDetail($id) {
 		//$no = $this->input->post('no');
 		$data = array(
-			'invoice_id'	 	=> $this->input->post('hid_invoice_id'),
-			'date'		=> $this->input->post('payment_date'),
-			'amount'			=> $this->input->post('payment_amount'),
-			'payment_type'		=> $this->input->post('payment_type'),
-			'remarks'			=> $this->input->post('remarks'),
-			
-		);	
+			'invoice_id'	 	=>  $this->input->post('hid_invoice_id'),
+			'date'				=>  $this->input->post('payment_date'),
+			'bank_name'			=>  $this->input->post('bank_name'),
+			'amount'			=>  $this->input->post('payment_amount'),
+			'payment_type'		=>  $this->input->post('payment_type'),
+			'cheque'			=>  $this->input->post('cheque_file'),
+		    'remarks'			=>  $this->input->post('remarks'),
+		);
 		$this->db->where('invoice_payment_detail_id', $id);
 		return $this->db->update('invoice_payment_detail', $data); 
 	}

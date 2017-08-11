@@ -36,7 +36,8 @@ class invoice extends CI_Controller {
 		if (empty($data['invoice'])) {
 			show_404();
 		}
-		$data['details'] =  $this->invoice_model->getDetilsbyinvoiceid($id);
+		$data['details'] 		=  $this->invoice_model->getDetilsbyinvoiceid($id);
+		$data['payment_details'] = $this->invoice_model->getPaymentDetailsbyinvoiceid($id);
 		$this->load->view('invoice/view', $data);
 	}
 
@@ -78,7 +79,7 @@ class invoice extends CI_Controller {
 				$ret = array(
 					'status' => 'success',
 				);	
-				$this->pv_sendEmail($invoice_id);
+				//$this->pv_sendEmail($invoice_id);
 			}
 			else {
 				$ret = array(
@@ -112,7 +113,7 @@ class invoice extends CI_Controller {
 				//$data['uoms'] = $this->uom_model->get_uoms();
 				$data['transactions'] = $this->transaction_model->get_approved_transactions();
 				$data['details'] = $this->invoice_model->getDetilsbyinvoiceid($id);
-				
+				$data['payment_details'] = $this->invoice_model->getPaymentDetailsbyinvoiceid($id);
 
 				$this->load->view('template/header', $data);
 				$this->load->view('invoice/edit', $data);
@@ -171,6 +172,46 @@ class invoice extends CI_Controller {
 		}
 	    echo json_encode($ret);
 	}
+	
+	
+	
+	function upload_cheque()
+		{
+			//$output = '';
+			if(is_array($_FILES))  
+			{  
+				foreach($_FILES['cheque']['name'] as $name => $value)  
+				{  
+					$file_name = explode(".", $_FILES['cheque']['name'][$name]);  
+					//$allowed_extension = array("jpg", "jpeg", "png", "gif","JPG");
+					$allowed_extension = array("jpg", "jpeg", "png", "gif","pdf","doc","docx","xls","xlsx","csv"); 
+					if(in_array($file_name[1], $allowed_extension))  
+					{  
+						//$new_name = rand() . '.'. $file_name[1];  
+						$new_name = $file_name[0] . '_'.date('Ymdhis').'.'. $file_name[1];  
+						$sourcePath = $_FILES["cheque"]["tmp_name"][$name];  
+						$targetPath = "uploads/invoice/cheques/".$new_name;  
+						move_uploaded_file($sourcePath, $targetPath); 
+						
+					
+						
+						$output = '<input type ="hidden" name ="cheque_file" id="chk-new-file-name" value ="' . $targetPath .'" >';
+						//$output .= '<script type ="text/javascript">console.log($("main-new-file-name").val())</script>';
+						echo $output;
+					}
+
+						
+				}  
+			
+			}  
+		}
+		
+	
+	
+	
+	
+	
+	
 
 	//Site Ajax //
 	public function aj_getInvoicedetail($id) {
@@ -644,9 +685,9 @@ class invoice extends CI_Controller {
 					 "</table> <br/><br/>  For More information, Please login to the system. <br/><br/><br/> Thanks";
 
 		$emails = explode(', ', $this->setting_model->getEmails());  
-		print_r($emails);
-		echo count($emails);
-		echo $message;
+		//print_r($emails);
+		//echo count($emails);
+		//echo $message;
 		//Send Email 
 		foreach($emails as $email) {
 			//send_email('MBDPL CRM', 'dyan@mbdesign.com.sg', $email, 'New Quotation', $message);

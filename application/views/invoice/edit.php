@@ -42,11 +42,11 @@
         format: "yyyy-mm-dd",
         autoclose :true,
     }); 
-	/* 
+	
 	 $("#payment-date").datepicker({
         format: "dd/mm/yyyy",
         autoclose :true,
-    });  */
+    }); 
 
 	
     //$("#stock-id").select2();
@@ -523,6 +523,124 @@ if ( $action == "new" ) { ?>
                 </div>    
               </div>
             </div>
+			<div class="panel panel-default tab-panel">
+              <div class="panel-heading">
+                  Payment Details
+              </div>
+              <div class="panel-body">
+                <div class="row-fluid table-responsive" id="tbl-payment-detail">
+                    <div class="col-md-12">
+                        <table class="table table-striped table-bordered dataTable no-footer" cellspacing="0" width="100%" id='payment-detail-table'>
+                          <thead>
+                            <tr><!-- style="width:10%"
+                                     style="width:25%"
+							         style="width:10%"
+							         style="width:20%"
+							         style="width:10%"
+							         style="width:15%"
+							         style="width:10%"-->
+							  <th >Date</th>
+                              <th >Bank Name</th>
+                              <th >Cheque Amount</th>
+                              <th >Payment Type</th>
+                              <th >Cheque</th>
+                              <th >Remark</th>
+                              <th >Action</th>
+                            </tr>
+                          </thead>
+                          <tbody> 
+                            <?php if( isset($payment_details) ) { 
+                              foreach($payment_details as $key1=>$pd1) {
+                            ?>
+                              <!-- <tr class="id-<?= $pd1['invoice_payment_detail_id'] ?>">
+                                <td class="small-tbl-column"><?=$pd['date'] ?></td>
+                                <td><?= $pd1['amount'] ?></td>
+                                <td><?= $pd1['payment_type'] ?></td>
+                                <td><?= $pd1['remarks'] ?></td>
+                                <td><a href='#' class='edit-di-pd'><i class='fa fa-edit ico'></i> / <a href='#' class='delete-di'><i class='fa fa-trash ico'></i></a></td>
+                              </tr> -->
+                            <?php
+                              }
+                            } ?>
+                          </tbody>
+                          <tfoot>
+                              <tr id="detail-row-pd">
+                              <form id="detail-form-pd">
+                                <td>
+                                  <input type="hidden" id="hid-edit-id" name="hid_edit_id" />
+                                  <!--input type="text" class="form-control input-sm" id="no" name="no" placeholder="No" value="" /-->
+									
+									<input type="text" class="form-control input-sm" id="payment-date" name="payment_date" placeholder="Select Payment Date" value=""/>
+								  </td>
+                                 <td>
+                                  <input type="text" class="form-control input-sm" id="bank-name" name="bank_name" placeholder="Enter Bank Name" value="" />
+                                </td>
+								
+								<td>
+                                  <input type="text" class="form-control input-sm" id="payment-amount" name="payment_amount" placeholder="Enter Payment Amount" value="" />
+                                </td>
+                                <td>
+									<select class="form-control input-sm" name="payment_type" id="payment-type">
+										<option value="" selected>Select Payment Type</option>
+										<option value="Cash" <?= ( (isset($_POST['payment_type']) && $_POST['payment_type'] == 'Cash') || (isset($invoice['payment_type']) && $invoice['payment_type'] == 'Cash') ) ? 'selected' : ''; ?> >Cash</option>
+										<option value="Cheque" <?= ( (isset($_POST['payment_type']) && $_POST['payment_type'] == 'Cheque') || (isset($invoice['payment_type']) && $invoice['payment_type'] == 'Cheque') ) ? 'selected' : ''; ?> >Cheque</option>
+										<option value="Other" <?= ( (isset($_POST['payment_type']) && $_POST['payment_type'] == 'Other') || (isset($invoice['payment_type']) && $invoice['payment_type'] == 'Other') ) ? 'selected' : ''; ?> >Other</option>
+									</select> 
+								</td>
+								<td>
+									
+										<input type="file" name="cheque[]" id ="cheque_select" onchange = "ValidateSingleInput(this);">
+										<button class="btn btn-primary" id="btn-clear" style ="padding: 1px 6px;">Remove File</button>
+										<input type="hidden" class="form-control input-sm" id="path" name="path" placeholder="Enter Qty" value="" readonly>
+										<input type="hidden" class="form-control input-sm" id="file-name" name="file_name" placeholder="Enter Qty" value="">
+								
+							   </td>
+                                <td>
+                                  <input type="text" class="form-control input-sm" id="remarks" name="remarks" placeholder="Enter Remark" value="" />
+                                </td>
+                               
+                                <td>
+                                  <span id="detail-add-pd"><a href="#" id="ico-add-pd"><i class="fa fa-plus ico"></i></a></span>
+                                  <span id="detail-update-pd" style="display: none;"><a href="#" id="ico-update-pd" ><i class="fa fa-save ico"></i></a> / <a href="#" id="ico-cancel-pd" ><i class="fa fa-eraser ico-pd"></i></a></span>
+                                </td>
+                              </form>
+							  	<form id ='cheque-form2' style ="display:none;">
+									<?= ($action=='edit')? '<input type ="hidden" name ="cheque_file" id="chk-new-file-name" value ="" >' : "" ?>
+				
+								</form>
+                              </tr>
+							  <tr id="total-row-pd"></tr>
+								<!--td colspan="3" class='text-right'>Cheque No</td>
+								<td class='text-right'><input type="text" class="form-control input-sm" id="cheque-no" name="cheque_no" placeholder="Enter Cheque No" value="<?= isset($_POST['sub_total']) ? $_POST['sub_total'] : ( isset($invoice['sub_total']) ? $invoice['sub_total'] : '') ; ?>" /></td>
+								<td></td>
+								
+							  </tr>
+							  <tr>
+								<td colspan="3" class='text-right'>Bank Name</td>
+								<td class='text-right'><input type="text" class="form-control input-sm" id="bank-name" name="cheque_no" placeholder="Enter Cheque No" value="<?= isset($_POST['sub_total']) ? $_POST['sub_total'] : ( isset($invoice['sub_total']) ? $invoice['sub_total'] : '') ; ?>" /></td>
+								<td></td>
+								
+							  </tr>
+							  <tr>
+								<form id = "cheque-form">
+									<td colspan="3" class='text-right'>Cheque</td>
+									<td class='text-right'><input type="file" name="cheque[]" id ="cheque_select" onchange = "ValidateSingleInput(this);"></td>
+								</form>
+								<td></td>
+							  </tr>
+							  <tr>
+								<td colspan="3" class='text-right'></td>
+								<td class='text-right'><input type="text" class="form-control input-sm" id="path" name="path" placeholder="Upload File" value="" readonly></td>
+								<input type="hidden" class="form-control input-sm" id="file-name" name="file_name" placeholder="Upload File" value="">
+								<td></td>
+							  </tr-->
+
+                          </tfoot>
+                        </table>      
+                    </div>
+                </div>    
+              </div>
+            </div> 
 			</div>
             <div class="clearfix sp-margin-sm"></div>
             <div class="form-group">
