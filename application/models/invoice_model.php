@@ -269,12 +269,12 @@ class invoice_model extends CI_Model {
 		//'date'		=> $this->input->post('payment_date'),
 		$data = array(
 			'invoice_id'	 	=>  $this->input->post('hid_invoice_id'),
-			'date'				=>  $this->input->post('payment_date'),
+			'date'				=>  date('Y-m-d',strtotime($this->input->post('payment_date'))),
 			'bank_name'			=>  $this->input->post('bank_name'),
 			'amount'			=>  $this->input->post('payment_amount'),
 			'payment_type'		=>  $this->input->post('payment_type'),
 			'cheque'			=>  $this->input->post('cheque_file'),
-		    'remarks'		
+		    'remarks'			=>  $this->input->post('remarks'),
 		
 		
 		);
@@ -325,7 +325,7 @@ class invoice_model extends CI_Model {
 		//$no = $this->input->post('no');
 		$data = array(
 			'invoice_id'	 	=>  $this->input->post('hid_invoice_id'),
-			'date'				=>  $this->input->post('payment_date'),
+			'date'				=>  date('Y-m-d',strtotime($this->input->post('payment_date'))),
 			'bank_name'			=>  $this->input->post('bank_name'),
 			'amount'			=>  $this->input->post('payment_amount'),
 			'payment_type'		=>  $this->input->post('payment_type'),

@@ -160,9 +160,9 @@ class announcement_model extends CI_Model {
 				//$no = ($detail['no']) ? $detail['no'] : NULL;
 				$data = array(
 					'announce_id'	 	=> $announce_id,
-					'file_name'			=> $detail['file_name'],
-					'new_file_name'		=> $detail['new_file_name'],
-					'file_path'			=> $detail['file_path'],
+					'file_name'			=> mysqli_real_escape_string($detail['file_name']),
+					'new_file_name'		=> mysqli_real_escape_string($detail['new_file_name']),
+					'file_path'			=> mysqli_real_escape_string($detail['file_path']),
 					'date_uploaded'		=> date('Y-m-d'),
 					//'file_name'		=> $this->input->post('name'),
 				);

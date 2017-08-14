@@ -190,7 +190,7 @@
 	 $("#detail-form-pd").each(function(){
       this.reset();
     });
-
+	//alert('fdfetrt');
 	$('#detail-add-pd').show();
     $('#detail-update-pd').hide();
   }
@@ -327,22 +327,22 @@ if ( $action == "new" ) { ?>
   <script src="<?= base_url();?>js/invoice_edit.js"></script>
 <?php } ?>
 <section class="content">
-  <div class="row">
-	<div class="col-xs-12">
-		<ol class="breadcrumb">
-			<li><a href="<?= base_url().'index.php'; ?>"><i class="fa fa-dashboard"></i> Home</a></li>
-			<li><a href="<?= base_url().'invoice'; ?>">Announcement</a></li>
-			<li class="active"><?= ($action == 'new') ? "Add " : "Edit " ?> Invoice</li>
-		</ol>
-		<div class="box">
-          <div class="box-header">
-             <h3 class="box-title"><?= ($action == 'new') ? "Add " : "Edit " ?>Invoice</h3>
-			 <div class="pull-right">
-                      <a href="<?= base_url().'invoice'; ?>" class="btn btn-default btn-flat">Back</a>
-             </div>
-           </div><!-- /.box-header -->
-		</div>
-	</div>
+		<div class="row">
+			<div class="col-xs-12">
+				<ol class="breadcrumb">
+					<li><a href="<?= base_url().'index.php'; ?>"><i class="fa fa-dashboard"></i> Home</a></li>
+					<li><a href="<?= base_url().'invoice'; ?>">Announcement</a></li>
+					<li class="active"><?= ($action == 'new') ? "Add " : "Edit " ?> Invoice</li>
+				</ol>
+				<div class="box">
+				  <div class="box-header">
+					 <h3 class="box-title"><?= ($action == 'new') ? "Add " : "Edit " ?>Invoice</h3>
+					 <div class="pull-right">
+							  <a href="<?= base_url().'invoice'; ?>" class="btn btn-default btn-flat">Back</a>
+					 </div>
+				   </div><!-- /.box-header -->
+				</div>
+			</div>
             <div class="col-md-6">
               <div class="form-group">
                 <input type="hidden" id="hid-submitted" name="hid_submitted" value="1" />
@@ -430,6 +430,7 @@ if ( $action == "new" ) { ?>
                 </div>
               </div>
             </div>
+			<div class = "col-md-12">
             <div class="clearfix sp-margin-lg"></div>
             <div class ="box-body">
 			<div class="panel panel-default tab-panel">
@@ -439,7 +440,7 @@ if ( $action == "new" ) { ?>
               <div class="panel-body">
                 <div class="row-fluid table-responsive" id="tbl-detail">
                     <div class="col-md-12">
-                        <table class="table table-striped table-bordered dataTable no-footer" cellspacing="0" width="100%" id='detail-table'>
+                        <table class="table table-striped table-bordered dataTable" cellspacing="0" width="100%" id='detail-table'>
                           <thead>
                             <tr>
                               <th style="width:30%">Description</th>
@@ -523,6 +524,16 @@ if ( $action == "new" ) { ?>
                 </div>    
               </div>
             </div>
+			</div>
+			</div>
+			
+	</div>
+</section>
+<section class = "content">
+	<div class = "row">
+			<div class="clearfix sp-margin-lg"></div>
+			<div class= "col-md-12">
+			<div class ="box-body">
 			<div class="panel panel-default tab-panel">
               <div class="panel-heading">
                   Payment Details
@@ -532,18 +543,12 @@ if ( $action == "new" ) { ?>
                     <div class="col-md-12">
                         <table class="table table-striped table-bordered dataTable no-footer" cellspacing="0" width="100%" id='payment-detail-table'>
                           <thead>
-                            <tr><!-- style="width:10%"
-                                     style="width:25%"
-							         style="width:10%"
-							         style="width:20%"
-							         style="width:10%"
-							         style="width:15%"
-							         style="width:10%"-->
+                            <tr>
 							  <th >Date</th>
                               <th >Bank Name</th>
                               <th >Cheque Amount</th>
                               <th >Payment Type</th>
-                              <th >Cheque</th>
+                              <!--th >Cheque</th-->
                               <th >Remark</th>
                               <th >Action</th>
                             </tr>
@@ -553,7 +558,7 @@ if ( $action == "new" ) { ?>
                               foreach($payment_details as $key1=>$pd1) {
                             ?>
                               <!-- <tr class="id-<?= $pd1['invoice_payment_detail_id'] ?>">
-                                <td class="small-tbl-column"><?=$pd['date'] ?></td>
+                                <td class="small-tbl-column"><?=$pd1['date'] ?></td>
                                 <td><?= $pd1['amount'] ?></td>
                                 <td><?= $pd1['payment_type'] ?></td>
                                 <td><?= $pd1['remarks'] ?></td>
@@ -567,7 +572,7 @@ if ( $action == "new" ) { ?>
                               <tr id="detail-row-pd">
                               <form id="detail-form-pd">
                                 <td>
-                                  <input type="hidden" id="hid-edit-id" name="hid_edit_id" />
+                                  <input type="hidden" id="hid-edit-id-pd" name="hid_edit_id_pd" />
                                   <!--input type="text" class="form-control input-sm" id="no" name="no" placeholder="No" value="" /-->
 									
 									<input type="text" class="form-control input-sm" id="payment-date" name="payment_date" placeholder="Select Payment Date" value=""/>
@@ -587,14 +592,14 @@ if ( $action == "new" ) { ?>
 										<option value="Other" <?= ( (isset($_POST['payment_type']) && $_POST['payment_type'] == 'Other') || (isset($invoice['payment_type']) && $invoice['payment_type'] == 'Other') ) ? 'selected' : ''; ?> >Other</option>
 									</select> 
 								</td>
-								<td>
+								<!--td>
 									
 										<input type="file" name="cheque[]" id ="cheque_select" onchange = "ValidateSingleInput(this);">
 										<button class="btn btn-primary" id="btn-clear" style ="padding: 1px 6px;">Remove File</button>
 										<input type="hidden" class="form-control input-sm" id="path" name="path" placeholder="Enter Qty" value="" readonly>
 										<input type="hidden" class="form-control input-sm" id="file-name" name="file_name" placeholder="Enter Qty" value="">
 								
-							   </td>
+							   </td-->
                                 <td>
                                   <input type="text" class="form-control input-sm" id="remarks" name="remarks" placeholder="Enter Remark" value="" />
                                 </td>
@@ -609,38 +614,16 @@ if ( $action == "new" ) { ?>
 				
 								</form>
                               </tr>
-							  <tr id="total-row-pd"></tr>
-								<!--td colspan="3" class='text-right'>Cheque No</td>
-								<td class='text-right'><input type="text" class="form-control input-sm" id="cheque-no" name="cheque_no" placeholder="Enter Cheque No" value="<?= isset($_POST['sub_total']) ? $_POST['sub_total'] : ( isset($invoice['sub_total']) ? $invoice['sub_total'] : '') ; ?>" /></td>
-								<td></td>
-								
+							  <tr id="total-row-pd">
+							  
 							  </tr>
-							  <tr>
-								<td colspan="3" class='text-right'>Bank Name</td>
-								<td class='text-right'><input type="text" class="form-control input-sm" id="bank-name" name="cheque_no" placeholder="Enter Cheque No" value="<?= isset($_POST['sub_total']) ? $_POST['sub_total'] : ( isset($invoice['sub_total']) ? $invoice['sub_total'] : '') ; ?>" /></td>
-								<td></td>
-								
-							  </tr>
-							  <tr>
-								<form id = "cheque-form">
-									<td colspan="3" class='text-right'>Cheque</td>
-									<td class='text-right'><input type="file" name="cheque[]" id ="cheque_select" onchange = "ValidateSingleInput(this);"></td>
-								</form>
-								<td></td>
-							  </tr>
-							  <tr>
-								<td colspan="3" class='text-right'></td>
-								<td class='text-right'><input type="text" class="form-control input-sm" id="path" name="path" placeholder="Upload File" value="" readonly></td>
-								<input type="hidden" class="form-control input-sm" id="file-name" name="file_name" placeholder="Upload File" value="">
-								<td></td>
-							  </tr-->
-
                           </tfoot>
                         </table>      
                     </div>
                 </div>    
               </div>
             </div> 
+			</div>
 			</div>
             <div class="clearfix sp-margin-sm"></div>
             <div class="form-group">
