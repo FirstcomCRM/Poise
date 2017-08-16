@@ -9,6 +9,7 @@ class PDF extends TCPDF {
 	public $note;
 	public $quotation;
 	public $invoice;
+	public $receipt;
 	public $po;
 	public $do;
 	public $jobtitle;
@@ -35,6 +36,12 @@ class PDF extends TCPDF {
     	// $this->jobtitle = $invoice['job_title'];
     	// $this->terms = $invoice['terms'];
     }
+	
+	 public function setReceipt($receipt) {
+    	$this->receipt = $receipt;
+    	// $this->jobtitle = $invoice['job_title'];
+    	// $this->terms = $invoice['terms'];
+    }
 
     public function setPO($po) {
     	$this->po = $po;
@@ -58,7 +65,61 @@ class PDF extends TCPDF {
     }
 
     public function Header() { 
-		if($this->title != '') {
+		if(!empty($this->receipt)){
+			// $this->SetFont('helvetica', 'B', 11);
+			$this->ln(10);
+			// $this->setFontSpacing(2);
+			$this->Image('./images/logo_boshi_navyblue.png', 15, '', 30, '', '', '', '', false, 600, '', false, false, 0);
+			
+			$col_arr = array(
+				0 => array( 'w' => 0, 's' => 0, 'y' => '0' ),
+				1 => array( 'w' => 0, 's' => 0, 'y' => '5' ),
+			);
+			
+			$this->setColumnsArray($col_arr);
+			// $this->multiCell(180, 3, $this->title, 0, 'R',  0, 0, '', '', true, 0, false, true, 8, 'M');
+			$this->ln(15);
+			$this->selectColumn(1);
+			$this->SetFont('helvetica', 'B', 8);
+			//$this->multiCell(37, 5, '', 0, 'L', 0 , 0);
+			$this->multiCell(180, 5, 'POISE REAL ESTATE PTE LTD', 0, 'C', 0 , 1);
+			$this->SetFont('helvetica', '', 7);
+			$this->multiCell(180, 5, 'AGENCY LICENSE NO. L3001234567890', 0, 'C', 0 , 1);
+			$this->multiCell(180, 5, '33 UBI AVE 3 #08-12 VERTEX TOWER B SINGAPORE 408868', 0, 'C', 0 , 1);
+			$this->SetFont('helvetica', 'B', 8);
+			$this->multiCell(180, 5, 'OFFICIAL RECEIPT', 0, 'C', 0 , 1);
+			$this->SetFont('helvetica', '', 7);
+			$this->multiCell(180, 5, 'GST REG NO.: M201109442', 0, 'C', 0 , 1);
+			
+			$col_arr1 = array(
+				0 => array( 'w' => 120, 's' => 110, 'y' => '0' ),
+				//1 => array( 'w' => 115, 's' => 5, 'y' => '40' ),
+			);
+			
+			//$this->setColumnsArray($col_arr1);
+			
+			//$this->SetFont('helvetica', '', 7);
+			//$this->multiCell(37, 5, '', 0, 'L', 0 , 0);
+			$this->ln(-20);
+			$this->selectColumn(1);
+			$this->SetFont('helvetica', '', 8);
+			$this->setFontSpacing(0);
+			
+			$this->multiCell(182, 5, '(REG NO. M201109442)', 0, 'R',  0 , 1);
+			$this->multiCell(182, 5, '(L NO. M201109442)', 0, 'R',  0 , 1);
+			//$this->SetY(-35);
+			//$this->Image('./images/logo_boshi_navyblue.png', 15, 277, 30, '', '', '', '', false, 600, '', false, false, 0);	
+			//$this->Line(142, 268, 195, 268);
+			$this->SetFont('helvetica', '', 5);
+			//$this->multiCell(40, 4, '', 0, 'L', 0 , 0);
+			//$this->multiCell(88, 4, '', 0, 'L', 0 , 0);
+			//$this->multiCell(40, 4, 'Authorised Signature & Company Stamp', 0, 'L', 0 , 1);
+			//$this->ln(1);
+			//$this->selectColumn(2);
+			
+		}
+		else{
+			
 			$this->SetFont('helvetica', 'B', 11);
 			$this->ln(10);
 			$this->setFontSpacing(2);
@@ -68,6 +129,9 @@ class PDF extends TCPDF {
 			$this->SetFont('helvetica', '', 8);
 			$this->setFontSpacing(0);
 			$this->multiCell(180, 3, 'GST Reg No. M201109442', 0, 'R',  0, 0, '', '', true, 0, false, true, 8, 'M');
+			
+			
+			
 		}
 	}
 
@@ -122,14 +186,14 @@ class PDF extends TCPDF {
 		// }
 		// $this->Line(15, 268, 68, 268);
 		
-		if( empty($this->po) ) {
+		/* if( empty($this->po) ) {
 			$this->SetFont('helvetica', '', 5);
 			$this->multiCell(185, 5, '', 0, 'L', 0 , 0);
 			$this->StartTransform();
 			$this->Rotate(90);
 			$this->multiCell(50, 5,'CRN/GST No. 200404594H', 0, 'L', 0 , 0);
 			$this->StopTransform();
-		}
+		} */
 		$x = $this->PageNo();
 		$this->ln(10);
 		$this->SetFont('helvetica', '', 7);

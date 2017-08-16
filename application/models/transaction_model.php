@@ -479,7 +479,7 @@ class transaction_model extends CI_Model {
 	}
 
 	public function get_transactinfo($id) {
-		$this->db->select("p.*,pr.property_title", false);
+		$this->db->select("p.*,pr.property_title,u.name", false);
 		$this->db->from('case_submission p');
 		$this->db->join('property pr', 'pr.property_id = p.property_id', 'left');
         $this->db->join('users u', 'u.user_id = p.user_id', 'left');
@@ -518,6 +518,35 @@ class transaction_model extends CI_Model {
 		return $query->result_array();
 		//echo json_encode($query);
 	}
+	
+	
+	public function get_admin_setting() {
+		
+		
+	//$query = $this->db->select('email')->from('users')->where('role_id', 1)->where('role_id', 1)->get();
+    //return $query->row()->average_score;
+		/* $this->db->select('u.email');
+		$this->db->from('users u');
+		//$this->db->join('uom u', 'd.uom_id = u.uom_id', 'left');
+		$this->db->where('u.role_id =', 1);
+		$this->db->where('u.status !=', 1);
+		$query = $this->db->get();
+		return $query->result_array();
+		//echo json_encode($query); */
+		
+		/* $this->db->where('role_id =', 1);
+		$this->db->where('status !=', 1);
+			$query = $this->db->get('users');
+			return $query->result_array(); */
+			
+		$where = "`role_id` = 1 AND `status`!= 1";
+		$this->db->where($where);
+		$query = $this->db->get('users');
+		//echo "ZZZZZZZZZZZZZZZZ>".$query;
+		//return $query->result_array();
+		$query = $this->db->get_where('users');
+		return $query->row_array();
+	}
 
 	public function getQoNo($name) {
 		// $this->db->like('property_no', $name);
@@ -540,5 +569,11 @@ class transaction_model extends CI_Model {
 			return $query->result_array();	
 		}
 	}
+	
+	public function getAdminEmails() {
+		$setting = $this->get_admin_setting();
+		return $setting['email'];	
+	}
+	
 
 }

@@ -90,7 +90,7 @@ class transaction extends CI_Controller {
 				$ret = array(
 					'status' => 'success',
 				);	
-				//$this->pv_sendEmail($property_transaction_id);
+				$this->pv_sendEmail($transaction_id);
 			}
 			else {
 				$ret = array(
@@ -758,43 +758,49 @@ class transaction extends CI_Controller {
 	} 
 
 
-	public function pv_sendEmail($property_transaction_id) {
-		$property_transaction_info = $this->transaction_model->getproperty_transactioninfo($property_transaction_id);
-
+	public function pv_sendEmail($transaction_id) {
+		$transaction_info = $this->transaction_model->get_transactinfo($transaction_id);
+		//$recipients = $this->transaction_model->getAdminEmails();
 		$message = 	"Dear Sir/Madam, <br/><br/>There is a new Transaction with the following information. <br/><br/>" .
 					 "<table cellspacing='0' cellpadding='5' border='1'>" .
 					 "<tr>" .
-					 	"<td>Transaction No</td><td> : </td><td>" . $property_transaction_info['property_transaction_no'] . "</td>" . 
+					 	"<td>Transaction No</td><td> : </td><td>" . $transaction_info['case_no'] . "</td>" . 
 					 "</tr>".
 					  "<tr>" .
-					 	"<td>Date</td><td> : </td><td>" . date('d-m-Y', $property_transaction_info['date']) . "</td>" . 
+					 	"<td>Date</td><td> : </td><td>" . $transaction_info['transact_date'] . "</td>" . 
 					 "</tr>".
 					 "<tr>" .
-					 	"<td>Client</td><td> : </td><td>" . $property_transaction_info['client'] . "</td>" . 
+					 	"<td>Property Type</td><td> : </td><td>" . $transaction_info['property_type'] . "</td>" . 
 					 "</tr>".
 					  "<tr>" .
-					 	"<td>Rep</td><td> : </td><td>" . $property_transaction_info['rep'] . "</td>" . 
+					 	"<td>Sales Person</td><td> : </td><td>" . $transaction_info['name'] . "</td>" . 
 					 "</tr>".
 					 "<tr>" .
-					 	"<td>Sub Total</td><td> : </td><td>" . $property_transaction_info['sub_total'] . "</td>" . 
+					 	"<td>Sub Total</td><td> : </td><td>" . $transaction_info['amount'] . "</td>" . 
 					 "</tr>".
 					  "<tr>" .
-					 	"<td>GST</td><td> : </td><td>" . $property_transaction_info['gst'] . " %</td>" . 
-					 "</tr>".
-					 "<tr>" .
-					 	"<td>Grand Total</td><td> : </td><td>" . $property_transaction_info['total'] . "</td>" . 
+					 	"<td>GST</td><td> : </td><td>" . $transaction_info['gst'] . " %</td>" . 
 					 "</tr>".
 					 "</table> <br/><br/>  For More information, Please login to the system. <br/><br/><br/> Thanks";
+/*  "<tr>" .
+					 	"<td>Grand Total</td><td> : </td><td>" . $transaction_info['total'] . "</td>" . 
+					 "</tr>". */
+		//$emails = $this->transaction_model->getAdminEmails();
+		//$emails = explode(', ', $this->transaction_model->getAdminEmails());  		
+		//print_r($emails);
+	//	echo count($emails);
+		//echo $message;
+		
+		
+		$query = $this->db->query("SELECT distinct email FROM users where role_id=1 and status !=1;");
 
-		$emails = explode(', ', $this->setting_model->getEmails());  
-		print_r($emails);
-		echo count($emails);
-		echo $message;
 		//Send Email 
-		foreach($emails as $email) {
-			send_email('MBDPL CRM', 'dyan@mbdesign.com.sg', $email, 'New Transaction', $message);
-			//echo send_email('MBDPL CRM', 'josemiguelgonzales93@gmail.com', $email, 'New Transaction', $message);
+		foreach ($query->result_array() as $row)
+		{
+			//echo $row['email'];
+			send_email('POISE CRM', 'test@poise.com.sg',$row['email'], 'New Transaction', $message);
 		}
+				
 	}
 
 

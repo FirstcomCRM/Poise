@@ -135,6 +135,7 @@ class invoice extends CI_Controller {
 				$ret = array(
 					'status' => 'success',
 				);	
+				$this->pv_sendEmail($id);
 			}
 			else {
 				$ret = array(
@@ -663,36 +664,31 @@ class invoice extends CI_Controller {
 	} 
 	
 	public function pv_sendEmail($invoice_id) {
-		$invoice_info = $this->invoice_model->getInvoiceinfo($invoice_id);
-
-		$message = 	"Dear Sir/Madam, <br/><br/>There is a new Invoice with the following information. <br/><br/>" .
+		$cheque_info = $this->invoice_model->getInvoice_PD_info($invoice_id);
+		//$recipients = $this->transaction_model->getAdminEmails();
+		$message = 	"Dear Sir/Madam, <br/><br/>There is a new Cheque with the following information. <br/><br/>" .
 					 "<table cellspacing='0' cellpadding='5' border='1'>" .
 					 "<tr>" .
-					 	"<td>Invoice No</td><td> : </td><td>" . $invoice_info['invoice_no'] . "</td>" . 
+					 	"<td>Cheque No</td><td> : </td><td>" . $cheque_info['invoice_no'] . "</td>" . 
 					 "</tr>".
 					  "<tr>" .
-					 	"<td>Date</td><td> : </td><td>" . date('d-m-Y', $invoice_info['invoice_date']) . "</td>" . 
+					 	"<td>Bank Name</td><td> : </td><td>" . $cheque_info['invoice_date'] . "</td>" . 
 					 "</tr>".
 					 "<tr>" .
-					 	"<td>Delivery Date</td><td> : </td><td>" . $invoice_info['delivery_date'] . "</td>" . 
-					 "</tr>".
-					  "<tr>" .
-					 	"<td>Company</td><td> : </td><td>" . $invoice_info['job_title'] . "</td>" . 
-					 "</tr>".
-					 "<tr>" .
-					 	"<td>Contact</td><td> : </td><td>" . $invoice_info['contact'] . "</td>" . 
+					 	"<td>Amount</td><td> : </td><td>" . $cheque_info['entry_no'] . "</td>" . 
 					 "</tr>".
 					 "</table> <br/><br/>  For More information, Please login to the system. <br/><br/><br/> Thanks";
+		
+		
+		$query = $this->db->query("SELECT distinct email FROM users where role_id=1 and status !=1;");
 
-		$emails = explode(', ', $this->setting_model->getEmails());  
-		//print_r($emails);
-		//echo count($emails);
-		//echo $message;
 		//Send Email 
-		foreach($emails as $email) {
-			//send_email('MBDPL CRM', 'dyan@mbdesign.com.sg', $email, 'New Quotation', $message);
-			//echo send_email('MBDPL CRM', 'josemiguelgonzales93@gmail.com', $email, 'New Quotation', $message);
+		foreach ($query->result_array() as $row)
+		{
+			//echo $row['email'];
+			send_email('POISE CRM', 'test@poise.com.sg',$row['email'], 'New Transaction', $message);
 		}
+				
 	}
 	
 	

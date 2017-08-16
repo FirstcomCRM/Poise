@@ -545,10 +545,11 @@ if ( $action == "new" ) { ?>
                           <thead>
                             <tr>
 							  <th >Date</th>
+                              <th >Cheque No</th>
                               <th >Bank Name</th>
                               <th >Cheque Amount</th>
                               <th >Payment Type</th>
-                              <!--th >Cheque</th-->
+                              <th >Cheque</th>
                               <th >Remark</th>
                               <th >Action</th>
                             </tr>
@@ -577,6 +578,9 @@ if ( $action == "new" ) { ?>
 									
 									<input type="text" class="form-control input-sm" id="payment-date" name="payment_date" placeholder="Select Payment Date" value=""/>
 								  </td>
+								 <td>
+                                  <input type="text" class="form-control input-sm" id="cheque-no" name="cheque_no" placeholder="Enter Cheque No" value="" />
+                                </td>
                                  <td>
                                   <input type="text" class="form-control input-sm" id="bank-name" name="bank_name" placeholder="Enter Bank Name" value="" />
                                 </td>
@@ -592,14 +596,14 @@ if ( $action == "new" ) { ?>
 										<option value="Other" <?= ( (isset($_POST['payment_type']) && $_POST['payment_type'] == 'Other') || (isset($invoice['payment_type']) && $invoice['payment_type'] == 'Other') ) ? 'selected' : ''; ?> >Other</option>
 									</select> 
 								</td>
-								<!--td>
+								<td>
 									
 										<input type="file" name="cheque[]" id ="cheque_select" onchange = "ValidateSingleInput(this);">
 										<button class="btn btn-primary" id="btn-clear" style ="padding: 1px 6px;">Remove File</button>
 										<input type="hidden" class="form-control input-sm" id="path" name="path" placeholder="Enter Qty" value="" readonly>
 										<input type="hidden" class="form-control input-sm" id="file-name" name="file_name" placeholder="Enter Qty" value="">
 								
-							   </td-->
+							   </td>
                                 <td>
                                   <input type="text" class="form-control input-sm" id="remarks" name="remarks" placeholder="Enter Remark" value="" />
                                 </td>

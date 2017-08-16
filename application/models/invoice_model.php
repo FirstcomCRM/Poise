@@ -87,6 +87,7 @@ class invoice_model extends CI_Model {
 					'invoice_id'	=> $invoice_id,
 					'date'			=> $payment_detail['payment_date'],
 					'bank_name'		=> $payment_detail['bank_name'],
+					'cheque_no'		=> $payment_detail['cheque_no'],
 					'amount'		=> $payment_detail['payment_amount'],
 					'payment_type'	=> $payment_detail['payment_type'],
 					'cheque'		=> $payment_detail['cheque_file'],
@@ -125,10 +126,36 @@ class invoice_model extends CI_Model {
 			// 'commission'			=> $this->input->post('commission'),
 			// 'mf'					=> $this->input->post('mf'),
 		);
+		
+		$has_cheque = $this->checkPaymentDetails($id);
+		if($has_cheque) {
+			//$this->addDetails($invoice_id);	
+			$this->pv_sendEmail($has_cheque);	
+		}
+		
+		
 		$this->db->where('invoice_id', $id);
-		return $this->db->update('invoice', $data); 
+		return $this->db->update('invoice', $data);
+		
 	}
 
+	
+	public function checkPaymentDetails($invoice_id){
+		
+		
+		$this->db->select('pd.invoice_payment_detail_id');
+		$this->db->from('invoice_payment_detail pd');
+		$this->db->where('pd.invoice_id', $invoice_id);
+		$this->db->where('pd.status !=', 1);
+		$this->db->order_by('pd.invoice_payment_detail_id', 'DESC');
+		$this->db->limit(1);
+		$query = $this->db->get();
+		return $query->result_array();	
+	}
+	
+	
+	
+	
 	public function delete_invoice($id) {
 		$data = array(
 			'status' => 1,
@@ -156,7 +183,16 @@ class invoice_model extends CI_Model {
 		return $query->result_array();	
 	}
 	
-	
+	public function getInvoice_PD_info($detail_id) {
+		$this->db->select('pd.*');
+		$this->db->from('invoice_payment_detail pd');
+		$this->db->where('pd.invoice_payment_detail_id', $detail_id);
+		$this->db->where('pd.status !=', 1);
+		$this->db->order_by('pd.invoice_payment_detail_id', 'DESC');
+		$this->db->limit(1);
+		$query = $this->db->get();
+		return $query->result_array();	
+	}
 	
 	
 	public function getdtinvoices() {
@@ -237,15 +273,7 @@ class invoice_model extends CI_Model {
 		//$this->datatables->add_column('action', '<a class="btn btn-mtac admin-control btn-view btn-primary view-link" data-toggle="tooltip" data-placement="top" title="View" href="announcement/view/$1">View</a><a class="btn btn-mtac admin-control btn-view btn-success" data-toggle="tooltip" data-placement="top" title="Edit" href="announcement/edit/$1">Edit</a><a class="btn btn-mtac btn-delete btn-danger delete-link" data-toggle="tooltip" data-placement="top" title="Delete" href="announcement/delete/$1">Delete</a>', 'announce_id');
 		echo $this->datatables->generate();
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
+
 	
 	public function addDetail() {
 		$no = $this->input->post('no');
@@ -270,6 +298,7 @@ class invoice_model extends CI_Model {
 		$data = array(
 			'invoice_id'	 	=>  $this->input->post('hid_invoice_id'),
 			'date'				=>  date('Y-m-d',strtotime($this->input->post('payment_date'))),
+			'cheque_no'			=>  $this->input->post('cheque_no'),
 			'bank_name'			=>  $this->input->post('bank_name'),
 			'amount'			=>  $this->input->post('payment_amount'),
 			'payment_type'		=>  $this->input->post('payment_type'),
@@ -326,6 +355,7 @@ class invoice_model extends CI_Model {
 		$data = array(
 			'invoice_id'	 	=>  $this->input->post('hid_invoice_id'),
 			'date'				=>  date('Y-m-d',strtotime($this->input->post('payment_date'))),
+			'cheque_no'			=>  $this->input->post('cheque_no'),
 			'bank_name'			=>  $this->input->post('bank_name'),
 			'amount'			=>  $this->input->post('payment_amount'),
 			'payment_type'		=>  $this->input->post('payment_type'),
@@ -404,5 +434,42 @@ class invoice_model extends CI_Model {
 		return $query->row_array();	
 	}
 
+	
+	public function pv_sendEmail($detail_id) {
+		$cheque_info = $this->getInvoice_PD_info($detail_id);
+		//$recipients = $this->transaction_model->getAdminEmails();
+		$message = 	"Dear Sir/Madam, <br/><br/>There is a new Cheque with the following information. <br/><br/>" .
+					 "<table cellspacing='0' cellpadding='5' border='1'>" .
+					 "<tr>" .
+					 	"<td>Cheque No</td><td> : </td><td>" . $cheque_info['invoice_no'] . "</td>" . 
+					 "</tr>".
+					  "<tr>" .
+					 	"<td>Bank Name</td><td> : </td><td>" . $cheque_info['invoice_date'] . "</td>" . 
+					 "</tr>".
+					 "<tr>" .
+					 	"<td>Amount</td><td> : </td><td>" . $cheque_info['entry_no'] . "</td>" . 
+					 "</tr>".
+					 "</table> <br/><br/>  For More information, Please login to the system. <br/><br/><br/> Thanks";
+		/*  "<tr>" .
+								"<td>Grand Total</td><td> : </td><td>" . $transaction_info['total'] . "</td>" . 
+							 "</tr>". */
+				//$emails = $this->transaction_model->getAdminEmails();
+				//$emails = explode(', ', $this->transaction_model->getAdminEmails());  		
+				//print_r($emails);
+			//	echo count($emails);
+				//echo $message;
+		
+		
+		$query = $this->db->query("SELECT distinct email FROM users where role_id=1 and status !=1;");
+
+		//Send Email 
+		foreach ($query->result_array() as $row)
+		{
+			//echo $row['email'];
+			send_email('POISE CRM', 'test@poise.com.sg',$row['email'], 'New Transaction', $message);
+		}
+				
+	}
+	
 
 }

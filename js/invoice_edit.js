@@ -91,6 +91,7 @@ $( document ).ready(function() {
 				
 
               $('#payment-date').val(result['date']);
+              $('#cheque-no').val(result['cheque_no']);
               $('#bank-name').val(result['bank_name']);
 			  $('#payment-amount').val(result['amount']);
               $('#payment-type').val(result['payment_type']);
@@ -228,6 +229,7 @@ $( document ).ready(function() {
 		  
             hid_invoice_id    	: $('#hid-invoice-id').val(),
             payment_date      	: $('#payment-date').val(),
+            cheque_no      		: $('#cheque-no').val(),
             bank_name      		: $('#bank-name').val(),
             payment_amount      : $('#payment-amount').val(),
             payment_type      	: $('#payment-type').val(),
@@ -311,6 +313,7 @@ $( document ).ready(function() {
                 data: { 
 					hid_invoice_id    	: $('#hid-invoice-id').val(),
 					payment_date      	: $('#payment-date').val(),
+					cheque_no      		: $('#cheque-no').val(),
 					bank_name      		: $('#bank-name').val(),
 					payment_amount      : $('#payment-amount').val(),
 					payment_type      	: $('#payment-type').val(),
@@ -489,13 +492,15 @@ $( document ).ready(function() {
         var classname = 'id-' + value.invoice_payment_detail_id ; 
         $('#payment-detail-table > tbody:last').append("<tr class='"+classname+"'>"+
 											   "<td>"+ value.date +"</td>"+
+											   "<td>"+ value.cheque_no +"</td>"+
                                                "<td>"+ value.bank_name +"</td>"+
                                                "<td>"+ value.amount +"</td>"+
                                                "<td>"+ value.payment_type +"</td>"+ 
+											   "<td>"+ value.cheque +"</td>"+
                                                "<td>"+ value.remarks +"</td>"+
                                                "<td><a href='#' class='edit-di-pd'><i class='fa fa-edit ico'></i> / <a href='#' class='delete-di-pd'><i class='fa fa-trash ico'></i></a></td></tr>");
        /* sub_total += (value.amount != '') ? parseFloat(value.amount) : 0;*/
-	  // console.log(arr);"<td><input type ='file' name='cheque[]' id ='cheque_select' value= '"+ value.cheque +"'/></td>"+     "<td>"+ value.cheque +"</td>"+
+	  // console.log(arr);"<td><input type ='file' name='cheque[]' id ='cheque_select' value= '"+ value.cheque +"'/></td>"+     
     });
    
     } 

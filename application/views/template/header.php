@@ -173,6 +173,7 @@
                 <li><a href="<?= base_url().'property'; ?>"><i class="fa fa-circle-o"></i> Property</a></li>
                 <li><a href="<?= base_url().'transaction'; ?>"><i class="fa fa-circle-o"></i> Property Transaction</a></li>
                 <li><a href="<?= base_url().'invoice'; ?>"><i class="fa fa-circle-o"></i> Invoice</a></li>
+                <li><a href="<?= base_url().'receipt'; ?>"><i class="fa fa-circle-o"></i> Receipt</a></li>
               </ul>
             </li>
             <li class="treeview">

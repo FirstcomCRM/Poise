@@ -296,6 +296,7 @@ $( document ).ready(function() {
         var classname = 'id-' + i ; 
         $('#payment-detail-table > tbody:last').append("<tr class='"+classname+"'>"+
                                                "<td>"+ value.payment_date +"</td>"+
+                                               "<td>"+ value.cheque_no +"</td>"+
                                                "<td>"+ value.bank_name +"</td>"+
                                                "<td>"+ value.payment_amount +"</td>"+
                                                "<td>"+ value.payment_type +"</td>"+
