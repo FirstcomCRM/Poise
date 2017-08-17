@@ -42,6 +42,7 @@ class property_model extends CI_Model {
 				'meta_robots_follow'=> $this->input->post('meta_robots_follow'),
 				'meta_keywords'     => $this->input->post('meta_keywords'),
 				'date_added'     	=> date('Y-m-d'),
+				'property_img'		=> $this->input->post('main_new_file_name'),
 				'property_status'   => $this->input->post('property_status'),
 				
 			);
@@ -124,6 +125,7 @@ class property_model extends CI_Model {
 				'meta_robots_follow'=> $this->input->post('meta_robots_follow'),
 				'meta_keywords'     => $this->input->post('meta_keywords'),
 				'date_added'     	=> date('Y-m-d'),
+				'property_img'			=> $this->input->post('main_new_file_name'),
 				'property_status'   => $this->input->post('property_status'),
 		);
 		$this->db->where('property_id', $id);
@@ -173,14 +175,14 @@ class property_model extends CI_Model {
 			$this->datatables->where('p.user_id', $this->session->userdata('user_id'));
 		} */
 
-        $this->datatables->select("p.property_id,p.property_title, p.district, p.category, p.address, p.property_price,p.property_status, p.date_added", false);
+        $this->datatables->select("p.property_id,p.property_img, p.property_title, p.district, p.category, p.address, p.property_price,p.property_status, p.date_added", false);
         $this->datatables->from('property p');
         $this->datatables->join('users u', 'u.user_id = p.user_id', 'left');
 		$this->datatables->where('p.status !=', 1);
 		$this->datatables->where('p.user_id =', $this->session->userdata('user_id'));
 		$this->datatables->add_column('no', '');
 		//$this->datatables->add_column('action', '<a class="view-link" data-toggle="tooltip" data-placement="top" title="View" href="property/view/$1"><i class="fa fa-eye ico"></i></a> / <a class="edit-link" data-toggle="tooltip" data-placement="top" title="Edit" href="property/edit/$1"><i class="fa fa-edit ico"></i></a> / <a class="delete-link" data-toggle="tooltip" data-placement="top" title="Delete" href="property/delete/$1"><i class="fa fa-trash-o ico"></i></a>', 'property_id');
-		$this->datatables->add_column('action', '<a class="btn btn-mtac admin-control btn-view btn-primary view-link" data-toggle="tooltip" data-placement="top" title="View" href="property/view/$1">View</a><a class="btn btn-mtac admin-control btn-view btn-success" data-toggle="tooltip" data-placement="top" title="Edit" href="property/edit/$1">Edit</a><a class="btn btn-mtac btn-delete btn-danger delete-link" data-toggle="tooltip" data-placement="top" title="Delete" href="property/delete/$1">Delete</a>', 'property_id');
+		$this->datatables->add_column('action', '<a class="btn btn-mtac admin-control btn-view btn-primary view-link" data-toggle="tooltip" data-placement="top" title="View" href="property/view/$1">View</a><a class="btn btn-mtac admin-control btn-success edit-link" data-toggle="tooltip" data-placement="top" title="Edit" href="property/edit/$1">Edit</a><a class="btn btn-mtac btn-delete btn-danger delete-link" data-toggle="tooltip" data-placement="top" title="Delete" href="property/delete/$1">Delete</a>', 'property_id');
 		echo $this->datatables->generate();
 	}
 	
@@ -209,7 +211,7 @@ class property_model extends CI_Model {
 			$this->datatables->where('p.user_id', $this->session->userdata('user_id'));
 		} */
 
-        $this->datatables->select("p.property_id,p.property_title, p.district, p.category, p.address, p.property_price,p.property_status, p.date_added", false);
+        $this->datatables->select("p.property_id,p.property_img,p.property_title, p.district, p.category, p.address, p.property_price,p.property_status, p.date_added", false);
         $this->datatables->from('property p');
         $this->datatables->join('users u', 'u.user_id = p.user_id', 'left');
 		$this->datatables->where('p.property_status =', 'Pending');

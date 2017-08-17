@@ -34,6 +34,15 @@
         },
         "columns": [
             { "data": "no", "orderable": false, "bSearchable": false },
+			{ "data": "property_img",
+					"render": function(data, type, row) {
+						if(data){
+							return '<img height ="100" width="100" src="'+data+'" /> ';
+						}
+						else{
+							return '';
+						}
+					}},
             { "data": "property_title"},
             { "data": "district"},
             { "data": "category"},
@@ -446,6 +455,7 @@
 							<thead>
 							  <tr>
 								  <th>No</th>
+								  <th>Image</th>
 								  <th>Title</th>
 								  <th>District</th>
 								  <th>Category</th>
@@ -461,6 +471,7 @@
 							<tfoot>
 							  <tr>
 								  <th>No</th>
+								  <th>Image</th>
 								  <th>Title</th>
 								  <th>District</th>
 								  <th>Category</th>
