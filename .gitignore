@@ -7,3 +7,9 @@ application/cache/*
 application/logs/*
 !application/logs/index.html
 !application/logs/.htaccess
+uploads/user/img/invoice_sample_20170810032958.jpg
+uploads/property/main_images/invoice_sample_20170817050008.jpg
+uploads/property/main_images/receipt_sample_20170817044042.JPG
+uploads/property/main_images/receipt_sample_20170817043927.JPG
+uploads/property/main_images/invoice_sample_20170817045730.jpg
+uploads/user/img/logo_inner_old_20170810032921.png
