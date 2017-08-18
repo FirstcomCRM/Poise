@@ -1,5 +1,5 @@
 <?php  
-    $action_url =  ($action == 'new') ? base_url() ."announcement/create" : base_url()."announcement/edit/".$announcement['announce_id'];
+    $action_url =  ($action == 'new') ? base_url() ."tier_commission/create" : base_url()."tier_commission/edit/".$tier_commission['tier_commission_id'];
 ?>
 <link href="<?= base_url();?>css/select2/select2-4.css" rel="stylesheet">
 <link href="<?= base_url();?>css/select2/select2-b3.css" rel="stylesheet">
@@ -28,7 +28,7 @@
    $( document ).ready(function() {
 		//	loadsubcategory();
              
-    $("#announcement-date").datepicker({
+    $("#tier_commission-date").datepicker({
         format: "yyyy-mm-dd",
         autoclose :true,
     }); 
@@ -38,7 +38,7 @@
         autoclose :true,
     }); 
 
-    $("#announcement-date").datepicker({
+    $("#tier_commission-date").datepicker({
         format: "dd/mm/yyyy",
         autoclose :true,
     }); 
@@ -69,7 +69,7 @@
 	$readonly= '';
 }
 else{
-	$page = 'announcement';
+	$page = 'tier_commission';
 	$readonly= 'readonly';
 }
  
@@ -97,14 +97,14 @@ if ( $action == "new" ) { ?>
 	<div class="col-xs-12">
 		<ol class="breadcrumb">
 			<li><a href="<?= base_url().'index.php'; ?>"><i class="fa fa-dashboard"></i> Home</a></li>
-			<li><a href="<?= base_url().'announcement'; ?>">Announcement</a></li>
-			<li class="active"><?= ($action == 'new') ? "Add " : "Edit " ?> Announcement</li>
+			<li><a href="<?= base_url().'tier_commission'; ?>">Tier Commission</a></li>
+			<li class="active"><?= ($action == 'new') ? "Add " : "Edit " ?> Tier Commission</li>
 		</ol>
 		<div class="box"> 
           <div class="box-header">
-             <h3 class="box-title"><?= ($action == 'new') ? "Add " : "Edit " ?>Announcement</h3>
+             <h3 class="box-title"><?= ($action == 'new') ? "Add " : "Edit " ?>Tier Commission</h3>
 			 <div class="pull-right">
-                <a href="<?= base_url().'announcement'; ?>" class="btn btn-default btn-flat">Back</a>
+                <a href="<?= base_url().'tier_commission'; ?>" class="btn btn-default btn-flat">Back</a>
              </div>
            </div><!-- /.box-header -->
 		</div>
@@ -114,30 +114,46 @@ if ( $action == "new" ) { ?>
 		  <div class="box-body">
 			<div class="form-group">
                 <input type="hidden" id="hid-submitted" name="hid_submitted" value="1" />
-                <input type="hidden" id="hid-announcement-id" name="hid_announcement_id" value="<?= (isset($announcement['announce_id'])) ? $announcement['announce_id'] : ''; ?>" />
-                <label for="name" class="col-md-3 control-label">Title</label>
+                <input type="hidden" id="hid-tier_commission-id" name="hid_tier_commission_id" value="<?= (isset($tier_commission['tier_commission_id'])) ? $tier_commission['tier_commission_id'] : ''; ?>" />
+                <label for="name" class="col-md-3 control-label">User</label>
                 <div class="col-md-7">
-                    <input type="text" class="form-control input-sm" id="announcement-title" name="announcement_title" placeholder="Enter Announcement Title" value="<?= isset($_POST['announcement_title']) ? $_POST['announcement_title'] : ( isset($announcement['announce_title']) ? $announcement['announce_title'] : '') ; ?>">
+				
+					<select class="form-control input-sm" name="user_id" id="user-id" placeholder="Select User" required>
+                        <option value="" selected>Select User</option>
+                        <?php if($users != '') { ?>
+                            <?php foreach($users as $user) {  
+                                 if( isset($_POST['user_id']) && ($_POST['user_id'] == $user['user_id']) ) {
+                                    echo "<option selected value='". $user['user_id'] . "' >" . $user['name'] . "</option>";
+                                }
+                                else  if( isset($tier_commission['user_id']) && ($tier_commission['user_id'] == $user['user_id']) ) {
+                                    echo "<option selected value='". $user['user_id'] . "' >" . $user['name'] . "</option>";
+                                }
+                               else {
+                                    echo "<option value='". $user['user_id'] . "' >" . $user['name'] . "</option>";
+                               }
+                            } ?>
+                        <?php } ?>
+                    </select>    
+				
+				
+				
+				
+                    <!--input type="text" class="form-control input-sm" id="user-id" name="user_id" placeholder="Enter Tier Commission Title" value="<?= isset($_POST['user_id']) ? $_POST['user_id'] : ( isset($tier_commission['username']) ? $tier_commission['username'] : '') ; ?>"-->
                 </div>
                 <!-- <div class="col-md-3"><label class="checkbox-inline"><input id="chk-mf" type="checkbox" value="1" />Revised</label></div> -->
                 <div class="col-md-1 req-star">*</div>
             </div> 
 			<div class="sp-margin-sm"></div> 
               <div class="form-group">
-                <label for="name" class="col-md-3 control-label">Date</label>
+                <label for="name" class="col-md-3 control-label">Level</label>
                 <div class="col-md-7">
-                    <input type="text" class="form-control input-sm" id="announcement-date" name="announcement_date" placeholder="Enter Announcement Date" value="<?= isset($_POST['announcement_date']) ? $_POST['announcement_date'] : ( isset($announcement['announce_date']) ? $announcement['announce_date'] : '') ; ?>">
+                    <input type="text" class="form-control input-sm" id="level" name="level" placeholder="Enter Tier Commission Date" value="<?= isset($_POST['level']) ? $_POST['level'] : ( isset($tier_commission['level']) ? $tier_commission['level'] : '') ; ?>">
                 </div>
                 <!-- <div class="col-md-3"><label class="checkbox-inline"><input id="chk-mf" type="checkbox" value="1" />Revised</label></div> -->
                 <div class="col-md-1 req-star">*</div>
               </div>
 			<div class="sp-margin-md"></div> 
-            <div class="form-group">
-			  <label for="name" class="col-md-3 control-label">Announcement</label>
-			  <div class="col-sm-7">
-				<textarea class="form-control input-sm" id="announcement-body" name="announcement_body" placeholder="Write your announcement" height = "20" width = "100" style="height: 20em;width: 37em;*/" required><?= isset($_POST['announcement_body']) ? $_POST['announcement_body'] : ( isset($announcement['announce_body']) ? $announcement['announce_body'] : '') ; ?></textarea>
-			  </div>
-			</div>   
+            
 	
 			<!--input type ="file" name ="sample_files[]" multiple==-->
 			

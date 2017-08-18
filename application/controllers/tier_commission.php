@@ -87,7 +87,7 @@ class tier_commission extends CI_Controller {
 				$data['action'] = 'edit';
 				$data['nav_area'] = 'tier_commission';
 				//$data['details'] =  $this->tier_commission_model->getFilesbytier_commissionid($id);
-
+				$data['users'] = $this->user_model->get_users();
 				
 				$this->load->view('template/header', $data);
 				$this->load->view('tier_commission/edit', $data);
