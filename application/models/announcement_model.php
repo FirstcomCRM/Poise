@@ -233,7 +233,7 @@ class announcement_model extends CI_Model {
 			$this->datatables->where('q.sale_person_id', $this->session->userdata('user_id'));
 		} */
 		
-        $this->datatables->select("a.announce_id,a.announce_title,u.username, a.announce_body,a.announce_date,a.announce_img", false);
+        $this->datatables->select("a.announce_id,a.announce_img,a.announce_title,u.username, a.announce_body,a.announce_date,a.announce_img", false);
         $this->datatables->from('announcement a');
 		$this->datatables->join('users u', 'u.user_id = a.user_id', 'left');
 		$this->datatables->where('a.status !=', 1);

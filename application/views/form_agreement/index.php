@@ -26,9 +26,9 @@
             "url": "<?= base_url() ?>form_agreement/index/dt",
             "type": "POST",
             "data" : { 
-          //    'announcement_title'    :  function ( d ) { return $("#announcement-title").val(); },
-            //  'start_date'      :  function ( d ) { return $("#start-date").val(); },
-              //'end_date'      :  function ( d ) { return $("#end-date").val(); },
+             'form_title'    :  function ( d ) { return $("#form-title").val(); },
+             'start_date'      :  function ( d ) { return $("#start-date").val(); },
+              'end_date'      :  function ( d ) { return $("#end-date").val(); },
             }
         },
         "columns": [
@@ -174,12 +174,12 @@
 						  <div class="col-md-2 col-search">
 							<input type="text" class="form-control input-sm" name="form_title" id="form-title" placeholder="Search form" />
 						  </div>
-						  <div class="col-md-2 col-search">
+						  <!--div class="col-md-2 col-search">
 							<input type="text" class="form-control input-sm" name="start_date" id="start-date" placeholder="Search Start Date" />
 						  </div> 
 						  <div class="col-md-2 col-search">
 							<input type="text" class="form-control input-sm" name="end_date" id="end-date" placeholder="Search End Date" />
-						  </div>
+						  </div--->
 						  <div class="col-md-2 col-search" style="padding-right: 0px;">
 							<button type="submit" class="btn btn-default btn-sm" id="btn-submit"><i class="fa fa-search ico-btn"></i>Search</button>
 						  </div> 

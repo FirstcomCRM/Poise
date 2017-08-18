@@ -240,7 +240,7 @@ class form_agreement extends CI_Controller {
 		
 		
 		
-		public function aj_deleteAnnouncefile($id) {
+		public function aj_deleteFormfile($id) {
 		$form_file = $this->form_agreement_model->getFile($id);
 		if(!empty($form_file)) {
 			$removed = $this->form_agreement_model->removeFile($id);

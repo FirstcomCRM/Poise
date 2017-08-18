@@ -27,11 +27,11 @@
             "url": "<?= base_url() ?>transaction/index/dt",
             "type": "POST",
             "data" : { 
-              'property_no'    :  function ( d ) { return $("#property-no").val(); },
+              'transaction_no'    :  function ( d ) { return $("#transaction-no").val(); },
               'start_date'      :  function ( d ) { return $("#start-date").val(); },
               'end_date'        :  function ( d ) { return $("#end-date").val(); },
               'property_status':  function ( d ) { return $("#property-status").val(); },
-              'client_id'       :  function ( d ) { return $("#client-id").val(); },
+             // 'client_id'       :  function ( d ) { return $("#client-id").val(); },
             }
         },
         "columns": [
@@ -394,7 +394,7 @@
                     </div>
            </div><!-- /.box-header -->
 			<div class="box-body">
-				<!--div class="row-fluid search-area">
+				<div class="row-fluid search-area">
                   <div class="panel-group" id="accordion">
                     <div class="panel panel-default">
                       <div class="panel-heading">
@@ -407,7 +407,7 @@
                           <form id="search-form" method="post" action="<?= base_url().'property/index'; ?>" />   
                             <div class="form-group">
                               <div class="col-md-2 col-search">
-                                <input type="text" class="form-control input-sm" name="title" id="title" placeholder="Search Title" />
+                                <input type="text" class="form-control input-sm" name="transaction_no" id="transaction-no" placeholder="Search Transaction No" />
                               </div>
                               <div class="col-md-2 col-search">
                                 <input type="text" class="form-control input-sm" name="start_date" id="start-date" placeholder="Search Start Date" />
@@ -425,7 +425,7 @@
                               </div> 
                               <!-- <div class="clearfix sp-margin-sm"></div>
                               <div class="col-md-10"></div> -->
-                              <!--div class="col-md-2 col-search" style="padding-right: 0px;">
+                              <div class="col-md-2 col-search" style="padding-right: 0px;">
                                 <button type="submit" class="btn btn-default btn-sm" id="btn-submit"><i class="fa fa-search ico-btn"></i>Search</button>
                               </div>                            
                             </div> 
@@ -434,7 +434,7 @@
                       </div>
                     </div>
                   </div>             
-                </div-->
+                </div>
 				<div class="success-alert-area"> </div>
 				<?php if(isset($msg) && $msg != '') { ?>
 					<div class="alert alert-success"><a href='#' class='close' data-dismiss='alert'>&times;</a><?= $msg; ?></div>

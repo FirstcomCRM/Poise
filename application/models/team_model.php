@@ -54,8 +54,8 @@ class team_model extends CI_Model {
 		$this->datatables->where('status !=', 1);
 
 		$this->datatables->add_column('no', '');
-		$this->datatables->add_column('action', '<a class="edit-link" data-toggle="tooltip" data-placement="top" title="Edit" href="team/edit/$1"><i class="fa fa-edit ico"></i></a> / <a class="delete-link" data-toggle="tooltip" data-placement="top" title="Delete" href="team/delete/$1"><i class="fa fa-trash-o ico"></i></a>', 'team_id');
-
+		//$this->datatables->add_column('action', '<a class="edit-link" data-toggle="tooltip" data-placement="top" title="Edit" href="team/edit/$1"><i class="fa fa-edit ico"></i></a> / <a class="delete-link" data-toggle="tooltip" data-placement="top" title="Delete" href="team/delete/$1"><i class="fa fa-trash-o ico"></i></a>', 'team_id');
+		$this->datatables->add_column('action', '<a class="btn btn-mtac admin-control btn-success edit-link" data-toggle="tooltip" data-placement="top" title="Edit" href="team/edit/$1">Edit</a><a class="btn btn-mtac btn-delete btn-danger delete-link" data-toggle="tooltip" data-placement="top" title="Delete" href="team/delete/$1">Delete</a>', 'team_id');
 		echo $this->datatables->generate();
 	}
 

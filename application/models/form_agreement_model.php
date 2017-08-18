@@ -94,10 +94,10 @@ class form_agreement_model extends CI_Model {
 	
 	
 	public function getdtforms() {
-		/* if( $this->input->post('form_agreement_title') && ( $this->input->post('form_agreement_title') != '' ) ) {
-			$this->datatables->filter('a.announce_title LIKE "%' . $this->input->post('form_agreement_title') . '%"');
+		 if( $this->input->post('form_title') && ( $this->input->post('form_title') != '' ) ) {
+			$this->datatables->filter('f.form_name LIKE "%' . $this->input->post('form_title') . '%"');
 		}
-		if( $this->input->post('start_date') && ( $this->input->post('start_date') != '' ) ) { 
+		/*if( $this->input->post('start_date') && ( $this->input->post('start_date') != '' ) ) { 
         	$start_date = $this->input->post('start_date');
         	$this->datatables->filter('a.announce_date >=', date('Y-m-d',strtotime($start_date)));
         }
@@ -168,11 +168,11 @@ class form_agreement_model extends CI_Model {
 	
 	public function getFile($id) {
 		$this->db->select('f.*');
-		$this->db->from('announcement_files f');
+		$this->db->from('form_files f');
 	//	$this->db->join('uom u', 'd.uom_id = u.uom_id', 'left');
-		$this->db->where('f.announce_file_id', $id);
+		$this->db->where('f.form_file_id', $id);
 		$this->db->where('f.status !=', 1);
-		$query = $this->db->get('announcement_files');
+		$query = $this->db->get('form_files');
 		return $query->row_array();
 	}
 	

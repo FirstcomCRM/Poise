@@ -33,9 +33,16 @@ var burl = "<?= base_url() ?>";
         "columns": [
             { "data": "no", "orderable": false, "bSearchable": false },
             { "data": "user_img",
-					"render": function(data, type, row) {
+				"render": function(data, type, row) {
+					if (data==0 || data=="" || !data ){
+						data = '';
+						return data;
+					}
+					else{
 						return '<img height ="100" width="100" src="'+data+'" /> ';
-					}},
+					}
+				}
+			},
             { "data": "name"},
             { "data": "username"},
             { "data": "role" },

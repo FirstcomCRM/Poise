@@ -49,12 +49,17 @@ class form_category_model extends CI_Model {
 	}
 
 	public function getdtform_categories() {
+		if( $this->input->post('category') && ( $this->input->post('category') != '' ) ) {
+			$this->datatables->filter('name LIKE "%' . $this->input->post('category') . '%"');
+		}
+
         $this->datatables->select('form_category_id, name');
         $this->datatables->from('form_category');
 		$this->datatables->where('status !=', 1);
 
 		$this->datatables->add_column('no', '');
-		$this->datatables->add_column('action', '<a class="edit-link" data-toggle="tooltip" data-placement="top" title="Edit" href="form_category/edit/$1"><i class="fa fa-edit ico"></i></a> / <a class="delete-link" data-toggle="tooltip" data-placement="top" title="Delete" href="form_category/delete/$1"><i class="fa fa-trash-o ico"></i></a>', 'form_category_id');
+		//$this->datatables->add_column('action', '<a class="edit-link" data-toggle="tooltip" data-placement="top" title="Edit" href="form_category/edit/$1"><i class="fa fa-edit ico"></i></a> / <a class="delete-link" data-toggle="tooltip" data-placement="top" title="Delete" href="form_category/delete/$1"><i class="fa fa-trash-o ico"></i></a>', 'form_category_id');
+		$this->datatables->add_column('action', '<a class="btn btn-mtac admin-control btn-success edit-link" data-toggle="tooltip" data-placement="top" title="Edit" href="form_category/edit/$1">Edit</a><a class="btn btn-mtac btn-delete btn-danger delete-link" data-toggle="tooltip" data-placement="top" title="Delete" href="form_category/delete/$1">Delete</a>', 'form_category_id');
 
 		echo $this->datatables->generate();
 	}

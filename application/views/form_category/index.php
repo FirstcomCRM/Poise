@@ -13,12 +13,16 @@
         "ajax": {
             "url": "<?= base_url() ?>form_category/index/dt",
             "type": "POST",
-            "data" : { }
+            "data" : { 
+             'category'    :  function ( d ) { return $("#category").val(); },
+             //'start_date'      :  function ( d ) { return $("#start-date").val(); },
+              //'end_date'      :  function ( d ) { return $("#end-date").val(); },
+            }
         },
         "columns": [
             { "data": "no", "orderable": false, "bSearchable": false },
             { "data": "name"},
-            { "data": "action", "orderable": false, "bSearchable": false }
+            { "data": "action", "orderable": false, "bSearchable": false, "className": 'col_act_md' }
         ],
         "fnRowCallback" : function(nRow, aData, iDisplayIndex){
             // For auto numbering at 'No' column
@@ -42,7 +46,7 @@
     });
 
     // Quick Edit
-    $('#tbl-form_category').on('click', '.edit-link', function(e) { 
+    $('#tbl-category').on('click', '.edit-link', function(e) { 
       e.preventDefault();
       var id = getIdfromURL($(this).attr('href'));
       var editurl = 'form_category/aj_edit/' + id;
@@ -65,7 +69,7 @@
     });
 
     //Quick Delete
-    $('#tbl-form_category').on('click', '.delete-link', function(e) {
+    $('#tbl-category').on('click', '.delete-link', function(e) {
       e.preventDefault();
       var url =  $(this).attr("href");
       var del_id = url.substring(url.lastIndexOf("/") + 1, url.length);
@@ -111,7 +115,7 @@
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h4 class="modal-title" id="myModalLabel"><span class="quick-action"></span> form_category Management</h4>
+        <h4 class="modal-title" id="myModalLabel"><span class="quick-action"></span> Form Category Management</h4>
       </div>
       <div class="modal-body">
         <form form_category="form" id="quick-form">
@@ -162,11 +166,44 @@
 			</div>
            </div><!-- /.box-header -->
 			<div class="box-body">
+				<div class="row-fluid search-area">
+				  <div class="panel-group" id="accordion">
+					<div class="panel panel-default">
+					  <div class="panel-heading">
+						<h4 class="panel-title">
+						  <a data-toggle="collapse" data-parent="#accordion" href="#search">Filter</a>
+						</h4>
+					  </div>
+					  <div id="search" class="panel-collapse collapse">
+						<div class="panel-body">
+						  <form id="search-form" method="post" action="<?= base_url().'project/index'; ?>" />   
+							<div class="form-group">
+							  <div class="col-md-2 col-search">
+								<input type="text" class="form-control input-sm" name="category" id="category" placeholder="Search Form Category" />
+							  </div>
+							  <!--div class="col-md-2 col-search">
+								<input type="text" class="form-control input-sm" name="start_date" id="start-date" placeholder="Search Start Date" />
+							  </div> 
+							  <div class="col-md-2 col-search">
+								<input type="text" class="form-control input-sm" name="end_date" id="end-date" placeholder="Search End Date" />
+							  </div--->
+							  <div class="col-md-2 col-search" style="padding-right: 0px;">
+								<button type="submit" class="btn btn-default btn-sm" id="btn-submit"><i class="fa fa-search ico-btn"></i>Search</button>
+							  </div> 
+							  <div class="clearfix sp-margin-sm"></div>
+													  
+							</div> 
+						  </form>
+						</div>
+					  </div>
+					</div>
+				  </div>             
+				</div>
 				<div class="success-alert-area"> </div>
 				<?php if(isset($msg) && $msg != '') { ?>
 					<div class="alert alert-success"><a href='#' class='close' data-dismiss='alert'>&times;</a><?= $msg; ?></div>
 				<?php } ?>
-				<div class="row-fluid table-responsive" id="tbl-project">
+				<div class="row-fluid table-responsive" id="tbl-category">
 					<div class = "col-md-12">
 						<table class="table table-striped table-bordered dataTable no-footer" id = 'form-category-table'>
 							<thead>

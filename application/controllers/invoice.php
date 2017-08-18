@@ -27,7 +27,7 @@ class invoice extends CI_Controller {
 		}
 		else { 													// Datatable Load
 			$this->load->library("Datatables");
-			$this->invoice_model->getdtinvoices_admin();	
+			$this->invoice_model->getdtinvoices();	
 		}
 	}
 

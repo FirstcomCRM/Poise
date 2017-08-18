@@ -26,13 +26,24 @@
             "url": "<?= base_url() ?>announcement/index/dt",
             "type": "POST",
             "data" : { 
-          //    'announcement_title'    :  function ( d ) { return $("#announcement-title").val(); },
-            //  'start_date'      :  function ( d ) { return $("#start-date").val(); },
-              //'end_date'      :  function ( d ) { return $("#end-date").val(); },
+             'announcement_title'    :  function ( d ) { return $("#announcement-title").val(); },
+             'start_date'      :  function ( d ) { return $("#start-date").val(); },
+              'end_date'      :  function ( d ) { return $("#end-date").val(); },
             }
         },
         "columns": [
             { "data": "no", "orderable": false, "bSearchable": false },
+			{ "data": "announce_img",
+				"render": function(data, type, row) {
+					if (data==0 || data=="" || !data ){
+						data = '';
+						return data;
+					}
+					else{
+						return '<img height ="100" width="100" src="'+data+'" /> ';
+					}
+				}
+			},
             { "data": "announce_title"},
             { "data": "username"},
             { "data": "announce_body"},
@@ -171,7 +182,7 @@
 				  </div>
 				  <div id="search" class="panel-collapse collapse">
 					<div class="panel-body">
-					  <form id="search-form" method="post" action="<?= base_url().'project/index'; ?>" />   
+					  <form id="search-form" method="post" action="<?= base_url().'announcement/index'; ?>" />   
 						<div class="form-group">
 						  <div class="col-md-2 col-search">
 							<input type="text" class="form-control input-sm" name="announcement_title" id="announcement-title" placeholder="Search announcement" />
@@ -204,6 +215,7 @@
 						<thead>
 							<tr>
 								<th>No</th>
+								<th>Image</th>
 								<th>Title</th>
 								<th>Posted by</th>
 								<th>Announcement</th>
@@ -216,6 +228,7 @@
 						<tfoot>
 							<tr>
 								<th>No</th>
+								<th>Image</th>
 								<th>Title</th>
 								<th>Posted by</th>
 								<th>Announcement</th>

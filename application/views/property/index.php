@@ -35,14 +35,16 @@
         "columns": [
             { "data": "no", "orderable": false, "bSearchable": false },
 			{ "data": "property_img",
-					"render": function(data, type, row) {
-						if(data){
-							return '<img height ="100" width="100" src="'+data+'" /> ';
-						}
-						else{
-							return '';
-						}
-					}},
+				"render": function(data, type, row) {
+					if (data==0 || data=="" || !data ){
+						data = '';
+						return data;
+					}
+					else{
+						return '<img height ="100" width="100" src="'+data+'" /> ';
+					}
+				}
+			},
             { "data": "property_title"},
             { "data": "district"},
             { "data": "category"},
@@ -416,7 +418,10 @@
                         <div class="panel-body">
                           <form id="search-form" method="post" action="<?= base_url().'property/index'; ?>" />   
                             <div class="form-group">
-                              <div class="col-md-2 col-search">
+                              <!--div class="col-md-2 col-search">
+                                <input type="text" class="form-control input-sm" name="property_no" id="property-no" placeholder="Search Title" />
+                              </div-->
+							  <div class="col-md-2 col-search">
                                 <input type="text" class="form-control input-sm" name="title" id="title" placeholder="Search Title" />
                               </div>
                               <div class="col-md-2 col-search">

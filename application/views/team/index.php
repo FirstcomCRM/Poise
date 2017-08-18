@@ -166,7 +166,7 @@
 				<?php if(isset($msg) && $msg != '') { ?>
 					<div class="alert alert-success"><a href='#' class='close' data-dismiss='alert'>&times;</a><?= $msg; ?></div>
 				<?php } ?>
-				<div class="row-fluid table-responsive" id="tbl-project">
+				<div class="row-fluid table-responsive" id="tbl-team">
 					<div class = "col-md-12">
 						<table class="table table-striped table-bordered dataTable no-footer" id = 'team-table'>
 							<thead>

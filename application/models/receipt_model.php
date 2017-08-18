@@ -152,11 +152,11 @@ class receipt_model extends CI_Model {
 	
 	public function getdtreceipts() {
 		if( $this->input->post('receipt_no') && ( $this->input->post('receipt_no') != '' ) ) {
-			$this->datatables->filter('i.receipt_no LIKE "%' . $this->input->post('receipt_no') . '%"');
+			$this->datatables->filter('r.receipt_no LIKE "%' . $this->input->post('receipt_no') . '%"');
 		}
-		/* if( $this->input->post('quotation_no') && ( $this->input->post('quotation_no') != '' ) ) {
-			$this->datatables->filter('q.quotation_no LIKE "%' . $this->input->post('quotation_no') . '%"');
-		}*/
+		if( $this->input->post('transaction_no') && ( $this->input->post('transaction_no') != '' ) ) {
+			$this->datatables->filter('c.case_no LIKE "%' . $this->input->post('transaction_no') . '%"');
+		}
 		if( $this->input->post('start_date') && ( $this->input->post('start_date') != '' ) ) { 
         	$start_date = date('Y-m-d',strtotime($this->input->post('start_date')));
         	$this->datatables->filter('i.receipt_date >=', $start_date);

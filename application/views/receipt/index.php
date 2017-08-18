@@ -27,6 +27,7 @@
             "type": "POST",
             "data" : { 
               'receipt_no'      :  function ( d ) { return $("#receipt-no").val(); },
+              'transaction_no'  :  function ( d ) { return $("#transaction-no").val(); },
               'start_date'      :  function ( d ) { return $("#start-date").val(); },
               'end_date'        :  function ( d ) { return $("#end-date").val(); },
             }
@@ -179,10 +180,13 @@
                       </div>
                       <div id="search" class="panel-collapse collapse">
                         <div class="panel-body">
-                          <form id="search-form" method="post" action="<?= base_url().'property/index'; ?>" />   
+                          <form id="search-form" method="post" action="<?= base_url().'receipt/index'; ?>" />   
                             <div class="form-group">
                               <div class="col-md-2 col-search">
                                 <input type="text" class="form-control input-sm" name="receipt_no" id="receipt-no" placeholder="Search receipt No" />
+                              </div>
+							  <div class="col-md-2 col-search">
+                                <input type="text" class="form-control input-sm" name="transaction_no" id="transaction-no" placeholder="Search Transaction No" />
                               </div>
                               <div class="col-md-2 col-search">
                                 <input type="text" class="form-control input-sm" name="start_date" id="start-date" placeholder="Search Start Date" />

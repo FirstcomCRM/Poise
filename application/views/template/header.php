@@ -47,7 +47,7 @@
         <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
         <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
-	<script src="<?= base_url(); ?>bootstrap/js/jquery-1.11.1.js"></script>
+	<!--script src="<?= base_url(); ?>bootstrap/js/jquery-1.11.1.js"></script-->
 	<script src="<?= base_url(); ?>bootstrap/js/bootstrap.min.js"></script>
 	<script src="<?= base_url(); ?>bootstrap/js/jquery-1.11.1.js"></script>
 	<script src="<?= base_url(); ?>js/common-scripts.js"></script>
@@ -235,7 +235,7 @@
               </a>
               <ul class="treeview-menu">
                 <li><a href="<?= base_url().'team'; ?>"><i class="fa fa-circle-o"></i> Team Management</a></li>
-                <li><a href="<?= base_url().'user'; ?>"><i class="fa fa-circle-o"></i> Tier Commission Management</a></li>
+                <li><a href="<?= base_url().'tier_commission'; ?>"><i class="fa fa-circle-o"></i> Tier Commission Management</a></li>
                 <li><a href="<?= base_url().'permission'; ?>"><i class="fa fa-circle-o"></i> User Rights Management</a></li>
                 <li><a href="#"><i class="fa fa-circle-o"></i> Project Management</a></li>
                 <li><a href="#"><i class="fa fa-circle-o"></i> Management Contact</a></li>

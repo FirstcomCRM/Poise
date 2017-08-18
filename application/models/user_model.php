@@ -17,6 +17,24 @@ class user_model extends CI_Model {
 		return $query->row_array();
 	}
 
+	
+	public function get_tc_users($id = FALSE) {
+		if ($id === FALSE)
+		{
+			
+			$query = $this->db->query("SELECT user_id, username, name FROM users
+                               WHERE user_id not in (select user_id from tier_commission) and role_id=2");
+			//$this->db->where('status !=', 1);
+			//$this->db->where('status !=', 1);
+			//$query = $this->db->get('users');
+			return $query->result_array();
+		}
+
+		$query = $this->db->get_where('users', array('user_id' => $id));
+		return $query->row_array();
+	}
+	
+	
 	public function add_user() {
 		$data = array(
 			'name' 	  				=> $this->input->post('name'),

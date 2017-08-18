@@ -152,28 +152,21 @@ class property_model extends CI_Model {
 	}
 
 	public function getdtproperties() {
-		/* if( $this->input->post('property_no') && ( $this->input->post('property_no') != '' ) ) {
-			$this->datatables->filter('q.property_no LIKE "%' . $this->input->post('property_no') . '%"');
+		if( $this->input->post('title') && ( $this->input->post('title') != '' ) ) {
+			$this->datatables->filter('p.property_title LIKE "%' . $this->input->post('title') . '%"');
 		}
 		if( $this->input->post('start_date') && ( $this->input->post('start_date') != '' ) ) { 
-        	$start_date = get_earliesttimestamp($this->input->post('start_date'), '/');
-        	$this->datatables->filter('q.date >=', $start_date);
+        	$start_date = date('Y-m-d',strtotime($this->input->post('start_date')));
+        	$this->datatables->filter('p.date_added >=', $start_date);
         }
         if( $this->input->post('end_date') && ( $this->input->post('end_date') != '' ) ) { 
-        	$end_date = get_latesttimestamp($this->input->post('end_date'), '/');
-        	$this->datatables->filter('q.date <=', $end_date);
+        	$end_date = date('Y-m-d',strtotime($this->input->post('end_date')));
+        	$this->datatables->filter('p.date_added <=', $end_date);
         }
-		if( $this->input->post('client_id') && ( $this->input->post('client_id') != '' ) ) {
-			$this->datatables->filter('q.client_id', $this->input->post('client_id') );
-		}
+		
 		if( $this->input->post('property_status') && ( $this->input->post('property_status') != '' ) ) {
-			$this->datatables->filter('q.property_status', $this->input->post('property_status') );
-		} */
-
-		/* $role_id = $this->session->userdata('role_id');
-		if($role_id != 1) {
-			$this->datatables->where('p.user_id', $this->session->userdata('user_id'));
-		} */
+			$this->datatables->filter('p.property_status', $this->input->post('property_status') );
+		}
 
         $this->datatables->select("p.property_id,p.property_img, p.property_title, p.district, p.category, p.address, p.property_price,p.property_status, p.date_added", false);
         $this->datatables->from('property p');
@@ -189,22 +182,23 @@ class property_model extends CI_Model {
 	
 	public function getdtproperties_admin() {
 		/* if( $this->input->post('property_no') && ( $this->input->post('property_no') != '' ) ) {
-			$this->datatables->filter('q.property_no LIKE "%' . $this->input->post('property_no') . '%"');
+			$this->datatables->filter('p.case_no LIKE "%' . $this->input->post('case_no') . '%"');
+		} */
+		if( $this->input->post('title') && ( $this->input->post('title') != '' ) ) {
+			$this->datatables->filter('p.property_title LIKE "%' . $this->input->post('title') . '%"');
 		}
 		if( $this->input->post('start_date') && ( $this->input->post('start_date') != '' ) ) { 
-        	$start_date = get_earliesttimestamp($this->input->post('start_date'), '/');
-        	$this->datatables->filter('q.date >=', $start_date);
+        	$start_date = date('Y-m-d',strtotime($this->input->post('start_date')));
+        	$this->datatables->filter('p.date_added >=', $start_date);
         }
         if( $this->input->post('end_date') && ( $this->input->post('end_date') != '' ) ) { 
-        	$end_date = get_latesttimestamp($this->input->post('end_date'), '/');
-        	$this->datatables->filter('q.date <=', $end_date);
+        	$end_date = date('Y-m-d',strtotime($this->input->post('end_date')));
+        	$this->datatables->filter('p.date_added <=', $end_date);
         }
-		if( $this->input->post('client_id') && ( $this->input->post('client_id') != '' ) ) {
-			$this->datatables->filter('q.client_id', $this->input->post('client_id') );
-		}
+		
 		if( $this->input->post('property_status') && ( $this->input->post('property_status') != '' ) ) {
-			$this->datatables->filter('q.property_status', $this->input->post('property_status') );
-		} */
+			$this->datatables->filter('p.property_status', $this->input->post('property_status') );
+		}
 
 		/* $role_id = $this->session->userdata('role_id');
 		if($role_id != 1) {

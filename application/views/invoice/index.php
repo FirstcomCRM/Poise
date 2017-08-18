@@ -27,6 +27,7 @@
             "type": "POST",
             "data" : { 
               'invoice_no'      :  function ( d ) { return $("#invoice-no").val(); },
+              'transaction_no'      :  function ( d ) { return $("#transaction-no").val(); },
               'start_date'      :  function ( d ) { return $("#start-date").val(); },
               'end_date'        :  function ( d ) { return $("#end-date").val(); },
             }
@@ -183,6 +184,9 @@
                             <div class="form-group">
                               <div class="col-md-2 col-search">
                                 <input type="text" class="form-control input-sm" name="invoice_no" id="invoice-no" placeholder="Search Invoice No" />
+                              </div>
+							  <div class="col-md-2 col-search">
+                                <input type="text" class="form-control input-sm" name="transaction_no" id="transaction-no" placeholder="Search Transaction No" />
                               </div>
                               <div class="col-md-2 col-search">
                                 <input type="text" class="form-control input-sm" name="start_date" id="start-date" placeholder="Search Start Date" />

@@ -195,7 +195,7 @@ class invoice_model extends CI_Model {
 	}
 	
 	
-	public function getdtinvoices() {
+	/* public function getdtinvoices() {
 		if( $this->input->post('invoice_no') && ( $this->input->post('invoice_no') != '' ) ) {
 			$this->datatables->filter('i.invoice_no LIKE "%' . $this->input->post('invoice_no') . '%"');
 		}
@@ -234,14 +234,14 @@ class invoice_model extends CI_Model {
 		echo $this->datatables->generate();
 	}
 
-	
-	public function getdtinvoices_admin() {
+	 */
+	public function getdtinvoices() {
 		if( $this->input->post('invoice_no') && ( $this->input->post('invoice_no') != '' ) ) {
 			$this->datatables->filter('i.invoice_no LIKE "%' . $this->input->post('invoice_no') . '%"');
 		}
-		/* if( $this->input->post('quotation_no') && ( $this->input->post('quotation_no') != '' ) ) {
-			$this->datatables->filter('q.quotation_no LIKE "%' . $this->input->post('quotation_no') . '%"');
-		}*/
+		if( $this->input->post('transaction_no') && ( $this->input->post('transaction_no') != '' ) ) {
+			$this->datatables->filter('c.case_no LIKE "%' . $this->input->post('transaction_no') . '%"');
+		}
 		if( $this->input->post('start_date') && ( $this->input->post('start_date') != '' ) ) { 
         	$start_date = date('Y-m-d',strtotime($this->input->post('start_date')));
         	$this->datatables->filter('i.invoice_date >=', $start_date);
