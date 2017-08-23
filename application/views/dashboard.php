@@ -20,7 +20,7 @@
 		  <div class='user-block'>
 			<img class='img-circle' src='<?=base_url().$announcement['user_img']?>' alt='user image'>
 			<span class='username'><a href="#"><?=$announcement['name']?></a></span>
-			<span class='description'><?=$announcement['announce_date']?></span>
+			<span class='description'><?=date('d/m/y',strtotime($announcement['announce_date']))?></span>
 		  </div><!-- /.user-block -->
 		  <!--div class='box-tools'>
 			<button class='btn btn-box-tool' data-toggle='tooltip' title='Mark as read'><i class='fa fa-circle-o'></i></button>

@@ -30,7 +30,7 @@
 
 $( document ).ready(function() {
 
- 	//var arr = {};
+ 	var arr = {};
   	var key = 0;
 
   /* 	$(window).on('beforeunload', function(){        
@@ -38,6 +38,77 @@ $( document ).ready(function() {
           return 'When you leave right now, the data will not be saved.';
         }
     }); */
+	
+	
+	$('#ico-add').click(function(e) { 
+        e.preventDefault();
+        if ( $('#path').val() == '') {
+            alert("Please Upload File");
+        }
+        else {
+			//$('#detail-form').submit();
+            var formdata = $("#detail-form").serializeObject();
+			
+            var key = getLastindex();
+            arr[++key] = formdata; 
+			console.log(formdata);
+            updatePDTable();
+            resetForm();
+        }   
+    });
+	//$('#formid input').each(function(t)){
+	
+	
+	
+	$('#img_select').change(function(e){
+	
+	//var ext = document.getElementById("img_select").files[1].name;
+	$('#detail-form').submit();
+	//e.preventDefault();
+	var img = $('#img_select').val();
+	var news = document.getElementById("img_select").files[0].name;
+	//$('#path').val(img);
+	$('#path').val(burl + news);
+	$('#file-name').val(news);
+	//alert(ext);
+	
+	/* var fd = new FormData($('#path').get(0));
+	fd.append("CustomField", "This is some extra data");
+	console.log(fd); */
+	
+	});
+	$('#detail-form').on('submit', function(e){
+		e.preventDefault();
+		/* var formdata = $("#img-form").serializeObject();
+						
+		var key = getLastindex();
+		arr[++key] = formdata; 
+		console.log(arr); */
+	    $.ajax({
+			url : burl + "property/upload",
+			method : "POST",
+			data: new FormData(this),
+			contentType:false,
+			processData:false,
+			success: function(data){
+				
+				//url : burl + "announcement/upload",
+				// $('#img_select').val('');  
+               // $('#src_img_upload').modal('hide');  
+               $('#detail-form').html(data); 
+				
+				//alert(arr);
+
+			}
+		})
+	});
+	
+	
+	
+	
+	
+	
+	
 	
 	
 	function readURL(input) {
@@ -225,6 +296,31 @@ $( document ).ready(function() {
 		
 	}
 	
+	
+	function updatePDTable() {
+		$("#detail-table > tbody:last").children().remove();
+		$.each(arr, function( i, value ) {   
+			var classname = 'id-' + i ; 
+			var file_preview = '<img src =' +burl+value.file_path+ ' height ="100"  width = "100" />';
+			$('#detail-table > tbody:last').append("<tr class='"+classname+"'>"+
+												   "<td>"+ file_preview +"</td>"+
+												   "<td>"+ value.path +"</td>"+
+												   "<td>"+ value.file_path +"</td>"+
+												   "<td><a href='#' class='delete-di'><i class='fa fa-trash ico'></i></a></td></tr>");
+		   /* sub_total += (value.amount != '') ? parseFloat(value.amount) : 0;*/
+		  // console.log(arr);
+		});
+   
+   
+   
+    } 
+	 function getLastindex() {
+        var lastindex = 0;
+        $.each(arr, function( i, value ) {
+            lastindex = i;
+        });    
+        return lastindex;
+    }
 	
 
 });

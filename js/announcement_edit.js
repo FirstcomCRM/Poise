@@ -299,7 +299,9 @@ $( document ).ready(function() {
     $("#detail-table > tbody:last").children().remove();
     $.each(arr, function( i, value ) {   
         var classname = 'id-' + value.announce_file_id ; 
+		var file_preview = '<img src =' +burl+value.file_path+ ' height ="100"  width = "100" />';
        $('#detail-table > tbody:last').append("<tr class='"+classname+"'>"+
+												   "<td>"+ file_preview +"</td>"+
 												   "<td>"+ value.file_name +"</td>"+
 												   "<td>"+ value.file_path +"</td>"+
 												   "<td> <a href='#' class='delete-di'><i class='fa fa-trash ico'></i></a></td></tr>");

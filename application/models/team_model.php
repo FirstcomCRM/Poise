@@ -49,6 +49,10 @@ class team_model extends CI_Model {
 	}
 
 	public function getdtteams() {
+		if( $this->input->post('team_name') && ( $this->input->post('team_name') != '' ) ) {
+			$this->datatables->filter('name LIKE "%' . $this->input->post('team_name') . '%"');
+		}
+		
         $this->datatables->select('team_id, name');
         $this->datatables->from('team');
 		$this->datatables->where('status !=', 1);

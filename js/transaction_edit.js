@@ -1,4 +1,4 @@
-var _validFileExtensions = [".jpg", ".jpeg", ".bmp", ".gif", ".png",".pdf", ".doc", ".docx",".xls",".xlsx",".csv"];    
+var _validFileExtensions = [".pdf", ".doc", ".docx",".xls",".xlsx",".csv"];    
 	function ValidateSingleInput(oInput) {
 		if (oInput.type == "file") {
 			var sFileName = oInput.value;

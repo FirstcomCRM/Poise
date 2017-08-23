@@ -13,7 +13,10 @@
 <!-- <script src="<?= base_url();?>js/ckeditor/ckeditor.js"></script> -->>
 <script>
   var burl = "<?= base_url() ?>";
-  
+  <?php if( isset($details) ) { ?>
+    var detail_arr = <?= json_encode($details); ?>;   
+  <?php } ?>
+
 
   $(function() {
 
@@ -57,6 +60,19 @@
 
   });
 
+  
+  function resetForm() {
+		$("#detail-form").each(function(){
+		  this.reset();
+		});
+
+		$('#description').trigger('autosize.resize');
+		$('#detail-add').show();
+		$('#detail-update').hide();
+
+	  }
+  
+  
   function showMyImage(fileInput) {
         var files = fileInput.files;
         for (var i = 0; i < files.length; i++) {           
@@ -180,7 +196,7 @@
               </div>
 			  
               <div class="clearfix sp-margin-sm"></div>
-			  <div class="form-group">
+			  <!--div class="form-group">
 				<form id ="image-form">
 				  <label for="name" class="col-md-3 control-label">Image</label>
 				  <div class="col-sm-7">
@@ -189,7 +205,7 @@
 					<h5><em>Click on the image to remove</em></h5>
 					<!--button type="submit" class="btn btn-primary" id="btn-clear">Clear</button-->
 
-					<img id ="main-img-preview" src ="<?= ($action == 'edit') ? base_url().$property['property_img'] : "" ?>" height=100 width = 100></img>
+					<!--img id ="main-img-preview" src ="<?= ($action == 'edit') ? base_url().$property['property_img'] : "" ?>" height=100 width = 100></img>
 					
 				  </div>
 				</form>
@@ -197,7 +213,7 @@
 				<?= ($action=='edit')? '<input type ="hidden" name ="main_new_file_name" id="main-new-file-name" value ="'.$property['property_img'].'" >' : "" ?>
 				
 				</form>
-			</div> 
+			</div--> 
               <!--div class="form-group">
                 <label for="name" class="col-md-3 control-label">Status</label>
                 <div class="col-md-7">
@@ -278,6 +294,85 @@
               
             
             </div>
+			
+			
+				<div class = "col-md-12">
+		<div class="panel panel-default tab-panel">
+            <div class="panel-heading">
+                Upload Images
+            </div>
+            <div class="panel-body">
+                <div class="row-fluid table-responsive" id="tbl-payment-detail">
+                    <div class="col-md-12">
+                        <table class="table table-striped table-bordered dataTable no-footer" cellspacing="0" width="100%" id='detail-table'>
+                          <thead>
+                            <tr>
+							  <th style="width:20%">Preview</th>
+                              <th style="width:20%">File</th>
+                              <th style="width:20%">Path</th>
+                              <th style="width:20%">Action</th>
+                            </tr>
+                          </thead>
+                          <tbody> 
+                            <?php if( isset($details) ) { 
+                              foreach($details as $key=>$pd) {
+                            ?>
+                              <!-- <tr class="id-<?= $pd['announce_file_id'] ?>">
+                                <td class="small-tbl-column"><?=$pd['file_name'] ?></td>
+                                <td><?= $pd['file_path'] ?></td>
+                                <td> / <a href='#' class='delete-di'><i class='fa fa-trash ico'></i></a></td>
+                              </tr> -->
+                            <?php
+                              }
+                            } ?>
+                          </tbody>
+                          <tfoot>
+                              <tr id="detail-row">
+								  <form id="detail-form">
+									<td></td>
+									<td>
+									  <!--input type="hidden" id="hid-edit-id" name="hid_edit_id" /-->
+										<input type="file" name="images[]" id ="img_select" onchange = "ValidateMainImage(this);">
+									</td>
+									<td>
+										<input type="text" class="form-control input-sm" id="path" name="path" placeholder="Enter Qty" value="" readonly>
+										<input type="hidden" class="form-control input-sm" id="file-name" name="file_name" placeholder="Enter Qty" value="">
+									</td>
+									<td>
+									 <!--input type="file" name="upload_file1" class="btn btn-default" id="upload_file1" readonly="true"/-->
+									  <span id="detail-add"><a href="#" id="ico-add"><i class="fa fa-plus ico"></i></a></span>
+									  <span id="detail-update" style="display: none;"><a href="#" id="ico-update" ><i class="fa fa-save ico"></i></a> / <a href="#" id="ico-cancel" ><i class="fa fa-eraser ico"></i></a></span>
+									</td>
+								  </form>
+                              </tr>
+                              <tr id="total-row">
+                               
+                              </tr>
+                             
+                          </tfoot>
+                        </table>      
+                    </div>
+                </div>    
+            </div>
+		</div>
+	</div>
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
             <div class="clearfix sp-margin-lg"></div>
 			<div class="form-group">
                 <div class="col-xs-12 text-right">

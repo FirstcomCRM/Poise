@@ -1,3 +1,4 @@
+
 <script>
   var burl = "<?= base_url() ?>";
 
@@ -172,39 +173,37 @@
 			 </div>
           </div><!-- /.box-header -->
 		  <div class="box-body">
-			<div class="row-fluid search-area">
-			  <div class="panel-group" id="accordion">
-				<div class="panel panel-default">
-				  <div class="panel-heading">
-					<h4 class="panel-title">
-					  <a data-toggle="collapse" data-parent="#accordion" href="#search">Filter</a>
-					</h4>
-				  </div>
-				  <div id="search" class="panel-collapse collapse">
-					<div class="panel-body">
-					  <form id="search-form" method="post" action="<?= base_url().'announcement/index'; ?>" />   
-						<div class="form-group">
-						  <div class="col-md-2 col-search">
-							<input type="text" class="form-control input-sm" name="announcement_title" id="announcement-title" placeholder="Search announcement" />
-						  </div>
-						  <div class="col-md-2 col-search">
-							<input type="text" class="form-control input-sm" name="start_date" id="start-date" placeholder="Search Start Date" />
-						  </div> 
-						  <div class="col-md-2 col-search">
-							<input type="text" class="form-control input-sm" name="end_date" id="end-date" placeholder="Search End Date" />
-						  </div>
-						  <div class="col-md-2 col-search" style="padding-right: 0px;">
-							<button type="submit" class="btn btn-default btn-sm" id="btn-submit"><i class="fa fa-search ico-btn"></i>Search</button>
-						  </div> 
-						  <div class="clearfix sp-margin-sm"></div>
-												  
-						</div> 
-					  </form>
-					</div>
+			<div class="box">
+				<div class="box-header with-border">
+				  <h3 class="box-title">Filter</h3>
+
+				  <div class="box-tools pull-right">
+					<button type="button" class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse">
+					  <i class="fa fa-minus"></i></button>
 				  </div>
 				</div>
-			  </div>             
-            </div>
+				<div class="box-body">
+				   <form id="search-form" method="post" action="<?= base_url().'announcement/index'; ?>" />   
+					<div class="form-group">
+					  <div class="col-md-2 col-search">
+						<input type="text" class="form-control input-sm" name="announcement_title" id="announcement-title" placeholder="Search announcement" />
+					  </div>
+					  <div class="col-md-2 col-search">
+						<input type="text" class="form-control input-sm" name="start_date" id="start-date" placeholder="Search Start Date" />
+					  </div> 
+					  <div class="col-md-2 col-search">
+						<input type="text" class="form-control input-sm" name="end_date" id="end-date" placeholder="Search End Date" />
+					  </div>
+					  <div class="col-md-2 col-search" style="padding-right: 0px;">
+						<button type="submit" class="btn btn-default btn-sm" id="btn-submit"><i class="fa fa-search ico-btn"></i>Search</button>
+					  </div> 
+					  <div class="clearfix sp-margin-sm"></div>
+											  
+					</div> 
+				  </form>
+				</div>
+			</div>
+
 			<div class="success-alert-area"> </div>
 			<?php if(isset($msg) && $msg != '') { ?>
 				<div class="alert alert-success"><a href='#' class='close' data-dismiss='alert'>&times;</a><?= $msg; ?></div>
@@ -214,13 +213,13 @@
 					<table class="table table-striped table-bordered dataTable no-footer" id = 'dataTable'>
 						<thead>
 							<tr>
-								<th>No</th>
-								<th>Image</th>
-								<th>Title</th>
-								<th>Posted by</th>
-								<th>Announcement</th>
-								<th>Date</th>
-								<th>Action</th>
+								<th style = "width:5px">No</th>
+								<th style = "width:20px">Image</th>
+								<th style = "width:20px">Title</th>
+								<th style = "width:20px">Posted by</th>
+								<th style = "width:15px">Announcement</th>
+								<th style = "width:20px">Date</th>
+								<th style = "width:20px">Action</th>
 							</tr>
 						</thead>
 						<tbody>

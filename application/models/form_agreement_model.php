@@ -97,27 +97,10 @@ class form_agreement_model extends CI_Model {
 		 if( $this->input->post('form_title') && ( $this->input->post('form_title') != '' ) ) {
 			$this->datatables->filter('f.form_name LIKE "%' . $this->input->post('form_title') . '%"');
 		}
-		/*if( $this->input->post('start_date') && ( $this->input->post('start_date') != '' ) ) { 
-        	$start_date = $this->input->post('start_date');
-        	$this->datatables->filter('a.announce_date >=', date('Y-m-d',strtotime($start_date)));
-        }
-        if( $this->input->post('end_date') && ( $this->input->post('end_date') != '' ) ) { 
-        	$end_date = $this->input->post('end_date');
-        	$this->datatables->filter('a.announce_date <=', date('Y-m-d',strtotime($end_date)));
-        } */
-		/* if( $this->input->post('quotation_no') && ( $this->input->post('quotation_no') != '' ) ) {
-			$this->datatables->filter('q.quotation_no LIKE "%' . $this->input->post('quotation_no') . '%"');
+		if( $this->input->post('category_id') && ( $this->input->post('category_id') != '' ) ) {
+			$this->datatables->filter('f.category_id LIKE "%' . $this->input->post('category_id') . '%"');
 		}
-		
-  		// if( $this->input->post('project_no') && ( $this->input->post('project_no') != '' ) ) {
-  		//  	$this->datatables->filter('p.project_no LIKE "%' . $this->input->post('project_no') . '%"');
-		// }
-		// if( $this->input->post('client_id') && ( $this->input->post('client_id') != '' ) ) {
-		// 	$this->datatables->filter('q.client_id', $this->input->post('client_id') );
-		// }
-		if( $this->input->post('form_agreement_status') && ( $this->input->post('form_agreement_status') != '' ) ) {
-			$this->datatables->filter('i.form_agreement_status', $this->input->post('form_agreement_status') );
-		} */
+	
 
 		//$role_id = $this->session->userdata('role_id');
 		/* if($role_id != 1) {

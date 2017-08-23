@@ -7,8 +7,8 @@ class invoice extends CI_Controller {
 		$this->load->library("pagination");
 		$this->load->model('invoice_model');
 		$this->load->model('transaction_model');
-		/* $this->load->model('production_model');
-		$this->load->model('uom_model');
+		$this->load->model('service_model');
+		/*$this->load->model('uom_model');
 		$this->load->model('client_model');
 		$this->load->model('quotation_model');
 		$this->load->model('setting_model'); */
@@ -57,7 +57,8 @@ class invoice extends CI_Controller {
 				//$data['is_quotation'] = false;
 				$data['users'] = $this->user_model->get_users();
 				$data['transactions'] = $this->transaction_model->get_approved_transactions();
-
+				$data['services'] = $this->service_model->get_services();
+				$data['invoice_no'] = $this->invoice_model->getInvoiceno();
 		
 				$this->load->view('template/header', $data);
 				$this->load->view('invoice/edit', $data);
@@ -114,7 +115,7 @@ class invoice extends CI_Controller {
 				$data['transactions'] = $this->transaction_model->get_approved_transactions();
 				$data['details'] = $this->invoice_model->getDetilsbyinvoiceid($id);
 				$data['payment_details'] = $this->invoice_model->getPaymentDetailsbyinvoiceid($id);
-
+				$data['services'] = $this->service_model->get_services();
 				$this->load->view('template/header', $data);
 				$this->load->view('invoice/edit', $data);
 				$this->load->view('template/footer', $data);		
@@ -135,7 +136,7 @@ class invoice extends CI_Controller {
 				$ret = array(
 					'status' => 'success',
 				);	
-				$this->pv_sendEmail($id);
+			//	$this->pv_sendEmail($id);
 			}
 			else {
 				$ret = array(

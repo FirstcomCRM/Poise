@@ -284,10 +284,12 @@ $( document ).ready(function() {
 		$("#detail-table > tbody:last").children().remove();
 		$.each(arr, function( i, value ) {   
 			var classname = 'id-' + i ; 
+			var file_preview = '<img src =' +burl+value.file_path+ ' height ="100"  width = "100" />';
 			$('#detail-table > tbody:last').append("<tr class='"+classname+"'>"+
+												   "<td>"+ file_preview +"</td>"+
 												   "<td>"+ value.path +"</td>"+
 												   "<td>"+ value.file_path +"</td>"+
-												   "<td><a href='#' class='edit-di'><i class='fa fa-edit ico'></i> / <a href='#' class='delete-di'><i class='fa fa-trash ico'></i></a></td></tr>");
+												   "<td><a href='#' class='delete-di'><i class='fa fa-trash ico'></i></a></td></tr>");
 		   /* sub_total += (value.amount != '') ? parseFloat(value.amount) : 0;*/
 		  // console.log(arr);
 		});

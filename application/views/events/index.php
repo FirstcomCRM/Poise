@@ -50,10 +50,10 @@
 				
 				 <h3 class="box-title">Events</h3>
 				   
-				 <div class="pull-right">
+				 <!--div class="pull-right">
 					<a href="#" id="quick-add" class="btn btn-default btn-flat"><i class="fa fa-plus ico-btn"></i> Add</a>
 					<!--a href="<?= base_url().'events/create'; ?>" class="btn btn-default btn-flat">Add</a-->
-				 </div>
+				 <!--/div-->
 			  </div><!-- /.box-header -->
 			  <div class="box-body">
 	
@@ -68,8 +68,8 @@
 							<div class="modal-body">
 								<div class="error"></div>
 								<form class="form-horizontal" id="crud-form">
-								<input type="hidden" id="start">
-								<input type="hidden" id="end">
+								<input type="hidden" id="start" name ="start" class="form-control input-md" />
+								<input type="hidden" id="end" name = "end" class="form-control input-md" />
 									<div class="form-group">
 										<label class="col-md-4 control-label" for="title">Title</label>
 										<div class="col-md-4">
@@ -85,13 +85,13 @@
 									<div class="form-group">
 										<label class="col-md-4 control-label" for="color">Start Date</label>
 										<div class="col-md-4">
-											   <input disabled type="text" class="form-control input-sm" name="start_date" id="start-date" placeholder="Search Start Date" value="<?= isset($_POST['start_date']) ? $_POST['start_date'] : ( isset($events['start']) ? date('Y-m-d H:i:s', strtotime($events['start'])) : '') ; ?>"/>
+											   <input  type="text" class="form-control input-sm" name="start_date" id="start-date" placeholder="Search Start Date" value="<?= isset($_POST['start_date']) ? $_POST['start_date'] : ( isset($events['start']) ? date('Y-m-d H:i:s', strtotime($events['start'])) : '') ; ?>"/>
 										</div>
 									</div>
 									<div class="form-group">
 										<label class="col-md-4 control-label" for="color">End Date</label>
 										<div class="col-md-4">
-											   <input disabled type="text" class="form-control input-sm" name="end_date" id="end-date" placeholder="Search End Date" value="<?= isset($_POST['end_date']) ? $_POST['end_date'] : ( isset($events['end']) ? date('Y-m-d H:i:s', strtotime($events['end'])) : '') ; ?>"/>
+											   <input  type="text" class="form-control input-sm" name="end_date" id="end-date" placeholder="Search End Date" value="<?= isset($_POST['end_date']) ? $_POST['end_date'] : ( isset($events['end']) ? date('Y-m-d H:i:s', strtotime($events['end'])) : '') ; ?>"/>
 										</div>
 									</div>
 									

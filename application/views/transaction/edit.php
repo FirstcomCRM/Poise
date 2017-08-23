@@ -23,17 +23,17 @@
   $(function() {
 
     $("#transact-date").datepicker({
-        format: "yyyy-mm-dd",
+        format: "dd/mm/yyyy",
         autoclose :true,
     }); 
 
     $("#option-date").datepicker({
-        format: "yyyy-mm-dd",
+        format: "dd/mm/yyyy",
         autoclose :true,
     }); 
 
     $("#contract-date").datepicker({
-        format: "yyyy-mm-dd",
+        format: "dd/mm/yyyy",
         autoclose :true,
     }); 
 
@@ -90,6 +90,7 @@
 				 // alert();
 				 console.log("transaction/aj_getPropertyinfo/" + $("#property-id").val());
 				$("#property-type").val(result['category']);
+				$("#price").val(result['property_price']);
 			   // $("#designation").val(result['designation']);
 			//    $("#department").val(result['department']);
 				//$("#address").val(result['address']);
@@ -211,17 +212,17 @@
                 <div class="col-md-1 req-star">*</div>
               </div> 
 				<div class="clearfix sp-margin-sm"></div>			  
-              <div class="form-group">
+              <!--div class="form-group">
                 <label for="name" class="col-md-4 control-label">Amount</label>
                 <div class="col-md-7">
                   <input type="text" class="form-control input-sm" id="amount" name="amount" placeholder="Enter Amount" value="<?= isset($_POST['amount']) ? $_POST['amount'] : ( isset($transaction['amount']) ? $transaction['amount'] : '') ; ?>">      
                 </div>
-              </div>
+              </div-->
               <div class="clearfix sp-margin-sm"></div>  
              <div class="form-group">
                 <label for="name" class="col-md-4 control-label">Transaction Date</label>
                 <div class="col-md-7">
-                    <input type="text" class="form-control input-sm" id="transact-date" name="transact_date" placeholder="Enter Transaction Date" value="<?= isset($_POST['transact_date']) ? $_POST['transact_date'] : ( isset($transaction['transact_date']) ? $transaction['transact_date'] : '') ; ?>">
+                    <input type="text" class="form-control input-sm" id="transact-date" name="transact_date" placeholder="Enter Transaction Date" value="<?= isset($_POST['transact_date']) ? $_POST['transact_date'] : ( isset($transaction['transact_date']) ? date('d/m/Y',strtotime($transaction['transact_date'])) : date('d/m/Y')) ; ?>">
                 </div>
                 <!-- <div class="col-md-4"><label class="checkbox-inline"><input id="chk-mf" type="checkbox" value="1" />Revised</label></div> -->
                 <div class="col-md-1 req-star">*</div>
@@ -271,24 +272,24 @@
               </div>
               <div class="clearfix sp-margin-sm"></div> 
 			  <div class="sp-margin-sm"></div> 			
-			  <div class="form-group">
+			  <!--div class="form-group">
 				<form id ="image-form">
-				  <label for="name" class="col-md-3 control-label">Image</label>
+				  <label for="name" class="col-md-3 control-label">Form</label>
 				  <div class="col-sm-7">
 					<input type="file" name="main_image[]" id ="main_img_select" onchange="showMyImage(this);ValidateMainImage(this)">
 					<input type="hidden" class="form-control input-sm" id="main-file-name" name="main_file_name" placeholder="Upload an Image" value="">
 					<h5><em>Click on the image to remove</em></h5>
 					<!--button type="submit" class="btn btn-primary" id="btn-clear">Clear</button-->
 
-					<img id ="main-img-preview" src ="<?= ($action == 'edit') ? base_url().$transaction['transact_img'] : "" ?>" height=100 width = 100></img>
+					<!--img id ="main-img-preview" src ="<?= ($action == 'edit') ? base_url().$transaction['transact_form'] : "" ?>" height=100 width = 100></img>
 					
 				  </div>
 				</form>
 				<form id ='image-form2' style ="display:none;">
-				<?= ($action=='edit')? '<input type ="hidden" name ="main_new_file_name" id="main-new-file-name" value ="'.$announcement['announce_img'].'" >' : "" ?>
+				<?= ($action=='edit')? '<input type ="hidden" name ="main_new_file_name" id="main-new-file-name" value ="'.$transaction['transact_form'].'" >' : "" ?>
 				
 				</form>
-			   </div> 
+			   </div--> 
             </div>
 			
 			
@@ -320,14 +321,14 @@
               <div class="form-group">
                 <label for="name" class="col-md-4 control-label">Contract Date</label>
                 <div class="col-md-7">
-                 <input type="text" class="form-control input-sm" id="contract-date" name="contract_date" placeholder="Enter Contract Date" value="<?= isset($_POST['contract_date']) ? $_POST['contract_date'] : ( isset($transaction['contract_date']) ? $transaction['contract_date'] : ''); ?>" />  
+                 <input type="text" class="form-control input-sm" id="contract-date" name="contract_date" placeholder="Enter Contract Date" value="<?= isset($_POST['contract_date']) ? $_POST['contract_date'] : ( isset($transaction['contract_date']) ? date('d/m/Y',strtotime($transaction['contract_date'])) : ''); ?>" />  
                 </div>
               </div>
               <div class="clearfix sp-margin-sm"></div> 
                <div class="form-group">
                 <label for="name" class="col-md-4 control-label">Option Date</label>
                 <div class="col-md-7">
-                 <input type="text" class="form-control input-sm" id="option-date" name="option_date" placeholder="Enter Option Date" value="<?= isset($_POST['option_date']) ? $_POST['option_date'] : ( isset($transaction['option_date']) ? $transaction['option_date'] : ''); ?>" />  
+                 <input type="text" class="form-control input-sm" id="option-date" name="option_date" placeholder="Enter Option Date" value="<?= isset($_POST['option_date']) ? $_POST['option_date'] : ( isset($transaction['option_date']) ? date('d/m/Y',strtotime($transaction['option_date'])) : ''); ?>" />  
                 </div>
               </div>
 			  <div class="clearfix sp-margin-sm"></div> 
@@ -382,7 +383,7 @@
 			<div class = "col-md-12">
 				<div class="panel panel-default tab-panel">
 				  <div class="panel-heading">
-					  Upload Files
+					  Upload Forms
 				  </div>
 				  <div class="panel-body">
 					<div class="row-fluid table-responsive" id="tbl-payment-detail">
@@ -417,7 +418,7 @@
 									
 									  <!--input type="hidden" id="hid-edit-id" name="hid_edit_id" /-->
 									  
-										<input type="file" name="images[]" id ="img_select">
+										<input type="file" name="images[]" id ="img_select" onchange="ValidateSingleInput(this);">
 										
 									</td>
 									<td>

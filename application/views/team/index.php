@@ -13,7 +13,10 @@
         "ajax": {
             "url": "<?= base_url() ?>team/index/dt",
             "type": "POST",
-            "data" : { }
+            "data" : {
+				'team_name'    :  function ( d ) { return $("#team-name").val(); },
+
+			}
         },
         "columns": [
             { "data": "no", "orderable": false, "bSearchable": false },
@@ -162,6 +165,32 @@
 			</div>
            </div><!-- /.box-header -->
 			<div class="box-body">
+				<div class="box">
+					<div class="box-header with-border">
+					  <h3 class="box-title">Filter</h3>
+
+					  <div class="box-tools pull-right">
+						<button type="button" class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse">
+						  <i class="fa fa-minus"></i></button>
+					  </div>
+					</div>
+					<div class="box-body">
+						<form id="search-form" method="post" action="<?= base_url().'team/index'; ?>" />   
+                            <div class="form-group">
+                              <div class="col-md-2 col-search">
+                                <input type="text" class="form-control input-sm" name="team_name" id="team-name" placeholder="Search Team Name" />
+                              </div>
+                              <!-- <div class="clearfix sp-margin-sm"></div>
+                              <div class="col-md-10"></div> -->
+                              <div class="col-md-2 col-search" style="padding-right: 0px;">
+                                <button type="submit" class="btn btn-default btn-sm" id="btn-submit"><i class="fa fa-search ico-btn"></i>Search</button>
+                              </div>                            
+                            </div> 
+                        </form>
+					</div>
+				</div>
+			
+				
 				<div class="success-alert-area"> </div>
 				<?php if(isset($msg) && $msg != '') { ?>
 					<div class="alert alert-success"><a href='#' class='close' data-dismiss='alert'>&times;</a><?= $msg; ?></div>

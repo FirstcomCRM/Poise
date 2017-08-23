@@ -13,7 +13,7 @@ $(function(){
         header: {
             left: 'prev, next, today',
             center: 'title',
-             right: 'month, basicWeek, basicDay'
+             right: 'false'
         },
         // Get all events stored in database
         eventLimit: true, // allow "more" link when too many events
@@ -51,6 +51,8 @@ $(function(){
                 },
                 title: 'Add Event' // Modal title
             });
+			//document.getElementById("start-date").disabled = false;
+			//document.getElementById("end-date").disabled = false;
             }, 
            
          eventDrop: function(event, delta, revertFunc,start,end) {  
@@ -119,7 +121,7 @@ $(function(){
         eventClick: function(calEvent, jsEvent, view) {
             // Set currentEvent variable according to the event clicked in the calendar
             currentEvent = calEvent;
-
+			
             // Open modal to edit or delete event
             modal({
                 // Available buttons when editing
@@ -151,8 +153,10 @@ $(function(){
         // Set input values
         $('#title').val(data.event ? data.event.title : '');        
         $('#description').val(data.event ? data.event.description : '');
-      //  $('#start-date').val(data.event ? data.event.start.format('YYYY-MM-DD HH:mm:ss') : '');
-      //  $('#end-date').val(data.event ? data.event.end.format('YYYY-MM-DD HH:mm:ss') : '');
+		/* $('#start-date').val(data.event ? data.event.start.format('YYYY-MM-DD HH:mm:ss') : '');
+		$('#start').val(data.event ? data.event.start.format('YYYY-MM-DD HH:mm:ss') : '');
+        $('#end-date').val(data.event ? data.event.end.format('YYYY-MM-DD HH:mm:ss') : '');
+        $('#end').val(data.event ? data.event.end.format('YYYY-MM-DD HH:mm:ss') : ''); */
         $('#color').val(data.event ? data.event.color : '#3a87ad');
         // Create Butttons
         $.each(data.buttons, function(index, button){
@@ -160,8 +164,10 @@ $(function(){
         })
         //Show Modal
         $('.modal').modal('show');
-		document.getElementById("start-date").disabled = true;
-			 document.getElementById("end-date").disabled = true;
+		//document.getElementById("start-date").disabled = true;
+		//document.getElementById("end-date").disabled = true;
+		//$('#start-date').val(data.event ? data.event.start.format('YYYY-MM-DD HH:mm:ss') : '');
+		//$('#end-date').val(data.event ? data.event.end.format('YYYY-MM-DD HH:mm:ss') : '');
     }
 
 	$("#quick-add").click(function(e){
@@ -208,6 +214,8 @@ $(function(){
                 id: currentEvent._id,
                 title: $('#title').val(),
                 description: $('#description').val(),
+                start: $('#start-date').val(),
+                end: $('#end-date').val(),
                 color: $('#color').val()
             }, function(result){
                 $('.alert').addClass('alert-success').text('Event updated successfuly');

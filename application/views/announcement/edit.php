@@ -29,7 +29,7 @@
 		//	loadsubcategory();
              
     $("#announcement-date").datepicker({
-        format: "yyyy-mm-dd",
+        format: "dd/mm/yyyy",
         autoclose :true,
     }); 
 /*
@@ -170,7 +170,7 @@ if ( $action == "new" ) { ?>
               <div class="form-group">
                 <label for="name" class="col-md-3 control-label">Date</label>
                 <div class="col-md-7">
-                    <input type="text" class="form-control input-sm" id="announcement-date" name="announcement_date" placeholder="Enter Announcement Date" value="<?= isset($_POST['announcement_date']) ? $_POST['announcement_date'] : ( isset($announcement['announce_date']) ? $announcement['announce_date'] : '') ; ?>">
+                    <input type="text" class="form-control input-sm" id="announcement-date" name="announcement_date" placeholder="Enter Announcement Date" value="<?= isset($_POST['announcement_date']) ? $_POST['announcement_date'] : ( isset($announcement['announce_date']) ? date('d/m/Y',strtotime($announcement['announce_date'])) : '') ; ?>">
                 </div>
                 <!-- <div class="col-md-3"><label class="checkbox-inline"><input id="chk-mf" type="checkbox" value="1" />Revised</label></div> -->
                 <div class="col-md-1 req-star">*</div>
@@ -179,10 +179,10 @@ if ( $action == "new" ) { ?>
             <div class="form-group">
 			  <label for="name" class="col-md-3 control-label">Announcement</label>
 			  <div class="col-sm-7">
-				<textarea class="form-control input-sm" id="announcement-body" name="announcement_body" placeholder="Write your announcement" height = "20" width = "100" style="height: 20em;width: 37em;*/" required><?= isset($_POST['announcement_body']) ? $_POST['announcement_body'] : ( isset($announcement['announce_body']) ? $announcement['announce_body'] : '') ; ?></textarea>
+				<textarea class="form-control input-sm" id="announcement-body" name="announcement_body" placeholder="Write your announcement"  style="/*height: 20em;width: 37em;*/" required><?= isset($_POST['announcement_body']) ? $_POST['announcement_body'] : ( isset($announcement['announce_body']) ? $announcement['announce_body'] : '') ; ?></textarea>
 			  </div>
 			</div>   
-			<div class="sp-margin-sm"></div> 			
+			<div class="sp-margin-sm" style = "padding-top: 4.2em;"></div> 			
 			<div class="form-group">
 				<form id ="image-form">
 				  <label for="name" class="col-md-3 control-label">Image</label>
@@ -192,7 +192,7 @@ if ( $action == "new" ) { ?>
 					<h5><em>Click on the image to remove</em></h5>
 					<!--button type="submit" class="btn btn-primary" id="btn-clear">Clear</button-->
 
-					<img id ="main-img-preview" src ="<?= ($action == 'edit') ? base_url().$announcement['announce_img'] : "" ?>" height=100 width = 100></img>
+					<img id ="main-img-preview" src ="<?= ($action == 'edit') ? base_url().$announcement['announce_img'] : "http://via.placeholder.com/100x100" ?>" height=100 width = 100></img>
 					
 				  </div>
 				</form>
@@ -222,6 +222,7 @@ if ( $action == "new" ) { ?>
                         <table class="table table-striped table-bordered dataTable no-footer" cellspacing="0" width="100%" id='detail-table'>
                           <thead>
                             <tr>
+							  <th style="width:20%">Preview</th>
                               <th style="width:20%">File</th>
                               <th style="width:20%">Path</th>
                               <th style="width:20%">Action</th>
@@ -243,6 +244,7 @@ if ( $action == "new" ) { ?>
                           <tfoot>
                               <tr id="detail-row">
 								  <form id="detail-form">
+									<td></td>
 									<td>
 									  <!--input type="hidden" id="hid-edit-id" name="hid_edit_id" /-->
 										<input type="file" name="images[]" id ="img_select" onchange = "ValidateSingleInput(this);">
@@ -267,7 +269,7 @@ if ( $action == "new" ) { ?>
                     </div>
                 </div>    
               </div>
-            </div>
+    </div>
 	</div>
 			
 		<div class="form-group">

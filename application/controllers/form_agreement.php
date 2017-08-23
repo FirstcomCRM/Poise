@@ -37,13 +37,14 @@ class form_agreement extends CI_Controller {
 		if($dt === FALSE ) { 									// First time load
 			$data['msg'] = $this->session->flashdata('msg');
 			$data['nav_area'] = 'form_agreement';
-
+			$data['categories'] = $this->form_category_model->get_form_categories();
 			$this->load->view('template/header', $data);
 			$this->load->view('form_agreement/index', $data);
 			$this->load->view('template/footer', $data);	
 		}
 		else { 													// Datatable Load
 			$this->load->library("Datatables");
+			$data['categories'] = $this->form_category_model->get_form_categories();
 			$this->form_agreement_model->getdtforms();	
 		}
 	}

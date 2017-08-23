@@ -83,9 +83,11 @@ class invoice_model extends CI_Model {
 		if($payment_details) {
 			foreach($payment_details as $payment_detail) {
 				//$no = ($detail['no']) ? $detail['no'] : NULL;
+				$payment_date = $payment_detail['payment_date'];
+				$new_payment_date = str_replace('/', '-', $payment_date);
 				$data = array(
 					'invoice_id'	=> $invoice_id,
-					'date'			=> $payment_detail['payment_date'],
+					'date'			=> date('Y-m-d',strtotime($new_payment_date)),
 					'bank_name'		=> $payment_detail['bank_name'],
 					'cheque_no'		=> $payment_detail['cheque_no'],
 					'amount'		=> $payment_detail['payment_amount'],
@@ -104,11 +106,13 @@ class invoice_model extends CI_Model {
 	
 	
 	public function update_invoice($id) { 
-		//$delivery_date = ($this->input->post('delivery_date')) ? get_timestamp($this->input->post('delivery_date'), '/') : 0;
-		//$invoice_date = ($this->input->post('invoice_date')) ? get_timestamp($this->input->post('invoice_date'), '/') : 0;
+
+		$invoice_date = $this->input->post('invoice_date');
+		$new_invoice_date = str_replace('/', '-', $invoice_date);
+		
 		$data = array(
 			'invoice_no'			=> $this->input->post('invoice_no'),
-			'invoice_date'			=> date('Y-m-d',strtotime($this->input->post('invoice_date'))),
+			'invoice_date'			=> date('Y-m-d',strtotime($new_invoice_date)),
 			'transaction_id' 	  	=> $this->input->post('transact_id'),
 			'entry_no'				=> $this->input->post('entry_no'),
 			'deliver_to'			=> $this->input->post('deliver_to'),
@@ -127,12 +131,12 @@ class invoice_model extends CI_Model {
 			// 'mf'					=> $this->input->post('mf'),
 		);
 		
-		$has_cheque = $this->checkPaymentDetails($id);
+		/* $has_cheque = $this->checkPaymentDetails($id);
 		if($has_cheque) {
 			//$this->addDetails($invoice_id);	
 			$this->pv_sendEmail($has_cheque);	
 		}
-		
+		 */
 		
 		$this->db->where('invoice_id', $id);
 		return $this->db->update('invoice', $data);
@@ -154,6 +158,8 @@ class invoice_model extends CI_Model {
 	}
 	
 	
+
+
 	
 	
 	public function delete_invoice($id) {
@@ -175,11 +181,17 @@ class invoice_model extends CI_Model {
 	}
 
 	public function getPaymentDetailsbyinvoiceid($invoice_id) {
-		$this->db->select('pd.*');
+		/* $this->db->select('DATE_FORMAT(pd.date, %d/%m/%Y) as date');
 		$this->db->from('invoice_payment_detail pd');
 		$this->db->where('pd.invoice_id', $invoice_id);
-		$this->db->where('pd.status !=', 1);
-		$query = $this->db->get();
+		$this->db->where('pd.status !=', 1); */
+		
+		$query = $this->db->query("SELECT pd.invoice_payment_detail_id, pd.invoice_id, pd.cheque_no,DATE_FORMAT(pd.date, '%d/%m/%Y') as date,pd.bank_name,
+		pd.amount,pd.payment_type,pd.cheque,pd.remarks 
+		FROM invoice_payment_detail pd where pd.invoice_id=".$invoice_id." and pd.status !=1;");
+		
+		
+		//$query = $this->db->get();
 		return $query->result_array();	
 	}
 	
@@ -259,7 +271,7 @@ class invoice_model extends CI_Model {
 		else{
 			$edit = '';
 		}
-        $this->datatables->select("i.invoice_id, i.invoice_no, i.invoice_date, c.case_no, i.deliver_to, i.address, i.sub_total", false);
+        $this->datatables->select("i.invoice_id, i.invoice_no, DATE_FORMAT(i.invoice_date, '%d/%m/%Y')as invoice_date, c.case_no, i.deliver_to, i.address, i.sub_total", false);
         $this->datatables->from('invoice i');
         $this->datatables->join('case_submission c', 'c.case_id = i.transaction_id', 'left');
         //$this->datatables->join('client c', 'q.client_id = c.client_id', 'left');
@@ -295,9 +307,11 @@ class invoice_model extends CI_Model {
 		//$no = $this->input->post('no');
 		//$payment_date = ($this->input->post('payment_date')) ? get_timestamp($this->input->post('payment_date'), '-') : 0;
 		//'date'		=> $this->input->post('payment_date'),
+		$payment_date = $this->input->post('payment_date');
+		$new_payment_date = str_replace('/', '-', $payment_date);
 		$data = array(
 			'invoice_id'	 	=>  $this->input->post('hid_invoice_id'),
-			'date'				=>  date('Y-m-d',strtotime($this->input->post('payment_date'))),
+			'date'				=>  date('Y-m-d',strtotime($new_payment_date)),
 			'cheque_no'			=>  $this->input->post('cheque_no'),
 			'bank_name'			=>  $this->input->post('bank_name'),
 			'amount'			=>  $this->input->post('payment_amount'),
@@ -327,11 +341,19 @@ class invoice_model extends CI_Model {
 
 	
 	public function getPaymentDetail($id) {
-		$this->db->select('pd.*');
+/* 		$this->db->select('pd.*');
 		$this->db->from('invoice_payment_detail pd');
 		$this->db->where('pd.invoice_payment_detail_id', $id);
 		$this->db->where('pd.status !=', 1);
-		$query = $this->db->get('invoice_payment_detail');
+		 */
+		
+		
+		$query = $this->db->query("SELECT pd.invoice_payment_detail_id, pd.invoice_id, pd.cheque_no,DATE_FORMAT(pd.date, '%d/%m/%Y') as date,pd.bank_name,
+		pd.amount,pd.payment_type,pd.cheque,pd.remarks 
+		FROM invoice_payment_detail pd where pd.invoice_id=".$id." and pd.status !=1;");
+		
+		
+		//$query = $this->db->get('invoice_payment_detail');
 		return $query->row_array();
 	}
 	
@@ -352,9 +374,12 @@ class invoice_model extends CI_Model {
 
 	public function updatePaymentDetail($id) {
 		//$no = $this->input->post('no');
+		
+		$payment_date = $this->input->post('payment_date');
+		$new_payment_date = str_replace('/', '-', $payment_date);
 		$data = array(
 			'invoice_id'	 	=>  $this->input->post('hid_invoice_id'),
-			'date'				=>  date('Y-m-d',strtotime($this->input->post('payment_date'))),
+			'date'				=>  date('Y-m-d',strtotime($new_payment_date)),
 			'cheque_no'			=>  $this->input->post('cheque_no'),
 			'bank_name'			=>  $this->input->post('bank_name'),
 			'amount'			=>  $this->input->post('payment_amount'),

@@ -165,22 +165,24 @@
 		<div class="box">
           <div class="box-header">
              <h3 class="box-title">Receipt</h3>
+			  <?php if ($this->session->userdata('role_id')==1 ){ ?>
 			 <div class="pull-right">
 			  <a href="<?= base_url().'receipt/create'; ?>" class="btn btn-default btn-flat">Add</a>
 			 </div>
+			  <?php }?>
            </div><!-- /.box-header -->
 			<div class="box-body">
-				<div class="row-fluid search-area">
-                  <div class="panel-group" id="accordion">
-                    <div class="panel panel-default">
-                      <div class="panel-heading">
-                        <h4 class="panel-title">
-                          <a data-toggle="collapse" data-parent="#accordion" href="#search">Filter</a>
-                        </h4>
-                      </div>
-                      <div id="search" class="panel-collapse collapse">
-                        <div class="panel-body">
-                          <form id="search-form" method="post" action="<?= base_url().'receipt/index'; ?>" />   
+				<div class="box">
+					<div class="box-header with-border">
+					  <h3 class="box-title">Filter</h3>
+
+					  <div class="box-tools pull-right">
+						<button type="button" class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse">
+						  <i class="fa fa-minus"></i></button>
+					  </div>
+					</div>
+					<div class="box-body">
+						<form id="search-form" method="post" action="<?= base_url().'receipt/index'; ?>" />   
                             <div class="form-group">
                               <div class="col-md-2 col-search">
                                 <input type="text" class="form-control input-sm" name="receipt_no" id="receipt-no" placeholder="Search receipt No" />
@@ -200,12 +202,9 @@
                                 <button type="submit" class="btn btn-default btn-sm" id="btn-submit"><i class="fa fa-search ico-btn"></i>Search</button>
                               </div>                            
                             </div> 
-                          </form>
-                        </div>
-                      </div>
-                    </div>
-                  </div>             
-                </div>
+                        </form>
+					</div>
+				</div>
 				<div class="success-alert-area"> </div>
 				<?php if(isset($msg) && $msg != '') { ?>
 					<div class="alert alert-success"><a href='#' class='close' data-dismiss='alert'>&times;</a><?= $msg; ?></div>

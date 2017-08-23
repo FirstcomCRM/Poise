@@ -39,7 +39,7 @@
     });  */
 
     $("#invoice-date").datepicker({
-        format: "yyyy-mm-dd",
+        format: "dd/mm/yyyy",
         autoclose :true,
     }); 
 	
@@ -148,7 +148,7 @@
 	
 	
 	
-    /* $('#service-id').change(function(e) { 
+    $('#service-id').change(function(e) { 
       if( $('#service-id').val() != 0) {
         // alert( $('#service-id').val() ) ;
         $.ajax({
@@ -170,7 +170,7 @@
             } 
         });
       }
-    }); */
+    });
     
   });
 
@@ -349,7 +349,7 @@ if ( $action == "new" ) { ?>
                 <input type="hidden" id="hid-invoice-id" name="hid_invoice_id" value="<?= (isset($invoice['invoice_id'])) ? $invoice['invoice_id'] : ''; ?>" />
                 <label for="name" class="col-md-3 control-label">Invoice No</label>
                 <div class="col-md-7">
-                    <input type="text" class="form-control input-sm" id="invoice-no" name="invoice_no" placeholder="Enter Invoice No" value="<?= isset($_POST['invoice_no']) ? $_POST['invoice_no'] : ( isset($invoice['invoice_no']) ? $invoice['invoice_no'] : '') ; ?>" >
+                    <input type="text" class="form-control input-sm" id="invoice-no" name="invoice_no" placeholder="Enter Invoice No" value="<?= isset($_POST['invoice_no']) ? $_POST['invoice_no'] : ( isset($invoice['invoice_no']) ? $invoice['invoice_no'] : $invoice_no) ; ?>" >
                 </div>
                 <!-- <div class="col-md-3"><label class="checkbox-inline"><input id="chk-mf" type="checkbox" value="1" />Revised</label></div> -->
                 <div class="col-md-1 req-star">*</div>
@@ -358,7 +358,7 @@ if ( $action == "new" ) { ?>
               <div class="form-group">
                 <label for="name" class="col-md-3 control-label">Invoice Date</label>
                 <div class="col-md-7">
-                   <input type="text" class="form-control input-sm" id="invoice-date" name="invoice_date" placeholder="Enter Invoice Date" value="<?= isset($_POST['invoice_date']) ? $_POST['invoice_date'] : ( isset($invoice['invoice_date']) ? $invoice['invoice_date'] : ''); ?>" >     
+                   <input type="text" class="form-control input-sm" id="invoice-date" name="invoice_date" placeholder="Enter Invoice Date" value="<?= isset($_POST['invoice_date']) ? $_POST['invoice_date'] : ( isset($invoice['invoice_date']) ? date('d/m/Y',strtotime($invoice['invoice_date'])) : date('d/m/Y')); ?>" >     
                 </div>
                 <div class="col-md-1 req-star">*</div>
               </div>
@@ -473,13 +473,12 @@ if ( $action == "new" ) { ?>
 								<input type="hidden" id="hid-edit-id" name="hid_edit_id" />
                                   <select class="form-control input-sm" name="service_id" id="service-id" placeholder="Select Services" />  
                                     <option value="" selected>Select Services</option>
-                                     <option value="" selected>Select Services</option>
                                     <option value="test">Test Service</option>
-                                    <?php /* if( isset($services) && $services != '') { ?>
+                                    <?php if( isset($services) && $services != '') { ?>
                                         <?php foreach($services as $service) {
                                                echo "<option value='". $service['service_id']. "' >" . $service['name'] . "</option>";
                                         } ?>
-                                    <?php } */ ?>
+                                    <?php }?>
                                   </select>
                                   <div class="clearfix sp-margin-sm"></div> 
                                   <textarea class="form-control input-sm" id="description" name="description" placeholder="Enter Description"></textarea>
@@ -505,7 +504,7 @@ if ( $action == "new" ) { ?>
                               </tr>
                               <tr>
                                 <td colspan="2" class='text-right'>GST</td>
-                                <td class='text-right'><input type="text" class="form-control input-sm" id="gst" name="gst" placeholder="Enter GST" value="<?= isset($_POST['gst']) ? $_POST['gst'] : ( isset($invoice['gst']) ? $invoice['gst'] : '') ; ?>" /></td>
+                                <td class='text-right'><input type="text" class="form-control input-sm" id="gst" name="gst" placeholder="Enter GST" value="<?= isset($_POST['gst']) ? $_POST['gst'] : ( isset($invoice['gst']) ? $invoice['gst'] : '7.00') ; ?>" /></td>
                                 <td></td>
                               </tr>
 							  <tr>

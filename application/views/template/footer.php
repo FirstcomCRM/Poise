@@ -74,7 +74,7 @@
 				<script src='<?=base_url()?>assets/js/bootstrap-colorpicker.min.js'></script>
   
 			  <!-- Custom -->
-			  <script class="include" type="text/javascript" src="<?= base_url(); ?>js/jquery.dcjqaccordion.2.7.js"></script>
+			 <script class="include" type="text/javascript" src="<?= base_url(); ?>js/jquery.dcjqaccordion.2.7.js"></script>
 			  <!--script src="<?= base_url(); ?>js/jquery.scrollTo.min.js"></script>
 			  <script src="<?= base_url(); ?>js/jquery.nicescroll.js" type="text/javascript"></script--> 
 	
@@ -92,20 +92,7 @@
 			<script src="//blueimp.github.io/Gallery/js/jquery.blueimp-gallery.min.js"></script>
 			<!-- The Iframe Transport is required for browsers without support for XHR file uploads -->
 			<script src="<?= base_url(); ?>js/js/jquery.iframe-transport.js"></script>
-			<!-- The basic File Upload plugin -->
-			<script src="<?= base_url(); ?>js/js/jquery.fileupload.js"></script>
-			<!-- The File Upload processing plugin -->
-			<script src="<?= base_url(); ?>js/js/jquery.fileupload-process.js"></script>
-			<!-- The File Upload image preview & resize plugin -->
-			<script src="<?= base_url(); ?>js/js/jquery.fileupload-image.js"></script>
-			<!-- The File Upload audio preview plugin -->
-			<script src="<?= base_url(); ?>js/js/jquery.fileupload-audio.js"></script>
-			<!-- The File Upload video preview plugin -->
-			<script src="<?= base_url(); ?>js/js/jquery.fileupload-video.js"></script>
-			<!-- The File Upload validation plugin -->
-			<script src="<?= base_url(); ?>js/js/jquery.fileupload-validate.js"></script>
-			<!-- The File Upload user interface plugin -->
-			<script src="<?= base_url(); ?>js/js/jquery.fileupload-ui.js"></script>
+			
 			<!-- The main application script -->
 			<!--script src="<?= base_url(); ?>js/js/main.js"></script-->
 	

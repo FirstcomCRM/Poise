@@ -49,7 +49,7 @@ class property_model extends CI_Model {
 			$this->db->insert('property', $data);
 			$property_id = $this->db->insert_id();
 			if($property_id) {
-				$this->addDetails($property_id);	
+				$this->add_files($property_id);	
 			}
 			return $property_id;
 			
@@ -61,22 +61,24 @@ class property_model extends CI_Model {
 
 	}
 
-	public function addDetails($property_id) {
-		$details = $this->input->post('detail_info');
+	public function add_files($property_id) {
+		$details = $this->input->post('files_info');
+		/* echo '<pre>';
+		print_r($details);
+		echo '</pre>';
+		die(); */
 		if($details) {
 			foreach($details as $detail) {
-				$no = ($detail['no']) ? $detail['no'] : NULL;
+				//$no = ($detail['no']) ? $detail['no'] : NULL;
 				$data = array(
 					'property_id'	 	=> $property_id,
-					'no'				=> $no,
-					'description'		=> $detail['description'],
-					'qty'				=> $detail['qty'],
-					'supplier_id'		=> $detail['supplier_id'],
-					'supplier_cost'		=> $detail['supplier_cost'],
-					'uom_id'			=> $detail['uom_id'],
-					'amount'			=> $detail['amount'],
+					'file_name'			=> $detail['file_name'],
+					'new_file_name'		=> $detail['new_file_name'],
+					'file_path'			=> $detail['file_path'],
+					'date_uploaded'		=> date('Y-m-d'),
+					//'file_name'		=> $this->input->post('name'),
 				);
-				$this->db->insert('property_detail', $data);
+				$this->db->insert('property_files', $data);
 			}	
 		}
 	}
@@ -168,9 +170,10 @@ class property_model extends CI_Model {
 			$this->datatables->filter('p.property_status', $this->input->post('property_status') );
 		}
 
-        $this->datatables->select("p.property_id,p.property_img, p.property_title, p.district, p.category, p.address, p.property_price,p.property_status, p.date_added", false);
+        $this->datatables->select("p.property_id,b.file_path as property_img, p.property_title, p.district, p.category, p.address, p.property_price,p.property_status, DATE_FORMAT(p.date_added, '%d/%m/%Y')as date_added", false);
         $this->datatables->from('property p');
         $this->datatables->join('users u', 'u.user_id = p.user_id', 'left');
+		$this->datatables->join('(select property_id,file_path from property_files group by property_id order by property_id desc) b', 'p.property_id = b.property_id', 'left');
 		$this->datatables->where('p.status !=', 1);
 		$this->datatables->where('p.user_id =', $this->session->userdata('user_id'));
 		$this->datatables->add_column('no', '');
@@ -204,11 +207,12 @@ class property_model extends CI_Model {
 		if($role_id != 1) {
 			$this->datatables->where('p.user_id', $this->session->userdata('user_id'));
 		} */
-
-        $this->datatables->select("p.property_id,p.property_img,p.property_title, p.district, p.category, p.address, p.property_price,p.property_status, p.date_added", false);
+		//select a.property_id, b.file_name as image from property a left join (select property_id,file_name from property_files group by property_id order by property_id desc) b on a.property_id = b.property_id
+        $this->datatables->select("p.property_id,b.file_path as property_img,p.property_title, p.district, p.category, p.address, p.property_price,p.property_status, DATE_FORMAT(p.date_added, '%d/%m/%Y')as date_added", false);
         $this->datatables->from('property p');
         $this->datatables->join('users u', 'u.user_id = p.user_id', 'left');
-		$this->datatables->where('p.property_status =', 'Pending');
+        $this->datatables->join('(select property_id,file_path from property_files group by property_id order by property_id desc) b', 'p.property_id = b.property_id', 'left');
+		$this->datatables->where('p.property_status !=', 'Draft');
 		$this->datatables->where('p.status !=', 1);
 		$this->datatables->add_column('no', '');
 		//$this->datatables->add_column('action', ' <button type="submit" class="btn btn-mtac admin-control" id="btn-view"><i class="fa fa-save ico-btn"></i>View</button><button type="submit" class="btn btn-mtac admin-control" id="btn-approve"><i class="fa fa-save ico-btn"></i>Approve</button><button type="submit" class="btn btn-mtac admin-control" id="btn-reject"><i class="fa fa-save ico-btn"></i>Reject</button>', 'property_id');
@@ -220,7 +224,15 @@ class property_model extends CI_Model {
 	
 	
 	
-	
+	public function getFilesbypropertyid($property_id) {
+		$this->db->select('f.*');
+		$this->db->from('property_files f');
+		//$this->db->join('uom u', 'd.uom_id = u.uom_id', 'left');
+		$this->db->where('f.property_id', $property_id);
+		$this->db->where('f.status !=', 1);
+		$query = $this->db->get();
+		return $query->result_array();	
+	}
 	
 	
 	
@@ -255,29 +267,52 @@ class property_model extends CI_Model {
 		return $query->row_array();
 	}
 
-	public function updateDetail($id) {
-		$no = $this->input->post('no');
+	public function addFile() {
+		//$no = $this->input->post('no');
 		$data = array(
-			'property_id'	 	=> $this->input->post('hid_property_id'),
-			'no'				=> ($no) ? $no : NULL,
-			'description'		=> $this->input->post('description'),
-			'supplier_id'		=> $this->input->post('supplier_id'),
-			'supplier_cost'		=> $this->input->post('supplier_cost'),
-			'discount'			=> $this->input->post('discount'),
-			'qty'				=> $this->input->post('qty'),
-			'uom_id'			=> $this->input->post('uom_id'),
-			'amount'			=> $this->input->post('amount'),
-		);	
-		$this->db->where('property_detail_id', $id);
-		return $this->db->update('property_detail', $data); 
+			'property_id'	 			=>  $this->input->post('hid_property_id'),
+			'file_name'					=>  $this->input->post('file_name'),
+			'new_file_name'				=>  $this->input->post('new_file_name'),
+			'file_path'					=>  $this->input->post('file_path'),
+			'date_uploaded'				=>  date('Y-m-d'),
+			
+		);
+		$this->db->insert('property_files', $data);
+		$detail_id = $this->db->insert_id();
+		return $detail_id;	
 	}
-
-	public function removeDetail($id) {
+	
+	
+	
+	public function removeFile($id) {
 		$data = array(
 			'status' => 1,
         );
-        $this->db->where('property_detail_id', $id);
-		return $this->db->update('property_detail', $data); 	
+        $this->db->where('announce_file_id', $id);
+		return $this->db->update('announcement_files', $data); 	
+	}
+	
+	
+	public function getFile($id) {
+		$this->db->select('f.*');
+		$this->db->from('announcement_files f');
+	//	$this->db->join('uom u', 'd.uom_id = u.uom_id', 'left');
+		$this->db->where('f.announce_file_id', $id);
+		$this->db->where('f.status !=', 1);
+		$query = $this->db->get('announcement_files');
+		return $query->row_array();
+	}
+	
+	
+	
+	public function getFilesbyannouncementid($announce_id) {
+		$this->db->select('f.*');
+		$this->db->from('announcement_files f');
+		//$this->db->join('uom u', 'd.uom_id = u.uom_id', 'left');
+		$this->db->where('f.announce_id', $announce_id);
+		$this->db->where('f.status !=', 1);
+		$query = $this->db->get();
+		return $query->result_array();	
 	}
 
 	public function getpropertyno() {

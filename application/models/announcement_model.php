@@ -69,73 +69,12 @@ class announcement_model extends CI_Model {
 	
 	
 	public function add_announcement() {
-		//$announcement_date = get_timestamp('d/m/Y', '/');
-		
-		/*if ($this->input->post('file_upload')) {
-							//file upload destination
-							$dir_path = './upload/';
-							$config['upload_path'] = $dir_path;
-							$config['allowed_types'] = '*';
-							$config['max_size'] = '0';
-							$config['max_filename'] = '255';
-							$config['encrypt_name'] = TRUE;
-
-							//upload file
-							$i = 0;
-							$files = array();
-							$is_file_error = FALSE;
-
-							if ($_FILES['upload_file1']['size'] <= 0) {
-								$this->handle_error('Select at least one file.');
-							} else {
-								foreach ($_FILES as $key => $value) {
-									if (!empty($value['name'])) {
-										$this->load->library('upload', $config);
-										if (!$this->upload->do_upload($key)) {
-											$this->handle_error($this->upload->display_errors());
-											$is_file_error = TRUE;
-										} else {
-											$files[$i] = $this->upload->data();
-											++$i;
-											//echo ">>>>>>>>>>>>>>.".$files[$i];
-										}
-									}
-								}
-							}
-							//echo "FILE IS>>>".count($files);
-							// There were errors, we have to delete the uploaded files
-							if ($is_file_error && $files) {
-								for ($i = 0; $i < count($files); $i++) {
-									$file = $dir_path . $files[$i]['file_name'];
-									//echo "FILE ISSSSSS>>>".$files[$i]['file_name'];
-									if (file_exists($file)) {
-										unlink($file);
-									}
-								}
-							}
-
-							if (!$is_file_error && $files) {
-								$resp = $this->save_files_info($files);
-								if ($resp === TRUE) {
-									$this->handle_success('File(s) was/were successfully uploaded.');
-								} else {
-									for ($i = 0; $i < count($files); $i++) {
-										$file = $dir_path . $files[$i]['file_name'];
-										if (file_exists($file)) {
-											unlink($file);
-										}
-									}
-									$this->handle_error('Error while saving file info to Database.');
-								}
-							}
-						
-					}*/
-		
-		
+		$announce_date = $this->input->post('announcement_date');
+		$new_announce_date = str_replace('/', '-', $announce_date);
 		$data = array(
 			'announce_title'		=> $this->input->post('announcement_title'),
 			'announce_body'			=> $this->input->post('announcement_body'),
-			'announce_date'			=> date('Y-m-d',strtotime($this->input->post('announcement_date'))),
+			'announce_date'			=> date('Y-m-d',strtotime($new_announce_date)),
 			'announce_img'			=> $this->input->post('main_new_file_name'),
 			'user_id'				=> $this->session->userdata('user_id'),
 			//'announcement_date'					=> $this->input->post('terms'),
@@ -160,9 +99,9 @@ class announcement_model extends CI_Model {
 				//$no = ($detail['no']) ? $detail['no'] : NULL;
 				$data = array(
 					'announce_id'	 	=> $announce_id,
-					'file_name'			=> mysqli_real_escape_string($detail['file_name']),
-					'new_file_name'		=> mysqli_real_escape_string($detail['new_file_name']),
-					'file_path'			=> mysqli_real_escape_string($detail['file_path']),
+					'file_name'			=> $detail['file_name'],
+					'new_file_name'		=> $detail['new_file_name'],
+					'file_path'			=> $detail['file_path'],
 					'date_uploaded'		=> date('Y-m-d'),
 					//'file_name'		=> $this->input->post('name'),
 				);
@@ -177,12 +116,12 @@ class announcement_model extends CI_Model {
 	
 	
 	public function update_announcement($id) { 
-		//$delivery_date = ($this->input->post('delivery_date')) ? get_timestamp($this->input->post('delivery_date'), '/') : 0;
-		//$announcement_date = ($this->input->post('announcement_date')) ? get_timestamp($this->input->post('announcement_date'), '/') : 0;
+		$announce_date = $this->input->post('announcement_date');
+		$new_announce_date = str_replace('/', '-', $announce_date);
 		$data = array(
 			'announce_title'		=> $this->input->post('announcement_title'),
 			'announce_body'			=> $this->input->post('announcement_body'),
-			'announce_date'			=> date('Y-m-d',strtotime($this->input->post('announcement_date'))),
+			'announce_date'			=> date('Y-m-d',strtotime($new_announce_date)),
 			'announce_img'			=> $this->input->post('main_new_file_name'),
 			// 'mf'					=> $this->input->post('mf'),
 		);
@@ -233,7 +172,7 @@ class announcement_model extends CI_Model {
 			$this->datatables->where('q.sale_person_id', $this->session->userdata('user_id'));
 		} */
 		
-        $this->datatables->select("a.announce_id,a.announce_img,a.announce_title,u.username, a.announce_body,a.announce_date,a.announce_img", false);
+        $this->datatables->select("a.announce_id,a.announce_img,a.announce_title,u.username, a.announce_body,DATE_FORMAT(a.announce_date, '%d/%m/%Y')as announce_date,a.announce_img", false);
         $this->datatables->from('announcement a');
 		$this->datatables->join('users u', 'u.user_id = a.user_id', 'left');
 		$this->datatables->where('a.status !=', 1);

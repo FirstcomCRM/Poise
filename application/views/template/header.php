@@ -47,33 +47,18 @@
         <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
         <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
-	<!--script src="<?= base_url(); ?>bootstrap/js/jquery-1.11.1.js"></script-->
-	<script src="<?= base_url(); ?>bootstrap/js/bootstrap.min.js"></script>
 	<script src="<?= base_url(); ?>bootstrap/js/jquery-1.11.1.js"></script>
+	<script src="<?= base_url(); ?>bootstrap/js/bootstrap.min.js"></script>
+	<!--script src="<?= base_url(); ?>bootstrap/js/jquery-1.11.1.js"></script-->
 	<script src="<?= base_url(); ?>js/common-scripts.js"></script>
 	
   </head>
-  
- <?php
- 
- $user_img = $this->session->userdata('user_img');
- if ($user_img==''){
-	 
-	 $user_img ="";
- }
- else{
-	 $user_img = base_url().$user_img;
- }
- 
- ?> 
-  
-  
   <body class="hold-transition skin-blue sidebar-mini">
     <div class="wrapper">
 
       <header class="main-header">
         <!-- Logo -->
-		 <a href="index2.html" class="logo">
+		 <a href="<?=base_url()?>/index.php" class="logo">
           <!-- mini logo for sidebar mini 50x50 pixels -->
           <span class="logo-mini"><b>POISE</b></span>
           <!-- logo for regular state and mobile devices -->
@@ -97,13 +82,13 @@
               <!-- User Account: style can be found in dropdown.less -->
               <li class="dropdown user user-menu">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                  <img src="<?= $user_img; ?>" class="user-image" alt="User Image">
+                  <img src="<?= base_url().$this->session->userdata('user_img'); ?>" class="user-image" alt="User Image">
                   <span class="hidden-xs"><?= $this->session->userdata('name'); ?></span>
                 </a>
                 <ul class="dropdown-menu">
                   <!-- User image -->
                   <li class="user-header">
-                    <img src="<?= $user_img; ?>" class="img-circle" alt="User Image">
+                    <img src="<?= base_url().$this->session->userdata('user_img'); ?>" class="img-circle" alt="User Image">
                     <p>
                       <?= $this->session->userdata('name'); ?>
                     </p>
@@ -135,7 +120,7 @@
           <!-- Sidebar user panel -->
           <div class="user-panel">
             <div class="pull-left image">
-              <img src="<?= $user_img; ?>" class="img-circle" alt="User Image">
+              <img src="<?= base_url().$this->session->userdata('user_img'); ?>" class="img-circle" alt="User Image">
             </div>
             <div class="pull-left info">
               <p><?= $this->session->userdata('name'); ?></p>
@@ -184,7 +169,7 @@
                 <i class="fa fa-angle-left pull-right"></i>
               </a>
               <ul class="treeview-menu">
-                <li><a href="<?= base_url().'project'; ?>"><i class="fa fa-circle-o"></i> Project</a></li>
+                <!--li><a href="<?= base_url().'project'; ?>"><i class="fa fa-circle-o"></i> Project</a></li-->
                 <li><a href="<?= base_url().'property'; ?>"><i class="fa fa-circle-o"></i> Property</a></li>
                 <li><a href="<?= base_url().'transaction'; ?>"><i class="fa fa-circle-o"></i> Property Transaction</a></li>
                 <li><a href="<?= base_url().'invoice'; ?>"><i class="fa fa-circle-o"></i> Invoice</a></li>
@@ -213,7 +198,7 @@
               </a>
               <ul class="treeview-menu">
                 <li><a href="<?= base_url().'report/sales_performance'; ?>"><i class="fa fa-circle-o"></i> Sales Performance</a></li>
-                <li><a href="<?= base_url().'report/sales_report'; ?>"><i class="fa fa-circle-o"></i> Daily/Monthly/Yearly Sales Report</a></li>
+                <li><a href="<?= base_url().'report/sales_report'; ?>"><i class="fa fa-circle-o"></i> Daily/Monthly/Yearly Sales <br> Report</a></li>
                 <li><a href="<?= base_url().'report/top_sales'; ?>"><i class="fa fa-circle-o"></i> Top Sales</a></li>
                 <li><a href="<?= base_url().'report/commission_report'; ?>"><i class="fa fa-circle-o"></i> Commission Report</a></li>
               </ul>
@@ -235,6 +220,7 @@
               </a>
               <ul class="treeview-menu">
                 <li><a href="<?= base_url().'team'; ?>"><i class="fa fa-circle-o"></i> Team Management</a></li>
+                <li><a href="<?= base_url().'service'; ?>"><i class="fa fa-circle-o"></i> Service Management</a></li>
                 <li><a href="<?= base_url().'tier_commission'; ?>"><i class="fa fa-circle-o"></i> Tier Commission Management</a></li>
                 <li><a href="<?= base_url().'permission'; ?>"><i class="fa fa-circle-o"></i> User Rights Management</a></li>
                 <li><a href="#"><i class="fa fa-circle-o"></i> Project Management</a></li>

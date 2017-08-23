@@ -27,8 +27,8 @@
             "type": "POST",
             "data" : { 
              'form_title'    :  function ( d ) { return $("#form-title").val(); },
-             'start_date'      :  function ( d ) { return $("#start-date").val(); },
-              'end_date'      :  function ( d ) { return $("#end-date").val(); },
+             'category_id'      :  function ( d ) { return $("#category-id").val(); },
+            //  'end_date'      :  function ( d ) { return $("#end-date").val(); },
             }
         },
         "columns": [
@@ -153,31 +153,46 @@
 				<li class="active">Forms and Agreement</li>
 			</ol>
              <h3 class="box-title">Forms and Agreement</h3>
-			   
+			 <?php if ($this->session->userdata('role_id')==1 ){ ?>
 			 <div class="pull-right">
 				<a href="<?= base_url().'form_agreement/create'; ?>" class="btn btn-default btn-flat"><i class="fa fa-plus ico-btn"></i>Add</a>
 			 </div>
+			 <?php }?>
           </div><!-- /.box-header -->
 		  <div class="box-body">
-			<div class="row-fluid search-area">
-			  <div class="panel-group" id="accordion">
-				<div class="panel panel-default">
-				  <div class="panel-heading">
-					<h4 class="panel-title">
-					  <a data-toggle="collapse" data-parent="#accordion" href="#search">Filter</a>
-					</h4>
+			<div class="box">
+				<div class="box-header with-border">
+				  <h3 class="box-title">Filter</h3>
+
+				  <div class="box-tools pull-right">
+					<button type="button" class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse">
+					  <i class="fa fa-minus"></i></button>
 				  </div>
-				  <div id="search" class="panel-collapse collapse">
-					<div class="panel-body">
-					  <form id="search-form" method="post" action="<?= base_url().'project/index'; ?>" />   
+				</div>
+				<div class="box-body">
+					<form id="search-form" method="post" action="<?= base_url().'form_agreement/index'; ?>" />   
 						<div class="form-group">
 						  <div class="col-md-2 col-search">
 							<input type="text" class="form-control input-sm" name="form_title" id="form-title" placeholder="Search form" />
 						  </div>
-						  <!--div class="col-md-2 col-search">
-							<input type="text" class="form-control input-sm" name="start_date" id="start-date" placeholder="Search Start Date" />
-						  </div> 
 						  <div class="col-md-2 col-search">
+							<select class="form-control input-sm" name="category_id" id="category-id" placeholder="Select Category" required>
+								<option value="" selected>Select Category</option>
+								<?php if( isset($categories) && $categories != '') {
+										foreach($categories as $category) {
+											//if( (isset($_POST['category_id']) && ($_POST['category_id'] == $category['form_category_id'])) ) {
+											if( (isset($_POST['category_id']) && ($_POST['category_id'] == $category['form_category_id']))|| (isset($form_agreement['category_id']) ) ) {	
+												echo "<option selected value='". $category['form_category_id']. "' >" . $category['name'] . "</option>";
+											}
+											else {  
+												echo "<option value='". $category['form_category_id']. "' >" . $category['name'] . "</option>";
+											}
+										}
+									} 
+								?>
+							  </select> 
+						  </div> 
+						  <!--div class="col-md-2 col-search">
 							<input type="text" class="form-control input-sm" name="end_date" id="end-date" placeholder="Search End Date" />
 						  </div--->
 						  <div class="col-md-2 col-search" style="padding-right: 0px;">
@@ -187,11 +202,10 @@
 												  
 						</div> 
 					  </form>
-					</div>
-				  </div>
 				</div>
-			  </div>             
-            </div>
+			   
+			</div>
+		
 			<div class="success-alert-area"> </div>
 			<?php if(isset($msg) && $msg != '') { ?>
 				<div class="alert alert-success"><a href='#' class='close' data-dismiss='alert'>&times;</a><?= $msg; ?></div>

@@ -97,7 +97,12 @@ class transaction_model extends CI_Model {
 	
 
 	public function add_transaction() {
-		
+		$transact_date = $this->input->post('transact_date');
+		$contract_date = $this->input->post('contract_date');
+		$option_date = $this->input->post('option_date');
+		$new_transact_date = str_replace('/', '-', $transact_date);
+		$new_contract_date = str_replace('/', '-', $contract_date);
+		$new_option_date = str_replace('/', '-', $option_date);
 		
 		 /* $query = $this->db->query("SELECT property_no FROM property
                                WHERE property_no = '".$this->input->post('property_no')."' and status = 0"); */
@@ -106,7 +111,7 @@ class transaction_model extends CI_Model {
 					'case_no'        				=> $this->input->post('case_no'),
 					'property_id'     		 		=> $this->input->post('property_id'),
 					'amount'           		 	 	=> $this->input->post('anount'),
-					'transact_date'  			 	=> date('Y-m-d',strtotime($this->input->post('transact_date'))),
+					'transact_date'  			 	=> date('Y-m-d',strtotime($new_transact_date)),
 					'property_type'      			=> $this->input->post('property_type'),
 					'address'          				=> $this->input->post('address'),
 					'price'             			=> $this->input->post('price'),
@@ -115,12 +120,12 @@ class transaction_model extends CI_Model {
 					'buyer_name'         			=> $this->input->post('buyer_name'),
 					'co_broke_agent'     			=> $this->input->post('co_broke_agent'),
 					'co_broke_agency'    			=> $this->input->post('co_broke_agency'),
-					'contract_date'      			=> date('Y-m-d',strtotime($this->input->post('contract_date'))),
-					'option_date'        			=> date('Y-m-d',strtotime($this->input->post('option_date'))),
+					'contract_date'      			=> date('Y-m-d',strtotime($new_contract_date)),
+					'option_date'        			=> date('Y-m-d',strtotime($new_option_date)),
 					'commission'         			=> $this->input->post('commission'),
 					'co_broke_commission'			=> $this->input->post('co_broke_commission'),
 					'internal_commission'			=> $this->input->post('internal_commission'),
-					'transact_img'					=> $this->input->post('main_new_file_name'),
+					//'transact_img'					=> $this->input->post('main_new_file_name'),
 					'user_id' 						=> $this->input->post('user_id'),
 			);
 			$this->db->insert('case_submission', $data);
@@ -201,11 +206,17 @@ class transaction_model extends CI_Model {
 	public function update_transaction($id) {
 		//$delivery_date = ($this->input->post('delivery_date')) ? get_timestamp($this->input->post('delivery_date'), '/') : 0;
 		//$invoice_date = ($this->input->post('invoice_date')) ? get_timestamp($this->input->post('invoice_date'), '/') : 0;
+		$transact_date = $this->input->post('transact_date');
+		$contract_date = $this->input->post('contract_date');
+		$option_date = $this->input->post('option_date');
+		$new_transact_date = str_replace('/', '-', $transact_date);
+		$new_contract_date = str_replace('/', '-', $contract_date);
+		$new_option_date = str_replace('/', '-', $option_date);
 		$data = array(
 				'case_no'        				=> $this->input->post('case_no'),
 				'property_id'     		 		=> $this->input->post('property_id'),
 				'amount'           		 	 	=> $this->input->post('anount'),
-				'transact_date'  			 	=> date('Y-m-d',strtotime($this->input->post('transact_date'))),
+				'transact_date'  			 	=> date('Y-m-d',strtotime($new_transact_date)),
 				'property_type'      			=> $this->input->post('property_type'),
 				'address'          				=> $this->input->post('address'),
 				'price'             			=> $this->input->post('price'),
@@ -214,12 +225,12 @@ class transaction_model extends CI_Model {
 				'buyer_name'         			=> $this->input->post('buyer_name'),
 				'co_broke_agent'     			=> $this->input->post('co_broke_agent'),
 				'co_broke_agency'    			=> $this->input->post('co_broke_agency'),
-				'contract_date'      			=> date('Y-m-d',strtotime($this->input->post('contract_date'))),
-				'option_date'        			=> date('Y-m-d',strtotime($this->input->post('option_date'))),
+				'contract_date'      			=> date('Y-m-d',strtotime($new_contract_date)),
+				'option_date'        			=> date('Y-m-d',strtotime($new_option_date)),
 				'commission'         			=> $this->input->post('commission'),
 				'co_broke_commission'			=> $this->input->post('co_broke_commission'),
 				'internal_commission'			=> $this->input->post('internal_commission'),
-				'transact_img'					=> $this->input->post('main_new_file_name'),
+				//'transact_img'					=> $this->input->post('main_new_file_name'),
 				'user_id' 						=> $this->input->post('user_id'),
 		);
 		$this->db->where('case_id', $id);
@@ -289,7 +300,7 @@ class transaction_model extends CI_Model {
 			$this->datatables->where('p.user_id', $this->session->userdata('user_id'));
 		} */
 
-        $this->datatables->select("p.case_id,p.case_no, pr.property_title,p.amount, p.transact_date, p.property_type,p.owner_name, p.address,p.price, pr.property_status", false);
+        $this->datatables->select("p.case_id,p.case_no, pr.property_title,p.amount, DATE_FORMAT(p.transact_date, '%d/%m/%Y')as transact_date, p.property_type,p.owner_name, p.address,p.price, pr.property_status", false);
         $this->datatables->from('case_submission p');
         $this->datatables->join('users u', 'u.user_id = p.user_id', 'left');
         $this->datatables->join('property pr', 'pr.property_id = p.property_id', 'left');
@@ -326,7 +337,7 @@ class transaction_model extends CI_Model {
 			$this->datatables->where('p.user_id', $this->session->userdata('user_id'));
 		} */
 
-		$this->datatables->select("p.case_id,p.case_no, pr.property_title,p.amount, p.transact_date, p.property_type, p.address,p.price, p.owner_name,p.property_id", false);
+		$this->datatables->select("p.case_id,p.case_no, pr.property_title,p.amount, DATE_FORMAT(p.transact_date, '%d/%m/%Y')as transact_date, p.property_type, p.address,p.price, p.owner_name,p.property_id", false);
         $this->datatables->from('case_submission p');
         $this->datatables->join('users u', 'u.user_id = p.user_id', 'left');
         $this->datatables->join('property pr', 'pr.property_id = p.property_id', 'left');

@@ -307,7 +307,7 @@ class transaction extends CI_Controller {
 		
 		
 		
-		public function aj_deleteAnnouncefile($id) {
+		public function aj_deleteTransactfile($id) {
 		$transact_file = $this->transaction_model->getFile($id);
 		if(!empty($transact_file)) {
 			$removed = $this->transaction_model->removeFile($id);
