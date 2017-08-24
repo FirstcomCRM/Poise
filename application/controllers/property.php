@@ -48,7 +48,7 @@ class property extends CI_Controller {
 		if (empty($data['property'])) {
 			show_404();
 		}
-		//$data['details'] =  $this->property_model->getDetilsbypropertyid($id);
+		$data['details'] =  $this->property_model->getFilesbypropertyid($id);
 		$this->load->view('property/view', $data);
 	}
 
@@ -276,6 +276,21 @@ class property extends CI_Controller {
 			 }  
 		}
 		
+	public function aj_check_status($property_id) {
+		$property['data'] = $this->property_model->checkStatus($property_id);
+		$property['count'] = count($property['data']);
+		if(!empty($property)) {
+			$property['status'] = 'success';
+		
+		}
+		else {
+			$ret = array(
+				'status'	=> 'fail',
+				'msg'		=> 'No Record'
+			);
+		}
+		echo json_encode($property);
+	}
 	
 	
 	public function aj_addPropertyfile() {

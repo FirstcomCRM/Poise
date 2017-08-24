@@ -202,11 +202,13 @@ class property_model extends CI_Model {
 		if( $this->input->post('property_status') && ( $this->input->post('property_status') != '' ) ) {
 			$this->datatables->filter('p.property_status', $this->input->post('property_status') );
 		}
-
+		
 		/* $role_id = $this->session->userdata('role_id');
 		if($role_id != 1) {
 			$this->datatables->where('p.user_id', $this->session->userdata('user_id'));
 		} */
+		
+		
 		//select a.property_id, b.file_name as image from property a left join (select property_id,file_name from property_files group by property_id order by property_id desc) b on a.property_id = b.property_id
         $this->datatables->select("p.property_id,b.file_path as property_img,p.property_title, p.district, p.category, p.address, p.property_price,p.property_status, DATE_FORMAT(p.date_added, '%d/%m/%Y')as date_added", false);
         $this->datatables->from('property p');
@@ -217,11 +219,36 @@ class property_model extends CI_Model {
 		$this->datatables->add_column('no', '');
 		//$this->datatables->add_column('action', ' <button type="submit" class="btn btn-mtac admin-control" id="btn-view"><i class="fa fa-save ico-btn"></i>View</button><button type="submit" class="btn btn-mtac admin-control" id="btn-approve"><i class="fa fa-save ico-btn"></i>Approve</button><button type="submit" class="btn btn-mtac admin-control" id="btn-reject"><i class="fa fa-save ico-btn"></i>Reject</button>', 'property_id');
 		//$this->datatables->add_column('action', '<a class="btn btn-mtac admin-control btn-view" data-toggle="tooltip" data-placement="top" title="View" href="property/view/$1"><i class="fa fa-save ico-btn"></i>View</a><a class="btn btn-mtac admin-control btn-approve" data-toggle="tooltip" data-placement="top" title="Approve" href="property/edit_status/$1"><i class="fa fa-save ico-btn"></i>Approve</a><a class="btn btn-mtac admin-control btn-reject" data-toggle="tooltip" data-placement="top" title="Reject" href="property/edit_status/$1"><i class="fa fa-save ico-btn"></i>Reject</a>', 'property_id');
+		
+		/* foreach ($query->result_array() as $row)
+		{
+			if($row['property_status']!='Pending'){
+				$app_rej = '';
+			}
+			else{
+				$app_rej = '<a class="btn btn-mtac admin-control btn-approve btn-success" data-toggle="tooltip" data-placement="top" title="Edit" href="property/edit_status/$1">Approve</a><a class="btn btn-mtac btn-danger btn-reject" data-toggle="tooltip" data-placement="top" title="Delete" href="property/edit_status/$1">Reject</a>';
+			}
+			//echo $row['email'];
+			//send_email('POISE CRM', 'test@poise.com.sg',$row['email'], 'New Transaction', $message);
+		}
+		 */
+		
+		
+		
 		$this->datatables->add_column('action', '<a class="btn btn-mtac admin-control btn-view btn-primary view-link" data-toggle="tooltip" data-placement="top" title="View" href="property/view/$1">View</a><a class="btn btn-mtac admin-control btn-approve btn-success" data-toggle="tooltip" data-placement="top" title="Edit" href="property/edit_status/$1">Approve</a><a class="btn btn-mtac btn-danger btn-reject" data-toggle="tooltip" data-placement="top" title="Delete" href="property/edit_status/$1">Reject</a>', 'property_id');
 		echo $this->datatables->generate();
 	}
 	
-	
+	public function checkStatus($property_id) {
+		$this->db->select('p.property_id,p.property_status');
+		$this->db->from('property p');
+		//$this->db->join('uom u', 'd.uom_id = u.uom_id', 'left');
+		$this->db->where('p.property_id', $property_id);
+		$this->db->where('p.status !=', 1);
+		$query = $this->db->get();
+		return $query->result_array();
+		//echo json_encode($query);
+	}
 	
 	
 	public function getFilesbypropertyid($property_id) {

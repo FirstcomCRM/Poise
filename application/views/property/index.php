@@ -50,7 +50,24 @@
             { "data": "category"},
             { "data": "address"},
             { "data": "property_price"},
-            { "data": "property_status"},
+            { "data": "property_status",
+				/* "render": function(data, type, row) {
+					if (data == "Pending"){
+						
+						//data = 'KUPAL';
+						//return data;
+						
+						  $("btn-approve").css("display", "inline-block");
+					}
+					else{
+						//return data;
+						$(".btn-approve").css("display", "none");
+						//return '<img height ="100" width="100" src="'+data+'" /> ';
+						
+					}
+					return data;
+				} */
+			},
             { "data": "date_added"},
             { "data": "action", "orderable": false, "bSearchable": false, "className": 'col_act_md'}
         ],
@@ -111,60 +128,97 @@
 	
 	$('#tbl-property').on('click', '.btn-reject', function(e) { 
       e.preventDefault();
-	  var id = getIdfromURL($(this).attr('href'));
-	   var xx = confirm("Reject this property?");
-	  if (xx == true){
+	  var check_id = getIdfromURL($(this).attr('href'));
+	  if(check_id){
+		$.ajax({
+			url: 'property/aj_check_status/'+check_id,
+			type: "post",
+			//data: { },
+			dataType: 'json',
+			success: function(data){  
+
+				if(data.data[0].property_status =="Rejected"){
+					alert('This Property is already rejected');
+				}
+
+				else{
+					
+					var xx = confirm("Reject this property?");
+					if (xx == true){
+					  
+						$("#viewModal").modal('hide'); 
+						// alert(url);
+						var url = 'property/edit_status/' + check_id + '/reject';
+						//alert(url);
+						deleteAjax(url, tbl);
+					}else{
+					  
+					}  
+				}
+			}
+		});
+	  }
+	  else{
+		alert('error in getting data');
+	  }
 		  
-		   $("#viewModal").modal('hide'); 
-		 // alert(url);
-		 var url = 'property/edit_status/' + id + '/reject';
-			//alert(url);
-		  deleteAjax(url, tbl);
-	  }else{
-		  
-		}
 	});
 	
 	
 	$('#tbl-property').on('click', '.btn-approve', function(e) { 
       e.preventDefault();
-	  var id = getIdfromURL($(this).attr('href'));
-	   var xx = confirm("Approve this property?");
-	  if (xx == true){
-		  
-		   $("#viewModal").modal('hide'); 
-		 // alert(url);
-		 var url = 'property/edit_status/' + id + '/publish';
-			//alert(url);
-		  deleteAjax(url, tbl);
+	  var check_id = getIdfromURL($(this).attr('href'));
+	  if(check_id){
+	  //var check_url ='property/check_status/' + id;
+		$.ajax({
+			url: 'property/aj_check_status/'+check_id,
+			type: "post",
+			//data: { },
+			dataType: 'json',
+			success: function(data){  
+
+				if(data.data[0].property_status =="Sold/Approved" || data.data[0].property_status =="Sold" || data.data[0].property_status =="Published" ){
+					//alert(data.data[0].property_status);
+					alert('This Property is already approved');
+				}
+				else if (data.data[0].property_status =="Rejected"){
+					var xx = confirm("Approve this property?");
+					if (xx == true){
+						  
+						$("#viewModal").modal('hide'); 
+						 // alert(url);
+						var url = 'property/edit_status/' + check_id + '/publish';
+						//alert(url);
+						deleteAjax(url, tbl);
+					}else{
+						  
+					}
+					
+				}
+				else if (data.data[0].property_status =="Pending"){
+					//var id = getIdfromURL($(this).attr('href'));
+					var xx = confirm("Approve this property?");
+					if (xx == true){
+						  
+						$("#viewModal").modal('hide'); 
+						 // alert(url);
+						var url = 'property/edit_status/' + check_id + '/publish';
+						//alert(url);
+						deleteAjax(url, tbl);
+					}else{
+						  
+					}
+				}	 
+			}
+		});
+
 	  }else{
+		  alert('error in getting data');
 		  
 	  }
-	  
-	  
-	  
-      /* var id = getIdfromURL($(this).attr('href'));
-      $.ajax({
-        type :  "POST",
-        url  :  burl + 'property/view/' + id,
-        data :  { },
-        success: function(data){ 
-          $('#view-property-detail').html(data); 
-           $("#viewModal").modal('show');
-        },
-        error: function(XMLHttpRequest, textStatus, errorThrown) { 
-            alert("ERROR!!!");     
-            alert(errorThrown);      
-        } 
-      }); */
+
     });
-	
-	
-	
-	
-	
-	
-	
+
     //Quick Delete
     $('#tbl-property').on('click', '.delete-link', function(e) {
       e.preventDefault();
@@ -270,48 +324,8 @@
       e.preventDefault();
     });
 
-	$('#tbl-property').on('click', '.has-invoice', function(e) {
-		 e.preventDefault();
-      //alert();
-	  //var url =  $(this).attr("href");
-     // var check_id = url.substring(url.lastIndexOf("/") + 1, url.length);
-	  
-		
-	  var check_id = getIdfromURL($(this).attr('href'));
-	  //alert(check_id);
-	 /*  var stateID = $(this).val();*/
-            if(check_id) {
-                $.ajax({
-                    url: 'property/aj_hasInvoice/'+check_id,
-                    type: "post",
-                    dataType: "json",
-                    success:function(data) {
-						console.log(data);
-					
-						if(data.count>0){
-							 $("#confirmModal").modal('show');
-							/* var xx = confirm('This property already has generated invoice. Add another?');
-							if (xx ==true){
-								window.location.href = "invoice/create/"+check_id;
-							} */
-							
-						}
-						else{
-							window.location.href = "invoice/create/"+check_id;
-						}
-                    }
-                });
-            }else{
-				
-				alert('ERROR!!');
-			}
-	   
-	  
-	  
-	  
-	  
-	  
-    });
+	
+
 
   });
 
@@ -440,6 +454,7 @@
                                   <option value="Sold">Sold</option>
                                   <option value="Sold/Approved">Approved</option>
                                   <option value="Published">Published</option>
+                                  <option value="Rejected">Rejected</option>
                                 </select> 
                               </div> 
                               <!-- <div class="clearfix sp-margin-sm"></div>

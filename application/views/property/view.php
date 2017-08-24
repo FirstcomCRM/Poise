@@ -97,7 +97,45 @@
           </div>
         </div>
         <div class="clearfix sp-margin-lg"></div>
-                  
+         <div class="col-md-12">
+         <div class="panel panel-default tab-panel">
+          <div class="panel-heading">
+              Uploaded Files
+          </div>
+          <div class="panel-body">
+            <div class="row-fluid table-responsive" id="tbl-detail">
+                <div class="col-md-12">
+                    <table class="table table-striped table-bordered dataTable no-footer" cellspacing="0" width="100%" id='detail-table'>
+                      <thead>
+                        <tr>
+                          <th style="width:20%">Preview</th>
+                          <th style="width:20%">File</th>
+						
+                        </tr>
+                      </thead>
+                      <tbody> 
+                        <?php if( isset($details) ) { 
+                          foreach($details as $key=>$pd) {
+                        ?>
+                          <tr class="id-<?= $pd['property_file_id'] ?>">
+                     
+                            <td><a href ="<?=base_url(). $pd['file_path'] ?>" target="_blank"><img src ="<?= $pd['file_path'] ?>" height="100" width="100"/></a></td>
+                            <td><?=$pd['new_file_name']?></td>
+                          
+                          </tr>
+                        <?php
+                          }
+                        } ?>
+                      </tbody>
+                      <tfoot>
+                       
+                      </tfoot>
+                    </table>      
+                </div>
+            </div>    
+          </div>
+        </div>    
+		</div>		         
         <div class="clearfix sp-margin-sm"></div>
   </div>
 </div>

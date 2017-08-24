@@ -28,7 +28,7 @@
           <div class="clearfix sp-margin-sm"></div>  
           <div class="form-group">
             <label for="name" class="col-md-5 control-label">Transaction Date :</label>
-            <div class="col-md-7"><?= $transaction['transact_date'] ?> </div>
+            <div class="col-md-7"><?= date('d/m/Y',strtotime($transaction['transact_date'])) ?> </div>
           </div>
           <div class="clearfix sp-margin-sm"></div> 
           <div class="form-group">
@@ -79,12 +79,12 @@
 		  <div class="clearfix sp-margin-sm"></div> 
 		   <div class="form-group">
             <label for="name" class="col-md-5 control-label">Contract Date :</label>
-            <div class="col-md-7"><?= $transaction['contract_date'] ?></div>
+            <div class="col-md-7"><?= date('d/m/Y',strtotime($transaction['contract_date'])) ?></div>
           </div>
 		  <div class="clearfix sp-margin-sm"></div> 
 		   <div class="form-group">
             <label for="name" class="col-md-5 control-label">Option Date :</label>
-            <div class="col-md-7"><?= $transaction['option_date'] ?></div>
+            <div class="col-md-7"><?= date('d/m/Y',strtotime($transaction['option_date'])) ?></div>
           </div>
 		  <div class="clearfix sp-margin-sm"></div> 
 		   <div class="form-group">

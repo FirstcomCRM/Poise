@@ -10,7 +10,7 @@
           <div class="clearfix sp-margin-sm"></div>  
           <div class="form-group">
               <label for="name" class="col-md-5 control-label">Invoice Date :</label>
-              <div class="col-md-7"><?= $invoice['invoice_date'] ?> </div>
+              <div class="col-md-7"><?= date('d/m/Y',strtotime($invoice['invoice_date'])) ?> </div>
           </div>
           <div class="clearfix sp-margin-sm"></div>  
           <div class="form-group">
@@ -128,7 +128,7 @@
                           foreach($payment_details as $key=>$pd1) {
                         ?>
                           <tr class="id-<?= $pd1['invoice_payment_detail_id'] ?>">
-						    <td><?= $pd1['date'] ?></td>
+						    <td><?= date('d/m/Y',strtotime($pd1['date'])) ?></td>
 							<td><?= $pd1['bank_name'] ?></td>
                             <td><?= $pd1['amount'] ?></td>
                             <td><?= $pd1['payment_type'] ?></td>

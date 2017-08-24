@@ -10,7 +10,7 @@
           <div class="clearfix sp-margin-sm"></div>  
           <div class="form-group">
               <label for="name" class="col-md-5 control-label">Invoice Date :</label>
-              <div class="col-md-7"><?= $invoice['invoice_date'] ?> </div>
+              <div class="col-md-7"><?= date('d/m/Y',strtotime($invoice['invoice_date'])) ?> </div>
           </div>
           <div class="clearfix sp-margin-sm"></div>  
           <div class="form-group">
