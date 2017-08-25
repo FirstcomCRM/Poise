@@ -41,7 +41,8 @@
                         ?>
                           <tr class="id-<?= $pd['form_file_id'] ?>">
                      
-                            <td><a href ="<?=base_url(). $pd['file_path'] ?>" target="_blank"><?= $pd['file_name'] ?></a></td>
+                            <!--td><a href ="<?=base_url(). $pd['file_path'] ?>" target="_blank"><?= $pd['file_name'] ?></a></td-->
+							<td><a href ="<?=base_url(). 'form_agreement/download/'.$pd['form_file_id'] ?>"><?= $pd['file_name'] ?></a></td>
                             <td><?=$pd['new_file_name']?></td>
                           
                           </tr>

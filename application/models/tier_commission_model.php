@@ -25,8 +25,9 @@ class tier_commission_model extends CI_Model {
 
 	public function add_tier_commission() {
 		$data = array(
-			'user_id' => $this->input->post('user_id'),
-			'level' => $this->input->post('level'),
+			'description' => $this->input->post('description'),
+			'team_id' => $this->input->post('team_id'),
+			'levels' => $this->input->post('levels'),
 		);
 		$this->db->insert('tier_commission', $data);
 		return $this->db->insert_id();
@@ -34,7 +35,9 @@ class tier_commission_model extends CI_Model {
 
 	public function update_tier_commission($id) {
 		$data = array(
-			'name' => $this->input->post('name'),
+			'description' => $this->input->post('description'),
+			'team_id' => $this->input->post('team_id'),
+			'levels' => $this->input->post('levels'),
 		);
 
 		$this->db->where('tier_commission_id', $id);
@@ -54,9 +57,10 @@ class tier_commission_model extends CI_Model {
 			$this->datatables->filter('name LIKE "%' . $this->input->post('category') . '%"');
 		}
 
-        $this->datatables->select('t.tier_commission_id, u.username, t.level');
+        $this->datatables->select('t.tier_commission_id, t.description,tm.name, t.levels');
         $this->datatables->from('tier_commission t');
-		$this->datatables->join('users u', 'u.user_id = t.user_id', 'left');
+		//$this->datatables->join('users u', 'u.user_id = t.user_id', 'left');
+		$this->datatables->join('team tm', 'tm.team_id = t.team_id', 'left');
 		$this->datatables->where('t.status !=', 1);
 
 		$this->datatables->add_column('no', '');
@@ -78,19 +82,5 @@ class tier_commission_model extends CI_Model {
           echo json_encode($row_set); //format the array into json data
         }
     }
-	
-	
-	public function gettierinfo($id) {
-		// $this->db->select("i.*, q.quotation_id, q.quotation_no ,q.job_title, c.client_id, c.company as client, c.contact, c.designation, c.department, CONCAT_WS (' ', c.address_1, c.address_2, c.postal_code) as address, u.name as rep", false);
-		$this->db->select('t.tier_commission_id, u.username, t.level');
-        $this->db->from('tier_commission t');
-		$this->db->join('users u', 'u.user_id = t.user_id', 'left');
-	//	$this->db->select("a.*", false);
-//		$this->db->from('announcement a');
-		//$this->db->where('a.status !=', 1);
-		$this->db->where('t.tier_commission_id', $id);
-		$query = $this->db->get();	
-		return $query->row_array();
-	}
 
 }

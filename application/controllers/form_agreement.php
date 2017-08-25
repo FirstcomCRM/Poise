@@ -13,6 +13,7 @@ class form_agreement extends CI_Controller {
 		$this->load->library("pagination");
 		$this->load->model('form_agreement_model');
 	 	$this->load->model('form_category_model');
+		$this->load->helper('download');
 	/*	$this->load->model('production_model');
 		$this->load->model('uom_model');
 		$this->load->model('client_model');
@@ -106,7 +107,26 @@ class form_agreement extends CI_Controller {
 			echo json_encode($ret);	
 		}
 	}
-
+	
+	function download($id){
+        if(!empty($id)){
+            
+            //get file info from database
+            $fileInfo = $this->form_agreement_model->getFile($id);
+            
+            //file path
+			// $path = '/home/poise/public_html/crmdemo2/';
+            $path = dirname(dirname(dirname( __FILE__ ))).'/';
+			$file = file_get_contents($path.$fileInfo['file_path']);
+			//echo $file;
+			$name = $fileInfo['file_name'];
+            //echo "FILE IS>>>".$file;
+			// download file from directory
+            force_download($name, $file);
+         
+        }
+    }
+	
 
 	public function edit($id,$submit = FALSE) {
 		$data['form_agreement'] = $this->form_agreement_model->getform_agreementinfo($id); 
@@ -143,7 +163,7 @@ class form_agreement extends CI_Controller {
 			$updated = $this->form_agreement_model->update_form_agreement($id);
 			if($updated) {
 				logActivity('Updated', "Updated New form_agreement : " . $this->input->post('form_agreement_no'), $id);
-				$this->session->set_flashdata('msg', 'form_agreement Successfully Updated');
+				$this->session->set_flashdata('msg', 'Form Successfully Updated');
 				$ret = array(
 					'status' => 'success',
 				);	
@@ -151,7 +171,7 @@ class form_agreement extends CI_Controller {
 			else {
 				$ret = array(
 					'status' => 'fail',
-					'msg'	 => 'Error in form_agreement Update'
+					'msg'	 => 'Error in Form Update'
 				);
 			}	
 			echo json_encode($ret);
@@ -164,20 +184,20 @@ class form_agreement extends CI_Controller {
 	}
 
 	public function delete($id) {
-		$form_agreement = $this->form_agreement_model->get_form_agreements($id);
+		$form_agreement = $this->form_agreement_model->get_forms($id);
 		if ( !empty($form_agreement) ) {
 			$deleted = $this->form_agreement_model->delete_form_agreement($id);  
 		    if($deleted) {
 		    	//logActivity('Deleted', "Deleted form_agreement : " . $form_agreement['form_agreement_no'], $id);
 			    $ret = array(
 			      'status' 	=> 'success',
-			      'msg'  	=> 'form_agreement Successfully Deleted',
+			      'msg'  	=> 'Form Successfully Deleted',
 			    );	    	
 		    }
 		    else {
 		    	$ret = array(
 			      'status' 	=> 'fail',
-			      'msg'  	=> 'Error in form_agreement Delete',
+			      'msg'  	=> 'Error in Form Delete',
 			    );
 		    }
 		}
@@ -257,7 +277,7 @@ class form_agreement extends CI_Controller {
 			else {
 				$ret = array(
 					'status'	=> 'fail',
-					'msg'		=> 'Error in File remove'
+					'msg'		=> 'Error in File Remove'
 				);	
 			}			
 		}

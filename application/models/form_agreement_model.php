@@ -102,10 +102,13 @@ class form_agreement_model extends CI_Model {
 		}
 	
 
-		//$role_id = $this->session->userdata('role_id');
-		/* if($role_id != 1) {
-			$this->datatables->where('q.sale_person_id', $this->session->userdata('user_id'));
-		} */
+		$role_id = $this->session->userdata('role_id');
+		if($role_id == 1) {
+			$edit= '<a class="btn btn-mtac admin-control btn-view btn-success" data-toggle="tooltip" data-placement="top" title="Edit" href="form_agreement/edit/$1">Edit</a>';
+		} 
+		else{
+			$edit ='';
+		}
 		
         $this->datatables->select("f.form_id,f.form_name,c.name", false);
         $this->datatables->from('forms f');
@@ -114,7 +117,7 @@ class form_agreement_model extends CI_Model {
 		$this->datatables->add_column('no', '');
 		//$this->datatables->add_column('action', '<a class="view-link btn btn-mtac admin-control btn-view" data-toggle="tooltip" data-placement="top" title="View" href="form_agreement/view/$1"><i class="fa fa-eye ico"></i></a> / <a class="print-link" data-toggle="tooltip" data-placement="top" title="Print" href="form_agreement/printform_agreement/$1"><i class="fa fa-print ico"></i></a> / <a class="edit-link" data-toggle="tooltip" data-placement="top" title="Edit" href="form_agreement/edit/$1"><i class="fa fa-edit ico"></i></a> / <a class="delete-link" data-toggle="tooltip" data-placement="top" title="Delete" href="form_agreement/delete/$1"><i class="fa fa-trash-o ico"></i></a>', 'announce_id');
 		//$this->datatables->add_column('action', '<a class="view-link" data-toggle="tooltip" data-placement="top" title="View" href="form_agreement/view/$1"><i class="fa fa-eye ico"></i></a> / <a class="edit-link" data-toggle="tooltip" data-placement="top" title="Edit" href="form_agreement/edit/$1"><i class="fa fa-edit ico"></i></a> / <a class="delete-link" data-toggle="tooltip" data-placement="top" title="Delete" href="form_agreement/delete/$1"><i class="fa fa-trash-o ico"></i></a>', 'announce_id');
-		$this->datatables->add_column('action', '<a class="btn btn-mtac admin-control btn-view btn-primary view-link" data-toggle="tooltip" data-placement="top" title="View" href="form_agreement/view/$1">View</a><a class="btn btn-mtac admin-control btn-view btn-success" data-toggle="tooltip" data-placement="top" title="Edit" href="form_agreement/edit/$1">Edit</a><a class="btn btn-mtac btn-delete btn-danger delete-link" data-toggle="tooltip" data-placement="top" title="Delete" href="form_agreement/delete/$1">Delete</a>', 'form_id');
+		$this->datatables->add_column('action', '<a class="btn btn-mtac admin-control btn-view btn-primary view-link" data-toggle="tooltip" data-placement="top" title="View" href="form_agreement/view/$1">View</a>'.$edit.'<a class="btn btn-mtac btn-delete btn-danger delete-link" data-toggle="tooltip" data-placement="top" title="Delete" href="form_agreement/delete/$1">Delete</a>', 'form_id');
 		//$this->datatables->add_column('action', '<a class="btn btn-block btn-primary" data-toggle="tooltip" data-placement="top" title="View" href="form_agreement/view/$1"><i class="fa fa-eye ico"></i></a> / <a class="edit-link" data-toggle="tooltip" data-placement="top" title="Edit" href="form_agreement/edit/$1"><i class="fa fa-edit ico"></i></a> / <a class="delete-link" data-toggle="tooltip" data-placement="top" title="Delete" href="form_agreement/delete/$1"><i class="fa fa-trash-o ico"></i></a>', 'announce_id');
 		//$this->datatables->add_column('action', '<a class="btn btn-block btn-primary" data-toggle="tooltip" data-placement="top" title="View" href="property/view/$1"><i class="fa fa-save ico-btn"></i>View</a><a class="btn btn-mtac admin-control btn-approve" data-toggle="tooltip" data-placement="top" title="Approve" href="property/edit_status/$1"><i class="fa fa-save ico-btn"></i>Approve</a><a class="btn btn-mtac admin-control btn-reject" data-toggle="tooltip" data-placement="top" title="Reject" href="property/edit_status/$1"><i class="fa fa-save ico-btn"></i>Reject</a>', 'property_id');
 		echo $this->datatables->generate();

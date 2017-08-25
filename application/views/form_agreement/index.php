@@ -82,7 +82,7 @@
       var del_id= $('#hid-delete-id').val();
       $("#myModal").modal('hide');  
       var url = 'form_agreement/delete/' + del_id;
-	  alert(url);
+	  //alert(url);
       deleteAjax(url, tbl);
     });
 

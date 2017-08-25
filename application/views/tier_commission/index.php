@@ -19,10 +19,11 @@
               //'end_date'      :  function ( d ) { return $("#end-date").val(); },
             }
         },
-        "columns": [
+       "columns": [
             { "data": "no", "orderable": false, "bSearchable": false },
-            { "data": "username"},
-            { "data": "level"},
+            { "data": "description"},
+            { "data": "name"},
+            { "data": "levels"},
             { "data": "action", "orderable": false, "bSearchable": false, "className": 'col_act_md' }
         ],
         "fnRowCallback" : function(nRow, aData, iDisplayIndex){
@@ -32,8 +33,43 @@
         },
     });
 
-   
-   
+    $('#btn-submit').click(function(e) {  
+        e.preventDefault();
+        tbl.api().ajax.reload();
+    });
+
+    // Quick Add 
+    $("#quick-add").click(function(e){
+      e.preventDefault();
+      var url = 'tier_commission/create';
+      $('#submiturl').val(url);
+      $('.quick-action').html('Add');
+      $("#quickModal").modal('show');
+    });
+
+    // Quick Edit
+    $('#tbl-tier-commission').on('click', '.edit-link', function(e) { 
+      e.preventDefault();
+      var id = getIdfromURL($(this).attr('href'));
+      var editurl = 'tier_commission/aj_edit/' + id;
+      getEditvalues(editurl);
+      var updateurl = 'tier_commission/edit/' + id;
+      $('#submiturl').val(updateurl);
+      $('.quick-action').html('Edit');
+      $("#quickModal").modal('show');
+    });
+
+    // Quick Submit
+    $("#btn-q-submit").click(function(e){
+      e.preventDefault();
+      var valid = validateForm('quick-form');
+      if(valid) {  
+        var formdata = $("#quick-form").serializeObject();
+        var url = $('#submiturl').val();
+        quickAjaxsubmit(url, formdata, tbl);
+      }   
+    });
+
     //Quick Delete
     $('#tbl-tier-commission').on('click', '.delete-link', function(e) {
       e.preventDefault();
@@ -54,7 +90,108 @@
     
   });
 </script>
+<!-- Modal (For Confirm Delete)-->
+<div class="modal fade" id="myModal" tabindex="-1" tier_commission="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="myModalLabel">Confirmation</h4>
+      </div>
+      <div class="modal-body">
+        <span>Are you sure to delete this record?</span>
+        <input type="hidden" name="hid-id" id="hid-delete-id" value=''/>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
+        <button type="button" class="btn btn-mtac" id='btn-confirm-yes'>Yes</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- End Model -->
 
+<!-- Modal (Quick Add Model) -->
+<div class="modal fade" id="quickModal" tabindex="-1" tier_commission="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-md">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="myModalLabel"><span class="quick-action"></span> Tier Commission</h4>
+      </div>
+      <div class="modal-body">
+        <form tier_commission="form" id="quick-form">
+            <div class="clearfix sp-margin-sm"></div>
+              <div class="alert alert-danger err-display" style="display:none;"> </div> 
+            <div class="clearfix sp-margin-md"></div>
+            <input type="hidden" id="submiturl" name="submiturl" value="">
+			 <div class="clearfix sp-margin-sm"></div>
+			<div class="form-group">
+				<label for="name" class="col-md-3 control-label">Description</label>
+				<div class="col-md-6">
+					<input type="text" class="form-control input-sm" id="description" name="description" placeholder="Enter Description" value="<?php echo isset($_POST['name']) ? $_POST['name'] : ( isset($admin['name']) ? $admin['name'] : '') ; ?>" required>
+				</div>
+				<div class="col-md-1 req-star">*</div>
+			</div>
+			<div class="clearfix sp-margin-sm"></div>
+			<div class="form-group">
+                <label for="role" class="col-md-3 control-label">Team</label>
+                <div class="col-md-6">
+                    <select class="form-control input-sm" name="team_id" id="team-id" placeholder="Select Team" required>
+                        <option value="" selected>Select Team</option>
+                        <?php if($users != '') { ?>
+                            <?php foreach($teams as $team) {  
+                                /* if( isset($_POST['user_id']) && ($_POST['user_id'] == $user['user_id']) ) {
+                                    echo "<option selected value='". $user['user_id'] . "' >" . $user['name'] . "</option>";
+                                }
+                                else */ //if( isset($tier_commission['user_id']) && ($tier_commission['user_id'] == $user['user_id']) ) {
+                                 //   echo "<option selected value='". $user['user_id'] . "' >" . $user['name'] . "</option>";
+                               // }
+                              //  else {
+                                    echo "<option value='". $team['team_id'] . "' >" . $team['name'] . "</option>";
+                               // }
+                            } ?>
+                        <?php } ?>
+                    </select>    
+                </div>
+                <div class="col-md-1 req-star">*</div>
+            </div>
+			<div class="clearfix sp-margin-sm"></div>
+			<div class="form-group">
+				<label for="name" class="col-md-3 control-label">No. of Levels</label>
+				<div class="col-md-6">
+				  <!-- <input type="text" class="form-control input-sm" id="level" name="level" placeholder="Enter level" value="<?= isset($_POST['level']) ? $_POST['level'] : ( isset($tier_commission['level']) ? $tier_commission['level'] : '') ; ?>"> -->
+				  <select class="form-control input-sm" name="levels" id="levels">
+                    <option value="" selected>Select No. of Levels</option>
+                    <option value="1" <?= ( (isset($_POST['levels']) && $_POST['levels'] == '1') || (isset($tier_commission['levels']) && $tier_commission['levels'] == '1') ) ? 'selected' : ''; ?> >1</option>
+                    <option value="2" <?= ( (isset($_POST['levels']) && $_POST['levels'] == '2') || (isset($tier_commission['levels']) && $tier_commission['levels'] == '2') ) ? 'selected' : ''; ?> >2</option>
+                    <option value="3" <?= ( (isset($_POST['levels']) && $_POST['levels'] == '3') || (isset($tier_commission['levels']) && $tier_commission['levels'] == '3') ) ? 'selected' : ''; ?> >3</option>
+                    <option value="4" <?= ( (isset($_POST['levels']) && $_POST['levels'] == '4') || (isset($tier_commission['levels']) && $tier_commission['levels'] == '4') ) ? 'selected' : ''; ?> >4</option>
+                    <option value="5" <?= ( (isset($_POST['levels']) && $_POST['levels'] == '5') || (isset($tier_commission['levels']) && $tier_commission['levels'] == '5') ) ? 'selected' : ''; ?> >5</option>
+                    <option value="6" <?= ( (isset($_POST['levels']) && $_POST['levels'] == '6') || (isset($tier_commission['levels']) && $tier_commission['levels'] == '6') ) ? 'selected' : ''; ?> >6</option>
+                    <option value="7" <?= ( (isset($_POST['levels']) && $_POST['levels'] == '7') || (isset($tier_commission['levels']) && $tier_commission['levels'] == '7') ) ? 'selected' : ''; ?> >7</option>
+                  </select>  
+				</div>
+			</div>
+            <div class="clearfix sp-margin-sm"></div> 
+            <div class="form-group">
+                <label for="description" class="col-md-2 control-label"></label>
+                <div class="col-md-6">
+                    <button type="submit" class="btn btn-primary btn-mtac" id='btn-q-submit'><i class="fa fa-save ico-btn"></i>Submit</button>
+                </div>
+            </div>
+            <div class="clearfix sp-margin-sm"></div>
+        </form>
+        <input type="hidden" name="hid-id" id="hid-delete-id" value=''/>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        
+      </div>
+    </div>
+  </div>
+</div>
+<!-- End Model -->
 
 <section class="content">
   <div class="row">
@@ -115,8 +252,9 @@
 							<thead>
 							  <tr>
 								<th>No</th>
-								<th>User</th>
-								<th>Level</th>
+								<th>Description</th>
+								<th>Name</th>
+								<th>Levels</th>
 								<th>Action</th>       
 							  </tr>
 							</thead>
@@ -125,8 +263,9 @@
 							<tfoot>
 							  <tr>
 								<th>No</th>
-								<th>User</th>
-								<th>Level</th>
+								<th>Description</th>
+								<th>Name</th>
+								<th>Levels</th>
 								<th>Action</th>       
 							  </tr>
 							</tfoot>

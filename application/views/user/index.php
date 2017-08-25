@@ -17,6 +17,7 @@ var burl = "<?= base_url() ?>";
 
 //$( document ).ready(function() {
   $(function(){
+	  
     var tbl = $('#admin-table').dataTable({
         "processing": true,
         "serverSide": true,
@@ -46,6 +47,8 @@ var burl = "<?= base_url() ?>";
             { "data": "name"},
             { "data": "username"},
             { "data": "role" },
+            { "data": "team" },
+            { "data": "level" },
             { "data": "email"},
             { "data": "contact"},
 			{ "data": "cv",
@@ -91,13 +94,16 @@ var burl = "<?= base_url() ?>";
     //Quick Edit
     $('#tbl-admin').on('click', '.edit-link', function(e) { 
       e.preventDefault();
+	  
       var id = getIdfromURL($(this).attr('href'));
       var editurl = 'user/aj_edit/' + id;
       getEditvalues(editurl);
+	  
       var updateurl = 'user/edit/' + id;
       $('#submiturl').val(updateurl);
       $('.quick-action').html('Edit');
       $("#quickModal").modal('show');
+	  getTeamTierInfo();
     });
 
     // Quick Submit
@@ -145,7 +151,15 @@ var burl = "<?= base_url() ?>";
       $("#myModal").modal('show');
      
     });
-
+	
+	$('#team-id').change(function(e) { 
+      if( $('#team-id').val() != 0 ) {
+        //getContactinfo();  
+		getTeamTierInfo();  
+      }
+    });
+	
+	
     //Quick Delete Confirm
     $("#btn-confirm-yes").click(function(){
       var del_id= $('#hid-delete-id').val();
@@ -174,14 +188,77 @@ var burl = "<?= base_url() ?>";
       }
     }); 
 
-
+	$('select[name="team_id"]').on('change', function() {
+		//getClientinfo();
+            var stateID = $(this).val();
+            if(stateID) {
+                $.ajax({
+                    url: 'user/aj_getTeamTierDetail/'+stateID,
+                    type: "post",
+                    dataType: "json",
+                    success:function(data) {
+						//console.log(url);
+                        $('select[name="level"]').empty();
+						$('select[name="level"]').append('<option value="">'+ 'Select Level' +'</option>');
+						console.log(data.data[0].levels);
+						var x2 = document.getElementById("level").length;
+						//console.log(x2);
+						for(var x = 0; x <data.data[0].levels; x++){
+							//x=+1;
+							var y = x+1;
+							$('select[name="level"]').append('<option value="'+ y +'">Level '+y+'</option>');
+						}
+						
+                    }
+                });
+				/* $("#designation").val('');  
+				$("#department").val('');
+				//$("#contact").val('');  
+				$("#address").val('');  */
+			
+			}
+			else{
+				
+				/* $("#designation").val('');  
+				$("#department").val('');
+				//$("#contact").val('');  
+				$("#address").val('');  */
+				
+                $('select[name="level"]').append('<option value="">'+ 'Select Level' +'</option>');
+            }
+        }); 
 
 
 	
 
   });
   
-
+	
+	function getTeamTierInfo() {
+		var team_id = $('#team_id').val();
+		console.log(team_id);
+		if(team_id) {
+		$.ajax({
+			url: 'aj_getTeamTierDetail/'+team_id,
+			type: "post",
+			dataType: "json",
+			success:function(data) {
+			//console.log('aj_getTeamTierDetail/'+client_id);				
+				$('select[name="contact"]').empty();
+				for(var x = 0; x <data.data[0].levels; x++){
+							//x=+1;
+							var y = x+1;
+							$('select[name="level"]').append('<option value="'+ y +'">Level '+y+'</option>');
+						}
+				
+			}
+		});
+		}else{
+			$('select[name="contact"]').empty();
+		}
+  }
+	
+	
    function resetForm() {
     $("#quick-form").each(function(){
       this.reset();
@@ -288,6 +365,66 @@ var burl = "<?= base_url() ?>";
 					</div>
 					<div class="clearfix sp-margin-sm"></div>
 					<div class="form-group">
+						<label for="role" class="col-md-4 control-label">Team</label>
+						<div class="col-md-6">
+							<select class="form-control input-sm" name="team_id" id="team-id" placeholder="Select Team" required>
+								<option value="" selected>Select Team</option>
+								<?php if($teams != '') { ?>
+									<?php foreach($teams as $team) {  
+										if( isset($_POST['team_id']) && ($_POST['team_id'] == $team['team_id']) ) {
+											echo "<option selected value='". $team['team_id'] . "' >" . $team['name'] . "</option>";
+										}
+										else if( isset($admin['team_id']) && ($admin['team_id'] == $team['team_id']) ) {
+											echo "<option selected value='". $team['team_id'] . "' >" . $team['name'] . "</option>";
+										}
+										else {
+											echo "<option value='". $team['team_id'] . "' >" . $team['name'] . "</option>";
+										}
+									} ?>
+								<?php } ?>
+							</select>    
+						</div>
+						<div class="col-md-1 req-star">*</div>
+					</div>
+					<div class="clearfix sp-margin-sm"></div>
+					<div class="form-group">
+						<label for="role" class="col-md-4 control-label">Level</label>
+						<div class="col-md-6">
+							<select class="form-control input-sm" name="level" id="level" placeholder="Select Level">
+								<?php// if($teams != '') { ?>
+									<?php /* foreach($teams as $team) {  
+										if( isset($_POST['level']) && ($_POST['level'] == $role['level']) ) {
+											echo "<option selected value='". $role['role_id'] . "' >" . $role['name'] . "</option>";
+										}
+										else if( isset($admin['role_id']) && ($admin['role_id'] == $role['role_id']) ) {
+											echo "<option selected value='". $role['role_id'] . "' >" . $role['name'] . "</option>";
+										}
+										else {
+											echo "<option value='". $role['role_id'] . "' >" . $role['name'] . "</option>";
+										} */
+									//} ?>
+								<?php //} ?>
+							</select>    
+						</div>
+						<div class="col-md-1 req-star">*</div>
+					</div>
+					<div class="clearfix sp-margin-sm"></div>
+					<div class="form-group">
+						<label for="role" class="col-md-4 control-label">Belong To</label>
+						<div class="col-md-6">
+							<select class="form-control input-sm" name="user_belong_to" id="user-belong-to" placeholder="User Belong To">
+								
+							</select>    
+						</div>
+						<div class="col-md-1 req-star">*</div>
+					</div>
+					<div id ='image-form2'>
+						<input type ="hidden" name ="user_img" id="img-new-file-name" value ="<?php echo isset($_POST['img_new_file_name']) ? $_POST['img_new_file_name'] : ( isset($engineer['user_img']) ? $engineer['user_img'] : '') ; ?>" >
+					</div>
+				</div> 
+			
+				<div class="col-md-6">
+					<div class="form-group">
 						<label for="username" class="col-md-4 control-label">Email</label>
 						<div class="col-md-6">
 							<input type="text" class="form-control input-sm" id="email" name="email" placeholder="Enter Email" value="<?php echo isset($_POST['email']) ? $_POST['email'] : ( isset($engineer['email']) ? $engineer['email'] : '') ; ?>">
@@ -295,13 +432,6 @@ var burl = "<?= base_url() ?>";
 						<div class="col-md-1 req-star">*</div>
 					</div>
 					<div class="clearfix sp-margin-sm"></div>
-					<div id ='image-form2'>
-						<input type ="hidden" name ="user_img" id="img-new-file-name" value ="<?php echo isset($_POST['img_new_file_name']) ? $_POST['img_new_file_name'] : ( isset($engineer['user_img']) ? $engineer['user_img'] : '') ; ?>" >
-					</div>
-				</div> 
-			
-				<div class="col-md-6">
-					
 					<div class="form-group">
 						<label for="username" class="col-md-4 control-label">Contact</label>
 						<div class="col-md-6">
@@ -452,6 +582,8 @@ var burl = "<?= base_url() ?>";
 								<th>Name</th>
 								<th>Username</th>
 								<th>Role</th>
+								<th>Team</th>
+								<th>Level</th>
 								<th>Email</th>
 								<th>Contact</th>
 								<th>CV</th>
@@ -467,6 +599,8 @@ var burl = "<?= base_url() ?>";
 								<th>Name</th>
 								<th>Username</th>
 								<th>Role</th>
+								<th>Level</th>
+								<th>Team</th>
 								<th>Email</th>
 								<th>Contact</th>
 								<th>CV</th>

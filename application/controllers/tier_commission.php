@@ -6,6 +6,7 @@ class tier_commission extends CI_Controller {
 		parent::__construct();
 		$this->load->model('tier_commission_model');
 		$this->load->model('user_model');
+		$this->load->model('team_model');
 		$this->load->library('session');
 		$this->load->library("pagination");
 		checkPermission();
@@ -15,6 +16,7 @@ class tier_commission extends CI_Controller {
 		if($dt === FALSE ) { 									// First time load
 			$data['nav_area'] = 'tier_commission';
 			$data['users'] = $this->user_model->get_tc_users();
+			$data['teams'] = $this->team_model->get_teams();
 			$this->load->view('template/header', $data);
 			$this->load->view('tier_commission/index', $data);
 			$this->load->view('template/footer', $data);	
@@ -30,7 +32,7 @@ class tier_commission extends CI_Controller {
 		$this->load->helper('form');
 		$this->load->library('form_validation');
 
-		$this->form_validation->set_rules('user_id', 'User', 'required');
+		$this->form_validation->set_rules('team_id', 'Team', 'required');
 
 		if($this->form_validation->run() === FALSE) {
 			$ret = array(
@@ -71,55 +73,46 @@ class tier_commission extends CI_Controller {
 		echo json_encode($tier_commission);
 	}
 
-	public function edit($id,$submit = FALSE) {
-		$data['tier_commission'] = $this->tier_commission_model->gettierinfo($id); 
-		if (empty($data['tier_commission'])) {
-			show_404();
-		}
-		$this->load->helper('form');
-		$this->load->library('form_validation');
+	public function edit($id) {
+		$data['users'] = $this->user_model->get_users();
+		$data['tier_commission'] = $this->tier_commission_model->get_tier_commissions($id);
+		if ( !empty($data['tier_commission']) ) {
+			$this->load->helper('form');
+			$this->load->library('form_validation');
 
-		$this->form_validation->set_rules('tier_commission_title', 'tier_commission Title', 'required');
-		$this->form_validation->set_rules('tier_commission_date', 'tier_commission Date', 'required');
+			$this->form_validation->set_rules('team_id', 'Team', 'required');
 
-		if($this->form_validation->run() === FALSE) {
-			if($submit == FALSE) {
-				$data['action'] = 'edit';
-				$data['nav_area'] = 'tier_commission';
-				//$data['details'] =  $this->tier_commission_model->getFilesbytier_commissionid($id);
-				$data['users'] = $this->user_model->get_users();
-				
-				$this->load->view('template/header', $data);
-				$this->load->view('tier_commission/edit', $data);
-				$this->load->view('template/footer', $data);	
-			}
-			else {
+			if($this->form_validation->run() === FALSE) {	
 				$ret = array(
 					'status' => 'fail',
 					'msg'	 => validation_errors(),
-				);	
-				echo json_encode($ret);
-			}
-		} 
-		else {
-			$updated = $this->tier_commission_model->update_tier_commission($id);
-			if($updated) {
-				logActivity('Updated', "Updated New tier_commission : " . $this->input->post('tier_commission_no'), $id);
-				$this->session->set_flashdata('msg', 'tier_commission Successfully Updated');
-				$ret = array(
-					'status' => 'success',
-				);	
+				);		
 			}
 			else {
-				$ret = array(
-					'status' => 'fail',
-					'msg'	 => 'Error in tier_commission Update'
-				);
-			}	
-			echo json_encode($ret);
+				$updated = $this->tier_commission_model->update_tier_commission($id);
+				if($updated) {
+					logActivity('Updated', "Updated Tier Commission : " . $this->input->post('name'), $id);
+					$ret = array(
+						'status' => 'success',
+						'msg'	 => 'Tier Commission Successfully Updated',
+					);
+				}
+				else {
+					$ret = array(
+						'status' => 'fail',
+						'msg'	 => 'Error in Tier Commission Update',
+					);
+				}
+				
+			}
 		}
-
-		
+		else {
+			$ret = array(
+				'status' => 'fail',
+				'msg'	 => 'No data',
+			);	
+		}
+		echo json_encode($ret);
 	}
 
 	public function delete($id) {

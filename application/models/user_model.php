@@ -41,6 +41,9 @@ class user_model extends CI_Model {
 			'username'				=> $this->input->post('username'),
 			'password'				=> md5($this->input->post('password')),
 			'role_id' 				=> $this->input->post('role_id'),
+			'team_id' 				=> $this->input->post('team_id'),
+			'level' 				=> $this->input->post('level'),
+			'user_belong_to' 		=> $this->input->post('user_belong_to'),
 			'email' 				=> $this->input->post('email'),
 			'contact'				=> $this->input->post('contact'),
 			'cea_no'				=> $this->input->post('cea_no'),
@@ -73,14 +76,17 @@ class user_model extends CI_Model {
 	public function update_user($id) {
 		//$def_com = ($this->input->post('default_commission') != '') ? $this->input->post('default_commission') : NULL;
 		$data = array(
-			'name' 	  			=> $this->input->post('name'),
-			'username'			=> $this->input->post('username'),
-			//'password'			=> md5($this->input->post('password')),
-			'role_id' 			=> $this->input->post('role_id'),
-			'email' 			=> $this->input->post('email'),
-			'contact'			=> $this->input->post('contact'),
-			'cea_no'			=> $this->input->post('cea_no'),
-			'nric'				=> $this->input->post('nric'),
+			'name' 	  				=> $this->input->post('name'),
+			'username'				=> $this->input->post('username'),
+			//'password'				=> md5($this->input->post('password')),
+			'role_id' 				=> $this->input->post('role_id'),
+			'team_id' 				=> $this->input->post('team_id'),
+			'level' 				=> $this->input->post('level'),
+			'user_belong_to' 		=> $this->input->post('user_belong_to'),
+			'email' 				=> $this->input->post('email'),
+			'contact'				=> $this->input->post('contact'),
+			'cea_no'				=> $this->input->post('cea_no'),
+			'nric'					=> $this->input->post('nric'),
 			'commission'			=> $this->input->post('commission'),
 			'co_broke_commission'	=> $this->input->post('co_broke_commission'),
 			'internal_commission'	=> $this->input->post('internal_commission'),
@@ -119,11 +125,25 @@ class user_model extends CI_Model {
 		}
 		return TRUE;
 	}	
+	
+	
+	public function getTeamTierDetails($team_id) {
+		$this->db->select('t.*,tc.*');
+		$this->db->from('team t');
+		$this->db->join('tier_commission tc', 'tc.team_id = t.team_id', 'left');
+		$this->db->where('t.team_id', $team_id);
+		$this->db->where('t.status !=', 1);
+		$query = $this->db->get();
+		return $query->result_array();
+		//echo json_encode($query);
+	}
+	
 
 	public function getdtusers() {
-        $this->datatables->select('a.user_id, a.user_img, a.name, a.username, r.name as role, a.email, a.contact, a.cv');
+        $this->datatables->select('a.user_id, a.user_img, a.name, a.username, r.name as role, t.name as team, a.level, a.email, a.contact, a.cv');
         $this->datatables->from('users a');
         $this->datatables->join('role r', 'a.role_id = r.role_id', 'left');
+        $this->datatables->join('team t', 'a.team_id = t.team_id', 'left');
 		$this->datatables->where('a.status !=', 1);
 
 		$this->datatables->add_column('no', '');

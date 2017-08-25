@@ -7,6 +7,7 @@ class user extends CI_Controller {
 		$this->load->library("pagination");
 		$this->load->model('user_model');
 		$this->load->model('role_model');
+		$this->load->model('team_model');
 		checkPermission();
 	}
 
@@ -16,6 +17,8 @@ class user extends CI_Controller {
 			$data['nav_area'] = 'user';
 
 			$data['roles'] = $this->role_model->getRoles(); 
+			$data['teams'] = $this->team_model->get_teams(); 
+			//$data['levels'] = $this->team_model->get_teams(); 
 			$this->load->view('template/header', $data);
 			$this->load->view('user/index', $data);
 			$this->load->view('template/footer', $data);	
@@ -25,7 +28,29 @@ class user extends CI_Controller {
 			$this->user_model->getdtusers();
 		}
 	}
-
+	
+	
+	public function aj_getTeamTierDetail($team_id) {
+		$team['data'] = $this->user_model->getTeamTierDetails($team_id);
+		$team['count'] = count($team['data']);
+		//$team['levels'] = $team['data['levels'];
+		if(!empty($team)) {
+			$team['status'] = 'success';
+			
+			//$client['designation']	=$client['designation'];
+			
+		}
+		else {
+			$ret = array(
+				'status'	=> 'fail',
+				'msg'		=> 'No Record'
+			);
+		}
+		echo json_encode($team);
+	}
+	
+	
+	
 	
 /* 	public function create($submit = FALSE) {
 		$this->load->helper('form');
