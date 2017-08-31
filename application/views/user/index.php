@@ -17,7 +17,7 @@ var burl = "<?= base_url() ?>";
 
 //$( document ).ready(function() {
   $(function(){
-	  
+	  getTeamTierInfo();
     var tbl = $('#admin-table').dataTable({
         "processing": true,
         "serverSide": true,
@@ -80,7 +80,7 @@ var burl = "<?= base_url() ?>";
 	
 	
 	
-	
+/* 	
     //Quick Add
     $("#quick-add").click(function(e){
       e.preventDefault();
@@ -104,6 +104,7 @@ var burl = "<?= base_url() ?>";
       $('.quick-action').html('Edit');
       $("#quickModal").modal('show');
 	  getTeamTierInfo();
+	  console.log($('#role-id').val());
     });
 
     // Quick Submit
@@ -167,7 +168,7 @@ var burl = "<?= base_url() ?>";
       var url = 'user/delete/' + del_id;
       deleteAjax(url, tbl);
     });
-
+ */
     $('#repassword').focusout(function(){
       if($('#password').val() != $('#repassword').val()) {
          $('#password, #repassword').closest('.form-group').addClass('has-error');
@@ -272,7 +273,7 @@ var burl = "<?= base_url() ?>";
    }
   
 </script>
-<script src="<?= base_url();?>js/user_add.js"></script>
+<!--script src="<?= base_url();?>js/user_add.js"></script-->
 <!-- Modal (For Confirm Delete)-->
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-sm">
@@ -563,8 +564,8 @@ var burl = "<?= base_url() ?>";
           <div class="box-header">
              <h3 class="box-title">User Management</h3>
 			 <div class="pull-right">
-				<!--a href="<?= base_url().'user/create'; ?>" class="btn btn-default btn-flat"><i class="fa fa-plus ico-btn"></i>Add</a-->
-				<a href="#" id="quick-add" class="btn btn-default btn-create"><i class="fa fa-plus ico-btn"></i> Add</a>
+				<a href="<?= base_url().'user/create'; ?>" class="btn btn-default btn-flat"><i class="fa fa-plus ico-btn"></i>Add</a>
+				<!--a href="#" id="quick-add" class="btn btn-default btn-create"><i class="fa fa-plus ico-btn"></i> Add</a-->
 			</div>
            </div><!-- /.box-header -->
 			<div class="box-body">

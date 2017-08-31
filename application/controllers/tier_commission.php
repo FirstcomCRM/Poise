@@ -142,6 +142,27 @@ class tier_commission extends CI_Controller {
 		echo json_encode($ret);
 	}
 
+	
+	public function aj_getTeamLevels($team_id) {
+		$team['data'] = $this->tier_commission_model->getTeamLevels($team_id);
+		$team['count'] = count($team['data']);
+		if(!empty($team)) {
+			$team['status'] = 'success';
+			//$client['designation']	=$client['designation'];
+			
+		}
+		else {
+			$ret = array(
+				'status'	=> 'fail',
+				'msg'		=> 'No Record'
+			);
+		}
+		echo json_encode($team);
+	}
+	
+	
+	
+	
 	public function aj_gettier_commission() {
 	    $term = $this->input->get('term');
 	    if (isset($term)){

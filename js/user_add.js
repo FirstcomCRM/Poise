@@ -80,7 +80,7 @@ $( document ).ready(function() {
 	 
 	
 	
-	$('#img_select').change(function(e){
+	/* $('#img_select').change(function(e){
 	
 	//var ext = document.getElementById("img_select").files[1].name;
 	$('#detail-form').submit();
@@ -108,7 +108,7 @@ $( document ).ready(function() {
 
 			}
 		})
-	});
+	}); */
 	
 	
 	function readURL(input) {
@@ -235,4 +235,78 @@ $( document ).ready(function() {
         resetForm();       
     });
 
+	
+	
+	
+	
+	$('#btn-submit').click(function(e) {
+	  var password = $('#password').val();
+      e.preventDefault(); 
+	  //alert(burl + "announcement/edit/" + $('#hid-announcement-id').val());
+     /*  if($('#password').val() != ''){
+		  var password = password;
+	  } */
+	  if( $('#username').val() == '' ) {
+            alert("Please enter username");
+      }
+      else {
+		 
+        $.ajax({
+          type: "POST",
+          url: burl + "user/create/",
+          beforeSend : function( xhr ) {
+            $('#btn-submit').html('<i class="fa fa-spinner ico-btn"> Processing...').prop('disabled', true);
+          },
+          data: { 
+               name     				: $('#name').val(),
+               username      			: $('#username').val(),
+               password      			: $('#password').val(),
+               role_id      			: $('#role-id').val(),
+               team_id      			: $('#team-id').val(),
+               level      				: $('#level').val(),
+               user_belong_to   		: $('#user-belong-to').val(),
+               email      				: $('#email').val(),
+               contact      			: $('#contact').val(),
+               nric      				: $('#nric').val(),
+               cea_no      				: $('#cea-no').val(),
+               commission      			: $('#commission').val(),
+               co_broke_commission  	: $('#co-broke-commission').val(),
+			   internal_commission		: $('#internal-commission').val(),
+			   user_img					: $('#img-new-file-name').val(),
+			   cv						: $('#cv-new-file-name').val(),
+			   
+			   //main_new_file_name     : $('#main-new-file-name').val(),
+          },
+          success: function(data){  
+            $('#btn-submit').html('<i class="fa fa-save ico-btn"> Update').prop('disabled', false);
+            var result = $.parseJSON(data);
+            if(result['status'] == 'success') {
+              window.location = burl + "user";
+            }
+            else {
+              var regex = /(<([^>]+)>)/ig;
+              result['msg'] = result['msg'].replace(regex, "");
+              alert(result['msg']);
+            }
+          },
+          error: function(XMLHttpRequest, textStatus, errorThrown) { 
+            alert("ERROR!!!");           
+          } 
+        });   
+      }
+    }); 
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 });

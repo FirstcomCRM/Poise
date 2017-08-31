@@ -89,6 +89,49 @@
     });
     
   });
+  
+  
+  
+  
+  
+  
+    function loaduserteam() {
+   //getClientinfo();
+            var stateID = $("#team-id").val();
+			 //alert('aj_getContactinfo/'+stateID);
+            if(stateID) {
+                $.ajax({
+                    url: burl + 'user/aj_getTeamLevels/'+stateID,
+                    type: "post",
+                    dataType: "json",
+                    success:function(data) {
+					
+                      /*   <?php if ($action=='new'){?> */
+							
+							('select[name="contact"]').empty();
+							$('select[name="contact"]').append('<option value="">'+ 'Select Contact' +'</option>');
+							
+						/* <?php }else if($action=='edit'){ ?> */
+							//$('select[name="contact"]').append('<option selected value="<?=$invoice['contact']?>"> <?= $invoice['contact_person']?></option>');
+						
+						/* <?php }?> */
+						
+						for(var x = 0; x < data.count; x++){
+							$('select[name="contact"]').append('<option value="'+ data.data[x].client_detail_id +'">'+ data.data[x].name +'</option>');
+						}
+						
+                    }
+                });
+            }else{
+                $('select[name="contact"]').append('<option value="">'+ 'Select Contact' +'</option>');
+            }
+}
+  
+  
+  
+  
+  
+  
 </script>
 <!-- Modal (For Confirm Delete)-->
 <div class="modal fade" id="myModal" tabindex="-1" tier_commission="dialog" aria-labelledby="myModalLabel" aria-hidden="true">

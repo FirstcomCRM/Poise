@@ -137,7 +137,17 @@ class user_model extends CI_Model {
 		return $query->result_array();
 		//echo json_encode($query);
 	}
-	
+	public function getUserBelongto($team_id,$level) {
+		$this->db->select('u.*');
+		$this->db->from('users u');
+		//$this->db->join('tier_commission tc', 'tc.team_id = t.team_id', 'left');
+		$this->db->where('u.team_id', $team_id);
+		$this->db->where('u.level', $level);
+		$this->db->where('u.status !=', 1);
+		$query = $this->db->get();
+		return $query->result_array();
+		//echo json_encode($query);
+	}
 
 	public function getdtusers() {
         $this->datatables->select('a.user_id, a.user_img, a.name, a.username, r.name as role, t.name as team, a.level, a.email, a.contact, a.cv');
