@@ -55,7 +55,7 @@ class service_model extends CI_Model {
 
 		$this->datatables->add_column('no', '');
 		//$this->datatables->add_column('action', '<a class="edit-link" data-toggle="tooltip" data-placement="top" title="Edit" href="service/edit/$1"><i class="fa fa-edit ico"></i></a> / <a class="delete-link" data-toggle="tooltip" data-placement="top" title="Delete" href="service/delete/$1"><i class="fa fa-trash-o ico"></i></a>', 'service_id');
-		$this->datatables->add_column('action', '<a class="btn btn-mtac admin-control btn-success edit-link" data-toggle="tooltip" data-placement="top" title="Edit" href="service/edit/$1">Edit</a><a class="btn btn-mtac btn-delete btn-danger delete-link" data-toggle="tooltip" data-placement="top" title="Delete" href="service/delete/$1">Delete</a>', 'service_id');
+		$this->datatables->add_column('action', '<ul class="list-inline hidden-xs"><li class = "li-padds"><a class="btn btn-mtac admin-control btn-success edit-link" data-toggle="tooltip" data-placement="top" title="Edit" href="service/edit/$1">Edit</a></li><li class = "li-padds"><a class="btn btn-mtac btn-delete btn-danger delete-link" data-toggle="tooltip" data-placement="top" title="Delete" href="service/delete/$1">Delete</a></li></ul>', 'service_id');
 		echo $this->datatables->generate();
 	}
 

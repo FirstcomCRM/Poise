@@ -25,6 +25,7 @@ function ValidateMainImage(oInput) {
 $( document ).ready(function() {
 
 	updatePDTable(detail_arr);
+	updateFPTable(fp_arr);
 	
 	$('#ico-add').click(function(e) { 
     e.preventDefault();
@@ -37,8 +38,8 @@ $( document ).ready(function() {
           url: burl + "property/aj_addPropertyfile", 
           data: { 
             hid_property_id   		: $('#hid-property-id').val(),
-            file_name	   		   : $('#file-name').val(),
-            new_file_name		 : $('#new-file-name').val(),
+            file_name	   		   	: $('#file-name').val(),
+            new_file_name		 	: $('#new-file-name').val(),
             file_path				: $('#file-path').val(),
             //date_uploaded		: $('#amount').val(),
           },
@@ -62,6 +63,45 @@ $( document ).ready(function() {
     });
 
 
+	$('#fp-ico-add').click(function(e) { 
+    e.preventDefault();
+    if ( $('#fp-path').val() == '') {
+      alert("Please Upload File");
+    }
+    else {
+      $.ajax({
+          type: "POST",
+          url: burl + "property/aj_addFloorPlanfile", 
+          data: { 
+            hid_property_id   		: $('#hid-property-id').val(),
+            fp_file_name	   		: $('#fp-file-name').val(),
+            fp_new_file_name		: $('#fp-new-file-name').val(),
+            fp_file_path			: $('#fp-file-path').val(),
+            fp_remarks				: $('#fp-remarks').val(),
+            //date_uploaded		: $('#amount').val(),
+          },
+          success: function(data){ 
+            //console.log(data); 
+            var result = $.parseJSON(data);
+            if(result['status'] == 'success') {
+				$('#fp-form').submit();
+                updateFPTable(result['property_floor_plans']);
+                resetFormFP();
+            }
+            else {
+              alert(result['msg']);
+            }
+          },
+          error: function(XMLHttpRequest, textStatus, errorThrown) { 
+            alert("ERROR!!!");           
+          } 
+      }); 
+    }   
+    });
+	
+	
+	
+	
     /** 
      * Btn submit
      */
@@ -174,9 +214,54 @@ $( document ).ready(function() {
 	});
 	
 	
+	//fp
+	$('#fp_img_select').change(function(e){3
+		$('#fp-form').submit();
+	
+		//readURL(this);
+		//$('#main-img-preview').show();
 	
 	
-		
+		//e.preventDefault();
+		var img = $('#fp_img_select').val();
+		var news = document.getElementById("fp_img_select").files[0].name;
+		$('#fp-path').val(burl + news);
+		$('#fp-file-name').val(news);
+	
+	});
+	
+	
+	$('#fp-form').on('submit', function(e){
+		e.preventDefault();
+		/* var formdata = $("#img-form").serializeObject();
+						
+		var key = getLastindex();
+		arr[++key] = formdata; 
+		console.log(arr); */
+	    $.ajax({
+			url : burl + "property/upload_floor_plan",
+			method : "POST",
+			data: new FormData(this),
+			contentType:false,
+			processData:false,
+			success: function(data){
+				
+			// /* 	url : burl + "announcement/upload",
+				 // $('#main_img_select').val('');  
+               // $('#src_img_upload').modal('hide');  
+               $('#fp-form').html(data); 
+				
+				// alert(arr);
+				
+				
+				
+				
+			}
+		})
+	});
+	
+
+
 	$('#img_select').change(function(e){
 		$('#detail-form').submit();
 		//e.preventDefault();
@@ -217,15 +302,7 @@ $( document ).ready(function() {
 			}
 		})
 	});
-	
-	
-	
 
-	
-	
-	
-	
-	
 	
 	 $('#detail-table').on('click', '.delete-di', function(e) {
         e.preventDefault(); 
@@ -256,6 +333,34 @@ $( document ).ready(function() {
         }     
     });
 	
+	$('#floor-plan-table').on('click', '.delete-di-fp', function(e) {
+        e.preventDefault(); 
+        var r = confirm("Are you sure to remove this file?");
+        if (r == true) {
+          var classname = $(this).closest("tr").attr('class');
+          var row = classname.split('-');
+          $.ajax({
+              type: "POST",
+              url: burl + "property/aj_deleteFloorPlanfile/" + row[1], 
+              data: { },
+              success: function(data){ 
+                console.log(data);
+                var result = $.parseJSON(data);
+                if(result['status'] == 'success') {
+                    $( "#fp-row" ).insertBefore($( "#total-row-fp" ) );
+                    updateFPTable(result['property_floor_plans']);
+                    resetFormFP();
+                }
+                else {
+                  alert(result['msg']);
+                }
+              },
+              error: function(XMLHttpRequest, textStatus, errorThrown) { 
+                alert("ERROR!!!");           
+              } 
+          });
+        }     
+    });
 	
 	
 	
@@ -310,21 +415,36 @@ $( document ).ready(function() {
 	}
 	
 	
-		function updatePDTable(arr) {
-    $("#detail-table > tbody:last").children().remove();
-    $.each(arr, function( i, value ) {   
-        var classname = 'id-' + value.announce_file_id ; 
-		var file_preview = '<img src =' +burl+value.file_path+ ' height ="100"  width = "100" />';
-       $('#detail-table > tbody:last').append("<tr class='"+classname+"'>"+
-												   "<td>"+ file_preview +"</td>"+
-												   "<td>"+ value.file_name +"</td>"+
-												   "<td>"+ value.file_path +"</td>"+
-												   "<td> <a href='#' class='delete-di'><i class='fa fa-trash ico'></i></a></td></tr>");
-       /* sub_total += (value.amount != '') ? parseFloat(value.amount) : 0;*/
-	  // console.log(arr);
-    });
+	function updatePDTable(arr) {
+		$("#detail-table > tbody:last").children().remove();
+		$.each(arr, function( i, value ) {   
+			var classname = 'id-' + value.property_file_id ; 
+			var file_preview = '<img src =' +burl+value.file_path+ ' height ="100"  width = "100" />';
+		   $('#detail-table > tbody:last').append("<tr class='"+classname+"'>"+
+													   "<td>"+ file_preview +"</td>"+
+													   "<td>"+ value.file_name +"</td>"+
+													   "<td>"+ value.file_path +"</td>"+
+													   "<td> <a href='#' class='delete-di'><i class='fa fa-trash ico'></i></a></td></tr>");
+		   /* sub_total += (value.amount != '') ? parseFloat(value.amount) : 0;*/
+		  // console.log(arr);
+		});
    
     } 
-	
+	function updateFPTable(arr) {
+		$("#floor-plan-table > tbody:last").children().remove();
+		$.each(arr, function( i, value ) {   
+			var classname = 'id-' + value.floor_plan_file_id ; 
+			var file_preview = '<img src =' +burl+value.file_path+ ' height ="100"  width = "100" />';
+		   $('#floor-plan-table > tbody:last').append("<tr class='"+classname+"'>"+
+													   "<td>"+ file_preview +"</td>"+
+													   "<td>"+ value.file_name +"</td>"+
+													   "<td>"+ value.file_path +"</td>"+
+													   "<td>"+ value.remarks +"</td>"+
+													   "<td> <a href='#' class='delete-di-fp'><i class='fa fa-trash ico'></i></a></td></tr>");
+		   /* sub_total += (value.amount != '') ? parseFloat(value.amount) : 0;*/
+		  // console.log(arr);
+		});
+   
+    }
 
 });

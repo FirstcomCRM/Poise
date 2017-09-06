@@ -158,7 +158,7 @@ class user_model extends CI_Model {
 
 		$this->datatables->add_column('no', '');
 		//$this->datatables->add_column('action', '<a class="edit-link" data-toggle="tooltip" data-placement="top" title="Edit" href="user/edit/$1"><i class="fa fa-edit ico"></i></a> / <a class="delete-link" data-toggle="tooltip" data-placement="top" title="Delete" href="user/delete/$1"><i class="fa fa-trash-o ico"></i></a>', 'user_id');
-		$this->datatables->add_column('action', '<a class="btn btn-mtac admin-control btn-view btn-success edit-link" data-toggle="tooltip" data-placement="top" title="Edit" href="user/edit/$1">Edit</a><a class="btn btn-mtac btn-delete btn-danger delete-link" data-toggle="tooltip" data-placement="top" title="Delete" href="user/delete/$1">Delete</a>', 'user_id');
+		$this->datatables->add_column('action', '<ul class="list-inline hidden-xs"><li class = "li-padds"><a class="btn btn-mtac admin-control btn-view btn-success edit-link" data-toggle="tooltip" data-placement="top" title="Edit" href="user/edit/$1">Edit</a></li><li class = "li-padds"><a class="btn btn-mtac btn-delete btn-danger delete-link" data-toggle="tooltip" data-placement="top" title="Delete" href="user/delete/$1">Delete</a></li></ul>', 'user_id');
 		echo $this->datatables->generate();
 	}
 }

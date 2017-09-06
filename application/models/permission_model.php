@@ -93,7 +93,7 @@ class permission_model extends CI_Model {
 
 		$this->datatables->add_column('no', '');
 		//$this->datatables->add_column('action', '<a class="view-link" data-toggle="tooltip" data-placement="top" title="View Detail" href="permission/view/$1"><i class="fa fa-eye ico"></i></a> / <a class="edit-link" data-toggle="tooltip" data-placement="top" title="Edit" href="permission/edit/$1"><i class="fa fa-edit ico"></i></a> / <a class="delete-link" data-toggle="tooltip" data-placement="top" title="Delete" href="permission/delete/$2"><i class="fa fa-trash-o ico"></i></a>', 'role_id, permission_id');
-		$this->datatables->add_column('action', '<a class="btn btn-mtac admin-control btn-view btn-success" data-toggle="tooltip" data-placement="top" title="Edit" href="permission/edit/$1">Edit</a><a class="btn btn-mtac btn-delete btn-danger delete-link" data-toggle="tooltip" data-placement="top" title="Delete" href="permission/delete/$1">Delete</a>', 'role_id' , 'permission_id');
+		$this->datatables->add_column('action', '<ul class="list-inline hidden-xs"><li class = "li-padds"><a class="btn btn-mtac admin-control btn-view btn-success" data-toggle="tooltip" data-placement="top" title="Edit" href="permission/edit/$1">Edit</a></li><li class = "li-padds"><a class="btn btn-mtac btn-delete btn-danger delete-link" data-toggle="tooltip" data-placement="top" title="Delete" href="permission/delete/$1">Delete</a></li></ul>', 'role_id' , 'permission_id');
 		echo $this->datatables->generate();
 	}
 

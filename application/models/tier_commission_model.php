@@ -65,7 +65,7 @@ class tier_commission_model extends CI_Model {
 
 		$this->datatables->add_column('no', '');
 		//$this->datatables->add_column('action', '<a class="edit-link" data-toggle="tooltip" data-placement="top" title="Edit" href="tier_commission/edit/$1"><i class="fa fa-edit ico"></i></a> / <a class="delete-link" data-toggle="tooltip" data-placement="top" title="Delete" href="tier_commission/delete/$1"><i class="fa fa-trash-o ico"></i></a>', 'tier_commission_id');
-		$this->datatables->add_column('action', '<a class="btn btn-mtac admin-control btn-success edit-link" data-toggle="tooltip" data-placement="top" title="Edit" href="tier_commission/edit/$1">Edit</a><a class="btn btn-mtac btn-delete btn-danger delete-link" data-toggle="tooltip" data-placement="top" title="Delete" href="tier_commission/delete/$1">Delete</a>', 'tier_commission_id');
+		$this->datatables->add_column('action', '<ul class="list-inline hidden-xs"><li class = "li-padds"><a class="btn btn-mtac admin-control btn-success edit-link" data-toggle="tooltip" data-placement="top" title="Edit" href="tier_commission/edit/$1">Edit</a></li><li class = "li-padds"><a class="btn btn-mtac btn-delete btn-danger delete-link" data-toggle="tooltip" data-placement="top" title="Delete" href="tier_commission/delete/$1">Delete</a></li></ul>', 'tier_commission_id');
 
 		echo $this->datatables->generate();
 	}
@@ -82,5 +82,18 @@ class tier_commission_model extends CI_Model {
           echo json_encode($row_set); //format the array into json data
         }
     }
+	
+	
+	public function getTeamLevels($team_id) {
+		$this->db->select('t.*');
+		$this->db->from('team t');
+		//$this->db->join('uom u', 'd.uom_id = u.uom_id', 'left');
+		$this->db->where('t.client_detail_id', $client_id);
+		$this->db->where('d.status !=', 1);
+		$query = $this->db->get();
+		return $query->result_array();
+		//echo json_encode($query);
+	}
+	
 
 }

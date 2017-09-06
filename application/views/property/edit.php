@@ -16,7 +16,9 @@
   <?php if( isset($details) ) { ?>
     var detail_arr = <?= json_encode($details); ?>;   
   <?php } ?>
-
+	<?php if( isset($fpdetails) ) { ?>
+    var fp_arr = <?= json_encode($fpdetails); ?>;   
+  <?php } ?>
 
   $(function() {
 
@@ -72,7 +74,16 @@
 
 	  }
   
-  
+  function resetFormFP() {
+		$("#fp-form").each(function(){
+		  this.reset();
+		});
+
+		//$('#description').trigger('autosize.resize');
+		$('#fp-detail-add').show();
+		$('#fp-detail-update').hide();
+
+	  }
   function showMyImage(fileInput) {
         var files = fileInput.files;
         for (var i = 0; i < files.length; i++) {           
@@ -133,21 +144,22 @@
               <div class="form-group">
                 <label for="name" class="col-md-3 control-label">Tenure</label>
                 <div class="col-md-7">
-                  <input type="text" class="form-control input-sm" id="tenure" name="tenure" placeholder="Enter Tenure" value="<?= isset($_POST['tenure']) ? $_POST['tenure'] : ( isset($property['tenure']) ? $property['tenure'] : '') ; ?>">      
-                </div>
+                  <!--input type="text" class="form-control input-sm" id="tenure" name="tenure" placeholder="Enter Tenure" value="<?= isset($_POST['tenure']) ? $_POST['tenure'] : ( isset($property['tenure']) ? $property['tenure'] : '') ; ?>"-->      
+					<select class="form-control input-sm" name="tenure" id="tenure" placeholder="Select Tenure">
+						<option value="" selected>Select Tenure</option>
+						<option value="Freehold" <?= ( (isset($_POST['tenure']) && $_POST['tenure'] == 'Freehold') || (isset($property['tenure']) && $property['tenure'] == 'Freehold') ) ? 'selected' : ''; ?>> Freehold</option>
+						<option value="9999" <?= ( (isset($_POST['tenure']) && $_POST['tenure'] == '9999') || (isset($property['tenure']) && $property['tenure'] == '9999') ) ? 'selected' : ''; ?>> 9999</option>
+						<option value="999" <?= ( (isset($_POST['tenure']) && $_POST['tenure'] == '999') || (isset($property['tenure']) && $property['tenure'] == '999') ) ? 'selected' : ''; ?>> 999</option>
+						<option value="99" <?= ( (isset($_POST['tenure']) && $_POST['tenure'] == '99') || (isset($property['tenure']) && $property['tenure'] == '99') ) ? 'selected' : ''; ?>> 99</option>
+						<option value="60" <?= ( (isset($_POST['tenure']) && $_POST['tenure'] == '60') || (isset($property['tenure']) && $property['tenure'] == '60') ) ? 'selected' : ''; ?>> 60</option>
+						<option value="Below 60 years" <?= ( (isset($_POST['tenure']) && $_POST['tenure'] == 'Below 60 years') || (isset($property['tenure']) && $property['tenure'] == 'Below 60 years') ) ? 'selected' : ''; ?>> Below 60 years</option>
+						<option value="30" <?= ( (isset($_POST['tenure']) && $_POST['tenure'] == '30') || (isset($property['tenure']) && $property['tenure'] == '30') ) ? 'selected' : ''; ?>> 30</option>
+						<option value="Below 15 years" <?= ( (isset($_POST['tenure']) && $_POST['tenure'] == 'Below 15 years') || (isset($property['tenure']) && $property['tenure'] == 'Below 15 years') ) ? 'selected' : ''; ?>> Below 15 years</option>
+					</select>
+				</div>
               </div>
               <div class="clearfix sp-margin-sm"></div>  
-              <div class="form-group">
-                <label for="name" class="col-md-3 control-label">Location</label>
-                  <div class="col-md-7">
-					<select class="form-control input-sm" name="location" id="location" placeholder="Select Location">
-						<option value="" selected>Select Location</option>
-						<option value="Location 1" <?= ( (isset($_POST['location']) && $_POST['location'] == 'location 1') || (isset($property['location']) && $property['location'] == 'Location 1') ) ? 'selected' : ''; ?>> Location 1</option>
-						<option value="Location 2" <?= ( (isset($_POST['location']) && $_POST['location'] == 'location 2') || (isset($property['location']) && $property['location'] == 'Location 2') ) ? 'selected' : ''; ?>> Location 2</option>
-					</select>
-                  </div>
-                  <div class="col-md-1 req-star">*</div>
-              </div>  
+               
               <div class="clearfix sp-margin-sm"></div> 
               <div class="form-group">
                 <label for="name" class="col-md-3 control-label">District</label>
@@ -155,10 +167,17 @@
 				
 					<select class="form-control input-sm" name="district" id="district" placeholder="Select District">
 						<option value="" selected>Select District</option>
-						<option value="District 1" <?= ( (isset($_POST['district']) && $_POST['district'] == 'District 1') || (isset($property['district']) && $property['district'] == 'District 1') ) ? 'selected' : ''; ?> >District 1</option>
-						<option value="District 2" <?= ( (isset($_POST['district']) && $_POST['district'] == 'District 2') || (isset($property['district']) && $property['district'] == 'District 2') ) ? 'selected' : ''; ?> >District 2</option>
+						<?php
+						/* if($action=="edit"){
+							echo "<script>alert('".$property['district']."')</script>";
+						} */
+
+						for ($x=1;$x<29;$x++){ ?>
+						<option value="District <?=$x;?>" <?= ( (isset($_POST['district']) && $_POST['district'] == 'District {$x}') || (isset($property['district']) && $property['district'] == 'District {$x}') ) ? 'selected' : ''; ?> >District <?=$x;?></option>
+						<!--option value="District 2" <?= ( (isset($_POST['district']) && $_POST['district'] == 'District 2') || (isset($property['district']) && $property['district'] == 'District 2') ) ? 'selected' : ''; ?> >District 2</option-->
+						<?php }?>
 					</select>
-				
+					
                   <!--input type="text" class="form-control input-sm" id="contact" name="contact" placeholder="Enter Contact" value="<?//= isset($_POST['contact']) ? $_POST['contact'] : ( isset($property['contact']) ? $property['contact'] : ''); ?>" /-->
                 </div>
               </div>
@@ -181,6 +200,7 @@
                   <textarea class="form-control input-sm" id="address" name="address" placeholder="Enter Address"><?= isset($_POST['address']) ? $_POST['address'] : ( isset($property['address']) ? $property['address'] : ''); ?></textarea>
                 </div>
               </div>
+			  <div class="clearfix sp-margin-sm"></div> 
               <div class="form-group">
                 <label for="name" class="col-md-3 control-label">Unit Size</label>
                 <div class="col-md-7">
@@ -285,8 +305,8 @@
 						<option value="" selected>Select Status</option>
 						<option value="Draft" <?= ( (isset($_POST['property_status']) && $_POST['property_status'] == 'Draft') || (isset($property['property_status']) && $property['property_status'] == 'Draft') ) ? 'selected' : ''; ?>> Draft</option>
 						<option value="Pending" <?= ( (isset($_POST['property_status']) && $_POST['property_status'] == 'Pending') || (isset($property['property_status']) && $property['property_status'] == 'Pending') ) ? 'selected' : ''; ?>> Pending</option>
-						<!--option value="" <?= ( (isset($_POST['location']) && $_POST['location'] == 'location 2') || (isset($property['location']) && $property['location'] == 'Location 2') ) ? 'selected' : ''; ?>> Location 2</option>
-						<option value="Location 2" <?= ( (isset($_POST['location']) && $_POST['location'] == 'location 2') || (isset($property['location']) && $property['location'] == 'Location 2') ) ? 'selected' : ''; ?>> Location 2</option-->
+						<!--option value="" <?= ( (isset($_POST['tenure']) && $_POST['tenure'] == 'location 2') || (isset($property['tenure']) && $property['tenure'] == 'Location 2') ) ? 'selected' : ''; ?>> Location 2</option>
+						<option value="Location 2" <?= ( (isset($_POST['tenure']) && $_POST['tenure'] == 'location 2') || (isset($property['tenure']) && $property['tenure'] == 'Location 2') ) ? 'selected' : ''; ?>> Location 2</option-->
 					</select>
                 </div>
               </div>
@@ -296,7 +316,7 @@
             </div>
 			
 			
-				<div class = "col-md-12">
+	<div class = "col-md-12">
 		<div class="panel panel-default tab-panel">
             <div class="panel-heading">
                 Upload Images
@@ -335,7 +355,7 @@
 										<input type="file" name="images[]" id ="img_select" onchange = "ValidateMainImage(this);">
 									</td>
 									<td>
-										<input type="text" class="form-control input-sm" id="path" name="path" placeholder="Enter Qty" value="" readonly>
+										<input type="text" class="form-control input-sm" id="path" name="path" placeholder="Upload Image" value="" readonly>
 										<input type="hidden" class="form-control input-sm" id="file-name" name="file_name" placeholder="Enter Qty" value="">
 									</td>
 									<td>
@@ -357,7 +377,71 @@
 		</div>
 	</div>
 			
-			
+	<div class = "col-md-12">
+		<div class="panel panel-default tab-panel">
+            <div class="panel-heading">
+                Upload Floor Plan Images
+            </div>
+            <div class="panel-body">
+                <div class="row-fluid table-responsive" id="tbl-floor-plan">
+                    <div class="col-md-12">
+                        <table class="table table-striped table-bordered dataTable no-footer" cellspacing="0" width="100%" id='floor-plan-table'>
+                          <thead>
+                            <tr>
+							  <th style="width:20%">Preview</th>
+                              <th style="width:20%">File</th>
+                              <th style="width:20%">Path</th>
+                              <th style="width:20%">Remarks</th>
+                              <th style="width:20%">Action</th>
+                            </tr>
+                          </thead>
+                          <tbody> 
+                            <?php if( isset($fpdetails) ) { 
+                              foreach($fpdetails as $key=>$fppd) {
+                            ?>
+                              <!-- <tr class="id-<?= $pd['floor_plan_file_id'] ?>">
+                                <td class="small-tbl-column"><?=$pd['file_name'] ?></td>
+                                <td><?= $pd['file_path'] ?></td>
+                                <td> / <a href='#' class='delete-di'><i class='fa fa-trash ico'></i></a></td>
+                              </tr> -->
+                            <?php
+                              }
+                            } ?>
+                          </tbody>
+                          <tfoot>
+                              <tr id="fp-row">
+								  <form id="fp-form">
+									<td></td>
+									<td>
+									  <!--input type="hidden" id="hid-edit-id" name="hid_edit_id" /-->
+										<input type="file" name="fp_images[]" id ="fp_img_select" onchange = "ValidateMainImage(this);">
+									</td>
+									<td>
+										<input type="text" class="form-control input-sm" id="fp-path" name="fp_path" placeholder="Upload Image" value="" readonly>
+										<input type="hidden" class="form-control input-sm" id="fp-file-name" name="fp_file_name" placeholder="Enter Qty" value="">
+									</td>
+									<td>
+										<input type="text" class="form-control input-sm" id="fp-remarks" name="fp_remarks" placeholder="Enter Remarks" value="">
+										
+									</td>
+									<td>
+									 <!--input type="file" name="upload_file1" class="btn btn-default" id="upload_file1" readonly="true"/-->
+									  <span id="fp-detail-add"><a href="#" id="fp-ico-add"><i class="fa fa-plus ico"></i></a></span>
+									  <span id="fp-detail-update" style="display: none;"><a href="#" id="fp-ico-update" ><i class="fa fa-save ico"></i></a> / <a href="#" id="fp-ico-cancel" ><i class="fa fa-eraser ico"></i></a></span>
+									</td>
+								  </form>
+                              </tr>
+                              <tr id="total-row-fp">
+                               
+                              </tr>
+                             
+                          </tfoot>
+                        </table>      
+                    </div>
+                </div>    
+            </div>
+		</div>
+	</div>		
 			
 			
 			

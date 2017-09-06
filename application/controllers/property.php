@@ -116,6 +116,7 @@ class property extends CI_Controller {
 			if($submit == FALSE) { 
 			 	$data['users'] = $this->user_model->getUsers();
 				$data['details'] =  $this->property_model->getFilesbypropertyid($id);
+				$data['fpdetails'] =  $this->property_model->getFloorPlansbypropertyid($id);
 
 				$this->load->view('template/header', $data);
 				$this->load->view('property/edit', $data);
@@ -238,9 +239,10 @@ class property extends CI_Controller {
 					   }
 
 						
-				  }  $output = '<input type ="text" name ="file_path" id="file-path" value ="' . $targetPath .'" >';
-							$output .= '<input type ="text" name ="new_file_name" id="new-file-name" value ="' . $new_name .'" >';
-					   echo $output;
+				  }  
+					$output = '<input type ="hidden" name ="file_path" id="file-path" value ="' . $targetPath .'" >';
+					$output .= '<input type ="hidden" name ="new_file_name" id="new-file-name" value ="' . $new_name .'" >';
+					echo $output;
 				
 			 }  
 		}
@@ -275,6 +277,40 @@ class property extends CI_Controller {
 			
 			 }  
 		}
+		
+		
+		function upload_floor_plan()
+		{
+			//$output = '';
+			if(is_array($_FILES))  
+			 {  
+				  foreach($_FILES['fp_images']['name'] as $name => $value)  
+				  {  
+					   $file_name = explode(".", $_FILES['fp_images']['name'][$name]);  
+					   $allowed_extension = array("jpg", "jpeg", "png", "gif","JPG");
+						//$allowed_extension = array("jpg", "jpeg", "png", "gif","pdf","doc","docx","xls","xlsx","csv"); 
+						if(in_array($file_name[1], $allowed_extension))  
+						{  
+							//$new_name = rand() . '.'. $file_name[1];  
+							$new_name = $file_name[0] . '_'.date('Ymdhis').'.'. $file_name[1];  
+							$sourcePath = $_FILES["fp_images"]["tmp_name"][$name];  
+							$targetPath = "uploads/property/fp_images/".$new_name;  
+							move_uploaded_file($sourcePath, $targetPath); 
+							$output = '<input type ="text" name ="fp_file_path" id="fp-file-path" value ="' . $targetPath .'" >';
+							$output .= '<input type ="text" name ="fp_new_file_name" id="fp-new-file-name" value ="' . $new_name .'" >';
+							//$output .= '<script type ="text/javascript">console.log($("main-new-file-name").val())</script>';
+							echo $output;
+						}
+
+						
+				  }  
+			
+			 }  
+		}
+		
+		
+		
+		
 		
 	public function aj_check_status($property_id) {
 		$property['data'] = $this->property_model->checkStatus($property_id);
@@ -312,10 +348,27 @@ class property extends CI_Controller {
 		echo json_encode($ret);
 	}
 		
+	public function aj_addFloorPlanfile() {
+		$fp_id = $this->property_model->addFloorPlan();
+		if($fp_id) {
+			$property_id = $this->input->post('hid_property_id');
+			$details = $this->property_model->getFloorPlansbypropertyid($property_id);
+			//logActivity('Added', "Added Invoice Detail : " . $this->input->post('description'), $detail_id);
+			$ret = array(
+				'status'			=> 'success',
+				'property_floor_plans'	=> $details
+			);
+		}
+		else {
+			$ret = array(
+				'status'	=> 'fail',
+			);	
+		}
+		echo json_encode($ret);
+	}
 		
 		
-		
-		public function aj_deletePropertyfile($id) {
+	public function aj_deletePropertyfile($id) {
 		$property_file = $this->property_model->getFile($id);
 		if(!empty($property_file)) {
 			$removed = $this->property_model->removeFile($id);
@@ -345,6 +398,34 @@ class property extends CI_Controller {
 	}
 	
 	
+	public function aj_deleteFloorPlanfile($id) {
+		$fp_file = $this->property_model->getFloorPlans($id);
+		if(!empty($fp_file)) {
+			$removed = $this->property_model->removeFloorPlan($id);
+			if($removed) {
+				//$this->announcement_model->getFilesbyannouncementid($id);
+				$details = $this->property_model->getFloorPlansbypropertyid($fp_file['property_id']);
+				//logActivity('Removed', "Removed Invoice Detail : " . $invoice_detail['description'], $id);
+				$ret = array(
+					'status'			=> 'success',
+					'property_floor_plans'	=> $details
+				);
+			}
+			else {
+				$ret = array(
+					'status'	=> 'fail',
+					'msg'		=> 'Error in File Remove'
+				);	
+			}			
+		}
+		else {
+			$ret = array(
+				'status'	=> 'fail',
+				'msg'		=> 'No Data',
+			);	
+		}
+		echo json_encode($ret);
+	}
 	
 	
 	

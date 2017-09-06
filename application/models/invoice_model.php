@@ -266,7 +266,7 @@ class invoice_model extends CI_Model {
 		$role_id = $this->session->userdata('role_id');
 		if($role_id == 1) {
 			//$edit = '/ <a class="edit-link" data-toggle="tooltip" data-placement="top" title="Edit" href="invoice/edit/$1"><i class="fa fa-edit ico"></i></a>';
-			$edit = '<a class="btn btn-mtac admin-control btn-view btn-success" data-toggle="tooltip" data-placement="top" title="Edit" href="invoice/edit/$1">Edit</a>';
+			$edit = '<li class = "li-padds"><a class="btn btn-mtac admin-control btn-view btn-success" data-toggle="tooltip" data-placement="top" title="Edit" href="invoice/edit/$1">Edit</a></li>';
 		}
 		else{
 			$edit = '';
@@ -281,7 +281,7 @@ class invoice_model extends CI_Model {
 		$this->datatables->add_column('no', '');
 		//$this->datatables->add_column('action', '<a class="view-link" data-toggle="tooltip" data-placement="top" title="View" href="invoice/view/$1"><i class="fa fa-eye ico"></i></a> / <a class="print-link" data-toggle="tooltip" data-placement="top" title="Print" href="invoice/printInvoice/$1"><i class="fa fa-print ico"></i></a> '.$edit.'/ <a class="delete-link" data-toggle="tooltip" data-placement="top" title="Delete" href="invoice/delete/$1"><i class="fa fa-trash-o ico"></i></a>', 'invoice_id');
 		//$this->datatables->add_column('action', '<a class="view-link" data-toggle="tooltip" data-placement="top" title="View" href="invoice/view/$1"><i class="fa fa-eye ico"></i></a> / <a class="print-link" data-toggle="tooltip" data-placement="top" title="Print" href="invoice/printInvoice/$1"><i class="fa fa-print ico"></i></a> '.$edit.'/<button class="btn btn-block btn-info">Info</button> <a class="delete-link" data-toggle="tooltip" data-placement="top" title="Delete" href="invoice/delete/$1"><i class="fa fa-trash-o ico"></i></a>', 'invoice_id');
-		$this->datatables->add_column('action', '<a class="btn btn-mtac admin-control btn-view btn-primary view-link" data-toggle="tooltip" data-placement="top" title="View" href="invoice/view/$1">View</a>'.$edit.'<a class="btn btn-mtac admin-control btn-view btn-warning" data-toggle="tooltip" data-placement="top" title="Print" href="invoice/printInvoice/$1">Print</a><a class="btn btn-mtac btn-delete btn-danger delete-link" data-toggle="tooltip" data-placement="top" title="Delete" href="announcement/delete/$1">Delete</a>', 'invoice_id');
+		$this->datatables->add_column('action', '<ul class="list-inline hidden-xs"><li class = "li-padds"><a class="btn btn-mtac admin-control btn-view btn-primary view-link" data-toggle="tooltip" data-placement="top" title="View" href="invoice/view/$1">View</a></li>'.$edit.'<li class = "li-padds"><a class="btn btn-mtac admin-control btn-view btn-warning" data-toggle="tooltip" data-placement="top" title="Print" href="invoice/printInvoice/$1">Print</a><a class="btn btn-mtac btn-delete btn-danger delete-link" data-toggle="tooltip" data-placement="top" title="Delete" href="announcement/delete/$1">Delete</a></li></ul>', 'invoice_id');
 		//$this->datatables->add_column('action', '<a class="btn btn-mtac admin-control btn-view btn-primary view-link" data-toggle="tooltip" data-placement="top" title="View" href="announcement/view/$1">View</a><a class="btn btn-mtac admin-control btn-view btn-success" data-toggle="tooltip" data-placement="top" title="Edit" href="announcement/edit/$1">Edit</a><a class="btn btn-mtac btn-delete btn-danger delete-link" data-toggle="tooltip" data-placement="top" title="Delete" href="announcement/delete/$1">Delete</a>', 'announce_id');
 		echo $this->datatables->generate();
 	}

@@ -389,9 +389,11 @@
           <div class="box-header">
              <h3 class="box-title">Property Transaction</h3>
              <h5 class="box-title">Case Submission</h5>
+			  <?php if ($this->session->userdata('role_id')!=1 ){ ?>
 			 <div class="pull-right">
                       <a href="<?= base_url().'transaction/create'; ?>" class="btn btn-default btn-flat">Add</a>
                     </div>
+			<?php }?>
            </div><!-- /.box-header -->
 			<div class="box-body">
 				<div class="box">

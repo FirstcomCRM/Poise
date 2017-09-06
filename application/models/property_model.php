@@ -178,7 +178,7 @@ class property_model extends CI_Model {
 		$this->datatables->where('p.user_id =', $this->session->userdata('user_id'));
 		$this->datatables->add_column('no', '');
 		//$this->datatables->add_column('action', '<a class="view-link" data-toggle="tooltip" data-placement="top" title="View" href="property/view/$1"><i class="fa fa-eye ico"></i></a> / <a class="edit-link" data-toggle="tooltip" data-placement="top" title="Edit" href="property/edit/$1"><i class="fa fa-edit ico"></i></a> / <a class="delete-link" data-toggle="tooltip" data-placement="top" title="Delete" href="property/delete/$1"><i class="fa fa-trash-o ico"></i></a>', 'property_id');
-		$this->datatables->add_column('action', '<a class="btn btn-mtac admin-control btn-view btn-primary view-link" data-toggle="tooltip" data-placement="top" title="View" href="property/view/$1">View</a><a class="btn btn-mtac admin-control btn-success edit-link" data-toggle="tooltip" data-placement="top" title="Edit" href="property/edit/$1">Edit</a><a class="btn btn-mtac btn-delete btn-danger delete-link" data-toggle="tooltip" data-placement="top" title="Delete" href="property/delete/$1">Delete</a>', 'property_id');
+		$this->datatables->add_column('action', '<ul class="list-inline hidden-xs"><li class = "li-padds"><a class="btn btn-mtac admin-control btn-view btn-primary view-link" data-toggle="tooltip" data-placement="top" title="View" href="property/view/$1">View</a></li><li class = "li-padds"><a class="btn btn-mtac admin-control btn-success edit-link" data-toggle="tooltip" data-placement="top" title="Edit" href="property/edit/$1">Edit</a></li><li class = "li-padds"><a class="btn btn-mtac btn-delete btn-danger delete-link" data-toggle="tooltip" data-placement="top" title="Delete" href="property/delete/$1">Delete</a></li></ul>', 'property_id');
 		echo $this->datatables->generate();
 	}
 	
@@ -220,22 +220,8 @@ class property_model extends CI_Model {
 		//$this->datatables->add_column('action', ' <button type="submit" class="btn btn-mtac admin-control" id="btn-view"><i class="fa fa-save ico-btn"></i>View</button><button type="submit" class="btn btn-mtac admin-control" id="btn-approve"><i class="fa fa-save ico-btn"></i>Approve</button><button type="submit" class="btn btn-mtac admin-control" id="btn-reject"><i class="fa fa-save ico-btn"></i>Reject</button>', 'property_id');
 		//$this->datatables->add_column('action', '<a class="btn btn-mtac admin-control btn-view" data-toggle="tooltip" data-placement="top" title="View" href="property/view/$1"><i class="fa fa-save ico-btn"></i>View</a><a class="btn btn-mtac admin-control btn-approve" data-toggle="tooltip" data-placement="top" title="Approve" href="property/edit_status/$1"><i class="fa fa-save ico-btn"></i>Approve</a><a class="btn btn-mtac admin-control btn-reject" data-toggle="tooltip" data-placement="top" title="Reject" href="property/edit_status/$1"><i class="fa fa-save ico-btn"></i>Reject</a>', 'property_id');
 		
-		/* foreach ($query->result_array() as $row)
-		{
-			if($row['property_status']!='Pending'){
-				$app_rej = '';
-			}
-			else{
-				$app_rej = '<a class="btn btn-mtac admin-control btn-approve btn-success" data-toggle="tooltip" data-placement="top" title="Edit" href="property/edit_status/$1">Approve</a><a class="btn btn-mtac btn-danger btn-reject" data-toggle="tooltip" data-placement="top" title="Delete" href="property/edit_status/$1">Reject</a>';
-			}
-			//echo $row['email'];
-			//send_email('POISE CRM', 'test@poise.com.sg',$row['email'], 'New Transaction', $message);
-		}
-		 */
 		
-		
-		
-		$this->datatables->add_column('action', '<a class="btn btn-mtac admin-control btn-view btn-primary view-link" data-toggle="tooltip" data-placement="top" title="View" href="property/view/$1">View</a><a class="btn btn-mtac admin-control btn-approve btn-success" data-toggle="tooltip" data-placement="top" title="Edit" href="property/edit_status/$1">Approve</a><a class="btn btn-mtac btn-danger btn-reject" data-toggle="tooltip" data-placement="top" title="Delete" href="property/edit_status/$1">Reject</a>', 'property_id');
+		$this->datatables->add_column('action', '<ul class="list-inline hidden-xs"><li class = "li-padds"><a class="btn btn-mtac admin-control btn-view btn-primary view-link" data-toggle="tooltip" data-placement="top" title="View" href="property/view/$1">View</a></li><li class = "li-padds"><a class="btn btn-mtac admin-control btn-approve btn-success" data-toggle="tooltip" data-placement="top" title="Edit" href="property/edit_status/$1">Approve</a></li><li class = "li-padds"><a class="btn btn-mtac btn-danger btn-reject" data-toggle="tooltip" data-placement="top" title="Delete" href="property/edit_status/$1">Reject</a></li></ul>', 'property_id');
 		echo $this->datatables->generate();
 	}
 	
@@ -260,7 +246,15 @@ class property_model extends CI_Model {
 		$query = $this->db->get();
 		return $query->result_array();	
 	}
-	
+	public function getFloorPlansbypropertyid($property_id) {
+		$this->db->select('f.*');
+		$this->db->from('property_floor_plans f');
+		//$this->db->join('uom u', 'd.uom_id = u.uom_id', 'left');
+		$this->db->where('f.property_id', $property_id);
+		$this->db->where('f.status !=', 1);
+		$query = $this->db->get();
+		return $query->result_array();	
+	}
 	
 	
 	
@@ -309,27 +303,56 @@ class property_model extends CI_Model {
 		return $detail_id;	
 	}
 	
-	
+	public function addFloorPlan() {
+		//$no = $this->input->post('no');
+		$data = array(
+			'property_id'	 			=>  $this->input->post('hid_property_id'),
+			'file_name'					=>  $this->input->post('fp_file_name'),
+			'new_file_name'				=>  $this->input->post('fp_new_file_name'),
+			'file_path'					=>  $this->input->post('fp_file_path'),
+			'remarks'					=>  $this->input->post('fp_remarks'),
+			'date_uploaded'				=>  date('Y-m-d'),
+			
+		);
+		$this->db->insert('property_floor_plans', $data);
+		$detail_id = $this->db->insert_id();
+		return $detail_id;	
+	}
 	
 	public function removeFile($id) {
 		$data = array(
 			'status' => 1,
         );
-        $this->db->where('announce_file_id', $id);
-		return $this->db->update('announcement_files', $data); 	
+        $this->db->where('property_file_id', $id);
+		return $this->db->update('property_files', $data); 	
 	}
 	
+	public function removeFloorPlan($id) {
+		$data = array(
+			'status' => 1,
+        );
+        $this->db->where('floor_plan_file_id', $id);
+		return $this->db->update('property_floor_plans', $data); 	
+	}
 	
 	public function getFile($id) {
 		$this->db->select('f.*');
-		$this->db->from('announcement_files f');
+		$this->db->from('property_files f');
 	//	$this->db->join('uom u', 'd.uom_id = u.uom_id', 'left');
-		$this->db->where('f.announce_file_id', $id);
+		$this->db->where('f.property_file_id', $id);
 		$this->db->where('f.status !=', 1);
-		$query = $this->db->get('announcement_files');
+		$query = $this->db->get('property_files');
 		return $query->row_array();
 	}
-	
+	public function getFloorPlans($id) {
+		$this->db->select('f.*');
+		$this->db->from('property_floor_plans f');
+	//	$this->db->join('uom u', 'd.uom_id = u.uom_id', 'left');
+		$this->db->where('f.floor_plan_file_id', $id);
+		$this->db->where('f.status !=', 1);
+		$query = $this->db->get('property_floor_plans');
+		return $query->row_array();
+	}
 	
 	
 	public function getFilesbyannouncementid($announce_id) {
